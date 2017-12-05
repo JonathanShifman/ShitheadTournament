@@ -11,13 +11,16 @@ import java.util.stream.Collectors;
 public class GameState {
 
     private Map<Integer, PlayerInfo> players;
+    private ICard currentTopCard;
 
-    public GameState(int targetPlayerId, Map<Integer, PlayerInfo> players) {
+    public GameState(int targetPlayerId, Map<Integer, PlayerInfo> players, ICard currentTopCard) {
         this.players = new HashMap<>();
 
         players.forEach((id, info)->{
             this.players.put(id, classifyInfo(info, id, targetPlayerId));
         });
+
+        this.currentTopCard = new Card(currentTopCard);
 
     }
 
@@ -44,5 +47,9 @@ public class GameState {
 
     public Map<Integer, PlayerInfo> getPlayers() {
         return players;
+    }
+
+    public ICard getCurrentTopCard() {
+        return currentTopCard;
     }
 }

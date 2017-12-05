@@ -19,6 +19,9 @@ public class Main {
 
 		gmActor.tell(new StartGame(), ActorRef.noSender());
 
+		while (true){
+			Thread.sleep(1000);
+		}
 		//runSeriesOfGames(1);
 	}
 

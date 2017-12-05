@@ -1,6 +1,7 @@
 package games.shithead.actors;
 
 import akka.actor.AbstractActor;
+import games.shithead.deck.ICard;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
@@ -25,6 +26,8 @@ public class GameActor extends AbstractActor {
     //queue of ids of players defining the order of their turns
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
     private int currentPlayer = -1;
+
+    private ICard currentTopCard = null;
 
     public Receive createReceive() {
         return receiveBuilder()
@@ -97,6 +100,10 @@ public class GameActor extends AbstractActor {
 
         //FIXME: fix so that player chooses the 3 cards that are revealed out of 6 he drew
 
+        currentTopCard = deck.getNextCard();
+        while(currentTopCard.isSpecialCard()){
+            currentTopCard = deck.getNextCard();
+        }
         sendStateOfGameToPlayers();
 
         currentPlayer = playingQueue.poll();
@@ -118,7 +125,7 @@ public class GameActor extends AbstractActor {
 
     private void sendStateOfGameToPlayers(){
         players.forEach((id, playerInfo)-> {
-            playerInfo.getPlayerRef().tell(new GameState(id, players), self());
+            playerInfo.getPlayerRef().tell(new GameState(id, players, currentTopCard), self());
         });
     }
 }
