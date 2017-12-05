@@ -52,9 +52,23 @@ public class GameActor extends AbstractActor {
 
         sendStateOfGameToPlayers();
 
-        playingQueue.addLast(currentPlayer);
-        currentPlayer = playingQueue.poll();
-        notifyPlayerTurn(currentPlayer);
+        boolean gameIsOver = checkGameOver();
+        if(gameIsOver){
+            notifyGameResult();
+        }else {
+            playingQueue.addLast(currentPlayer);
+            currentPlayer = playingQueue.poll();
+            notifyPlayerTurn(currentPlayer);
+        }
+    }
+
+    private void notifyGameResult() {
+        //FIXME: send game result to all players
+    }
+
+    private boolean checkGameOver() {
+        //FIXME: implement check if game is over
+        return false;
     }
 
     private void performMove(PlayerTurnInfo turnInfo) {

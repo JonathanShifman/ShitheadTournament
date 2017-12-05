@@ -17,7 +17,7 @@ public abstract class PlayerActor extends AbstractActor {
     public PlayerActor(String name){
         this.playerName = name;
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
-                .actorSelection(ShitheadActorSystem.GAME_ACTOR_PATH);
+                .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_MASTER_ACTOR_NAME));
 
         //upon creation all players ask the game actor to allocate player id so it's unique
         gameActor.tell(new AllocateIdRequest(), self());
