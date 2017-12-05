@@ -1,24 +1,28 @@
 package games.shithead.game;
 
+import akka.actor.ActorRef;
+import games.shithead.deck.ICard;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import games.shithead.deck.ICard;
-import games.shithead.players.IShitheadPlayer;
-
 public class PlayerInfo implements IPlayerInfo {
-	
-	private IShitheadPlayer player;
+
+	private final ActorRef playerRef;
 	private List<ICard> handCards;
 	private List<ICard> revealedTableCards;
 	private List<ICard> hiddenTableCards;
 	
-	public PlayerInfo(IShitheadPlayer player) {
-		this.player = player;
+	public PlayerInfo(ActorRef playerRef) {
+		this.playerRef = playerRef;
+		this.handCards = new ArrayList<>();
+		this.revealedTableCards = new ArrayList<>();
+		this.hiddenTableCards = new ArrayList<>();
 	}
 
 	@Override
-	public IShitheadPlayer getPlayer() {
-		return player;
+	public ActorRef getPlayerRef() {
+		return playerRef;
 	}
 
 	@Override

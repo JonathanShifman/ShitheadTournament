@@ -1,3 +1,5 @@
 games.Shithead/target/*
 .metadata/*
 .recommenders/*
+*.iml
+*.idea/

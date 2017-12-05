@@ -3,5 +3,28 @@
   <groupId>games</groupId>
   <artifactId>Shithead</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <name>Shithead</name>
+
+
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor -->
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-actor_2.12</artifactId>
+      <version>2.5.7</version>
+    </dependency>
+
+  </dependencies>
 </project>

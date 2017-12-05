@@ -1,13 +1,13 @@
 package games.shithead.game;
 
-import java.util.List;
-
+import akka.actor.ActorRef;
 import games.shithead.deck.ICard;
-import games.shithead.players.IShitheadPlayer;
+
+import java.util.List;
 
 public interface IPlayerInfo {
 	
-	IShitheadPlayer getPlayer();
+	ActorRef getPlayerRef();
 	
 	List<ICard> getHandCards();
 	
