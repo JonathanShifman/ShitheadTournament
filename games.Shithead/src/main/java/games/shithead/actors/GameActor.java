@@ -11,14 +11,13 @@ import games.shithead.gameManagement.StartGame;
 import games.shithead.gameManagement.AllocateIdRequest;
 import games.shithead.gameManagement.IdMessage;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class GameActor extends AbstractActor {
 
     private int idAllocator = 1;
+    private Random rnd = new Random();
 
     private boolean isGameStarted = false;
     private Map<Integer, PlayerInfo> players = new HashMap<>();
@@ -94,9 +93,11 @@ public class GameActor extends AbstractActor {
             playerInfo.getHandCards().addAll(deck.getNextCards(3));
             playerInfo.getHiddenTableCards().addAll(deck.getNextCards(3));
             playerInfo.getRevealedTableCards().addAll(deck.getNextCards(3));
-            playingQueue.add(id);
         });
 
+        List<Integer> playerIds = new ArrayList<>(players.keySet());
+        playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
+        playingQueue.addAll(playerIds);
 
         //FIXME: fix so that player chooses the 3 cards that are revealed out of 6 he drew
 
