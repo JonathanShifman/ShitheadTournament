@@ -104,15 +104,18 @@ public class GameActor extends AbstractActor {
 
     private void dealInitialCards() {
         players.forEach((id, playerInfo) -> {
-            playerInfo.getHandCards().addAll(deck.getNextCardFaces(3));
-            playerInfo.getHiddenTableCards().addAll(deck.getNextCardFaces(3));
-            playerInfo.getRevealedTableCards().addAll(deck.getNextCardFaces(3));
-            
-            for(int i = 0; i < 9; i++) {
-            	cardDatabase[cardUniqueIdAllocator++] = id;
-            }
+        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getHandCards(), id);
+        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getHiddenTableCards(), id);
+        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getRevealedTableCards(), id);
         });
 	}
+    
+    private void dealCardsToPlayer(List<ICardFace> cardFaces, List<IGameCard> listToAddCardsTo, int playerId) {
+    	for(ICardFace cardFace : cardFaces) {
+    		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
+    		cardDatabase[cardUniqueIdAllocator++] = playerId;
+    	}
+    }
 
     private void determinePlayersOrder() {
     	List<Integer> playerIds = new ArrayList<>(players.keySet());
