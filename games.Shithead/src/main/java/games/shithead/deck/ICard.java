@@ -7,5 +7,6 @@ public interface ICard {
 	int getKind();
 	
 	int getUniqueId();
-	
+
+	boolean isSpecialCard();
 }
