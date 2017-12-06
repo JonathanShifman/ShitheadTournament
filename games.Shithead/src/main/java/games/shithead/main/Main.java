@@ -6,7 +6,7 @@ import akka.actor.Props;
 import games.shithead.actors.GameActor;
 import games.shithead.actors.GameMasterActor;
 import games.shithead.actors.ShitheadActorSystem;
-import games.shithead.gameManagement.StartGame;
+import games.shithead.messages.StartGameMessage;
 
 public class Main {
 
@@ -17,7 +17,7 @@ public class Main {
 
 		Thread.sleep(5000);
 
-		gmActor.tell(new StartGame(), ActorRef.noSender());
+		gmActor.tell(new StartGameMessage(), ActorRef.noSender());
 
 		while (true){
 			Thread.sleep(1000);

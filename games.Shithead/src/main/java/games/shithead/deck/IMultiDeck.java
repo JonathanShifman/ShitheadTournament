@@ -4,8 +4,12 @@ import java.util.List;
 
 public interface IMultiDeck {
 	
-	ICard getNextCard();
+	ICardFace getNextCardFace();
 	
-	List<ICard> getNextCards(int numberOfCards);
+	List<ICardFace> getNextCardFaces(int numberOfCards);
+	
+	int getNumberOfDecks();
+	
+	int getNumberOfCards();
 	
 }

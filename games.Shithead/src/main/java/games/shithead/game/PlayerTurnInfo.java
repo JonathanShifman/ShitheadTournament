@@ -1,26 +1,26 @@
 package games.shithead.game;
 
-import games.shithead.deck.ICard;
+import games.shithead.deck.ICardFace;
 
 import java.util.List;
 
 public class PlayerTurnInfo {
 
     private int playerId;
-    private List<ICard> cardsToPut;
+    private List<ICardFace> cardsToPut;
     private boolean isInterruption;
 
-    public PlayerTurnInfo(int playerId, List<ICard> cardsToPut, boolean isInterruption) {
+    public PlayerTurnInfo(int playerId, List<ICardFace> cardsToPut, boolean isInterruption) {
         this.playerId = playerId;
         this.cardsToPut = cardsToPut;
         this.isInterruption = isInterruption;
     }
 
-    public List<ICard> getCardsToPut() {
+    public List<ICardFace> getCardsToPut() {
         return cardsToPut;
     }
 
-    public void setCardsToPut(List<ICard> cardsToPut) {
+    public void setCardsToPut(List<ICardFace> cardsToPut) {
         this.cardsToPut = cardsToPut;
     }
 

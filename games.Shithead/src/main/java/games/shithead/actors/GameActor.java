@@ -1,15 +1,15 @@
 package games.shithead.actors;
 
 import akka.actor.AbstractActor;
-import games.shithead.deck.ICard;
+import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
-import games.shithead.gameManagement.NotifyPlayersTurn;
-import games.shithead.gameManagement.RegisterPlayer;
-import games.shithead.gameManagement.StartGame;
-import games.shithead.gameManagement.AllocateIdRequest;
-import games.shithead.gameManagement.IdMessage;
+import games.shithead.messages.AllocateIdRequest;
+import games.shithead.messages.IdMessage;
+import games.shithead.messages.NotifyPlayersTurnMessage;
+import games.shithead.messages.RegisterPlayerMessage;
+import games.shithead.messages.StartGameMessage;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -21,18 +21,22 @@ public class GameActor extends AbstractActor {
 
     private boolean isGameStarted = false;
     private Map<Integer, PlayerInfo> players = new HashMap<>();
+    
     private IMultiDeck deck;
+    private int[] cardDatabase; //For efficient card mapping
+    private int cardUniqueIdAllocator = 0;
+    
     //queue of ids of players defining the order of their turns
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
     private int currentPlayer = -1;
 
-    private ICard currentTopCard = null;
+    private ICardFace currentTopCard = null;
 
     public Receive createReceive() {
         return receiveBuilder()
                 .match(AllocateIdRequest.class, this::allocateId)
-                .match(RegisterPlayer.class, this::registerPlayer)
-                .match(StartGame.class, this::startGame)
+                .match(RegisterPlayerMessage.class, this::registerPlayer)
+                .match(StartGameMessage.class, this::startGame)
                 .match(PlayerTurnInfo.class, this::handleTurn)
                 .matchAny(this::unhandled)
                 .build();
@@ -77,41 +81,47 @@ public class GameActor extends AbstractActor {
         //FIXME: implement the move itself
     }
 
-    private void startGame(StartGame gameStarter) {
+    private void startGame(StartGameMessage gameStarter) {
         if(players.size()<=1){
             System.out.println("Not enough players, waiting...");
             return;
         }
         isGameStarted = true;
         initDecks();
-    }
-
-    private void initDecks() {
-        //try to match deck size to number of players - change if it's not working well
-        deck = new MultiDeck((int) Math.ceil(players.size()/4));
-        players.forEach((id, playerInfo) -> {
-            playerInfo.getHandCards().addAll(deck.getNextCards(3));
-            playerInfo.getHiddenTableCards().addAll(deck.getNextCards(3));
-            playerInfo.getRevealedTableCards().addAll(deck.getNextCards(3));
-        });
-
-        List<Integer> playerIds = new ArrayList<>(players.keySet());
-        playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
-        playingQueue.addAll(playerIds);
-
-        //FIXME: fix so that player chooses the 3 cards that are revealed out of 6 he drew
-
-        currentTopCard = deck.getNextCard();
-        while(currentTopCard.isSpecialCard()){
-            currentTopCard = deck.getNextCard();
-        }
+        dealInitialCards();
         sendStateOfGameToPlayers();
-
-        currentPlayer = playingQueue.poll();
+        //FIXME: fix so that player chooses the 3 cards that are revealed out of 6 he drew
+        sendStateOfGameToPlayers();
+        determinePlayersOrder();
         notifyPlayerTurn(currentPlayer);
     }
 
-    private void registerPlayer(RegisterPlayer playerRegistration) {
+	private void initDecks() {
+        //try to match deck size to number of players - change if it's not working well
+        deck = new MultiDeck((int) Math.ceil(players.size()/4));
+        cardDatabase = new int[deck.getNumberOfCards()];
+    }
+
+    private void dealInitialCards() {
+        players.forEach((id, playerInfo) -> {
+            playerInfo.getHandCards().addAll(deck.getNextCardFaces(3));
+            playerInfo.getHiddenTableCards().addAll(deck.getNextCardFaces(3));
+            playerInfo.getRevealedTableCards().addAll(deck.getNextCardFaces(3));
+            
+            for(int i = 0; i < 9; i++) {
+            	cardDatabase[cardUniqueIdAllocator++] = id;
+            }
+        });
+	}
+
+    private void determinePlayersOrder() {
+    	List<Integer> playerIds = new ArrayList<>(players.keySet());
+        playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
+        playingQueue.addAll(playerIds);
+        currentPlayer = playingQueue.poll();
+	}
+
+	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
         if(isGameStarted){
             //too late for registration
             return;
@@ -120,7 +130,7 @@ public class GameActor extends AbstractActor {
     }
 
     private void notifyPlayerTurn(int playerToNotify) {
-        players.get(playerToNotify).getPlayerRef().tell(new NotifyPlayersTurn(playerToNotify), self());
+        players.get(playerToNotify).getPlayerRef().tell(new NotifyPlayersTurnMessage(playerToNotify), self());
         //maybe start timer or something so if one player crashes it doesn't stop the game
     }
 

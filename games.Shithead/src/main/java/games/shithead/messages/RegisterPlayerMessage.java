@@ -1,11 +1,11 @@
-package games.shithead.gameManagement;
+package games.shithead.messages;
 
-public class RegisterPlayer {
+public class RegisterPlayerMessage {
 
     public int playerId;
     public String playerName;
 
-    public RegisterPlayer(int playerId, String playerName) {
+    public RegisterPlayerMessage(int playerId, String playerName) {
         this.playerId = playerId;
         this.playerName = playerName;
     }
