@@ -5,7 +5,7 @@ import akka.actor.ActorSelection;
 import games.shithead.game.GameState;
 import games.shithead.game.PlayerTurnInfo;
 import games.shithead.messages.AllocateIdRequest;
-import games.shithead.messages.IdMessage;
+import games.shithead.messages.PlayerIdMessage;
 import games.shithead.messages.NotifyPlayersTurnMessage;
 import games.shithead.messages.RegisterPlayerMessage;
 
@@ -27,14 +27,14 @@ public abstract class PlayerActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 //after getting back the allocated id, we can register the player
-                .match(IdMessage.class, this::receiveId)
+                .match(PlayerIdMessage.class, this::receiveId)
                 .match(GameState.class, this::analyzeGameState)
                 .match(NotifyPlayersTurnMessage.class, this::makeMove)
                 .matchAny(this::unhandled)
                 .build();
     }
     
-    private void receiveId(IdMessage idMessage) {
+    private void receiveId(PlayerIdMessage idMessage) {
     	this.playerId = idMessage.playerId;
         sender().tell(new RegisterPlayerMessage(playerId, playerName), self());
     }

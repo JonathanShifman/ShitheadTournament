@@ -6,7 +6,7 @@ import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
 import games.shithead.messages.AllocateIdRequest;
-import games.shithead.messages.IdMessage;
+import games.shithead.messages.PlayerIdMessage;
 import games.shithead.messages.NotifyPlayersTurnMessage;
 import games.shithead.messages.RegisterPlayerMessage;
 import games.shithead.messages.StartGameMessage;
@@ -16,20 +16,24 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class GameActor extends AbstractActor {
 
-    private int idAllocator = 1;
     private Random rnd = new Random();
-
     private boolean isGameStarted = false;
+    
+    private int playerIdAllocator = 1;
     private Map<Integer, PlayerInfo> players = new HashMap<>();
     
     private IMultiDeck deck;
-    private int[] cardDatabase; //For efficient card mapping
+    private int[] cardDatabase; 
+    //For efficient mapping of cards to players
     private int cardUniqueIdAllocator = 0;
     
-    //queue of ids of players defining the order of their turns
+    //Queue of ids of players defining the order of their turns
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
-    private int currentPlayer = -1;
-
+    
+    //Updated as the game progresses, and holds the players' ids in the order they finished their games
+    private List<Integer> finalStandings = new LinkedList<>();
+    
+    private int currentTurnPlayerId = -1;
     private ICardFace currentTopCard = null;
 
     public Receive createReceive() {
@@ -43,57 +47,32 @@ public class GameActor extends AbstractActor {
     }
 
     private void allocateId(AllocateIdRequest request) {
-        getSender().tell(new IdMessage(idAllocator++), self());
+        getSender().tell(new PlayerIdMessage(playerIdAllocator++), self());
     }
 
-    private void handleTurn(PlayerTurnInfo turnInfo) {
-        boolean isMoveValid = MoveValidator.validateMove(turnInfo, currentPlayer);
-        if(!isMoveValid){
-            System.out.println("Player " + turnInfo.getPlayerId() + " made an illegal move");
+	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
+        if(isGameStarted){
+            //too late for registration
             return;
         }
-
-        //perform move here
-        performMove(turnInfo);
-
-        sendStateOfGameToPlayers();
-
-        boolean gameIsOver = checkGameOver();
-        if(gameIsOver){
-            notifyGameResult();
-        }else {
-            playingQueue.addLast(currentPlayer);
-            currentPlayer = playingQueue.poll();
-            notifyPlayerTurn(currentPlayer);
-        }
-    }
-
-    private void notifyGameResult() {
-        //FIXME: send game result to all players
-    }
-
-    private boolean checkGameOver() {
-        //FIXME: implement check if game is over
-        return false;
-    }
-
-    private void performMove(PlayerTurnInfo turnInfo) {
-        //FIXME: implement the move itself
+        //FIXME: Save player's name as well
+        players.put(playerRegistration.playerId, new PlayerInfo(getSender()));
     }
 
     private void startGame(StartGameMessage gameStarter) {
-        if(players.size()<=1){
+        if(players.size() <= 1){
             System.out.println("Not enough players, waiting...");
             return;
         }
+        
         isGameStarted = true;
         initDecks();
         dealInitialCards();
-        sendStateOfGameToPlayers();
-        //FIXME: fix so that player chooses the 3 cards that are revealed out of 6 he drew
-        sendStateOfGameToPlayers();
+        //Wait for table cards selection
+        distributeDealtCards();
         determinePlayersOrder();
-        notifyPlayerTurn(currentPlayer);
+        distributePlayersOrder();
+        startCycle();
     }
 
 	private void initDecks() {
@@ -118,29 +97,74 @@ public class GameActor extends AbstractActor {
     	}
     }
 
+	private void distributeDealtCards() {
+		// TODO Auto-generated method stub
+		
+	}
+
     private void determinePlayersOrder() {
     	List<Integer> playerIds = new ArrayList<>(players.keySet());
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
-        currentPlayer = playingQueue.poll();
+        currentTurnPlayerId = playingQueue.poll();
 	}
 
-	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
-        if(isGameStarted){
-            //too late for registration
-            return;
-        }
-        players.put(playerRegistration.playerId, new PlayerInfo(getSender()));
-    }
+	private void distributePlayersOrder() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void startCycle() {
+		while (playingQueue.size() > 1) {
+			//Play
+		}
+		finalStandings.add(playingQueue.removeFirst());
+		//Finish game
+	}
 
     private void notifyPlayerTurn(int playerToNotify) {
         players.get(playerToNotify).getPlayerRef().tell(new NotifyPlayersTurnMessage(playerToNotify), self());
         //maybe start timer or something so if one player crashes it doesn't stop the game
     }
 
+    private void handleTurn(PlayerTurnInfo turnInfo) {
+        boolean isMoveValid = MoveValidator.validateMove(turnInfo, currentTurnPlayerId);
+        if(!isMoveValid){
+            System.out.println("Player " + turnInfo.getPlayerId() + " made an illegal move");
+            return;
+        }
+
+        //perform move here
+        performMove(turnInfo);
+
+        sendStateOfGameToPlayers();
+
+        boolean gameIsOver = checkGameOver();
+        if(gameIsOver){
+            notifyGameResult();
+        }else {
+            playingQueue.addLast(currentTurnPlayerId);
+            currentTurnPlayerId = playingQueue.poll();
+            notifyPlayerTurn(currentTurnPlayerId);
+        }
+    }
+
+    private void performMove(PlayerTurnInfo turnInfo) {
+        //FIXME: implement the move itself
+    }
+
     private void sendStateOfGameToPlayers(){
         players.forEach((id, playerInfo)-> {
             playerInfo.getPlayerRef().tell(new GameState(id, players, currentTopCard), self());
         });
+    }
+
+    private void notifyGameResult() {
+        //FIXME: send game result to all players
+    }
+
+    private boolean checkGameOver() {
+        //FIXME: implement check if game is over
+        return false;
     }
 }
