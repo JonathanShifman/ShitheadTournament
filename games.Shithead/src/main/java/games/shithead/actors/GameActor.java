@@ -114,6 +114,7 @@ public class GameActor extends AbstractActor {
     	for(ICardFace cardFace : cardFaces) {
     		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
     		cardDatabase[cardUniqueIdAllocator++] = playerId;
+    		listToAddCardsTo.add(gameCard);
     	}
     }
 
