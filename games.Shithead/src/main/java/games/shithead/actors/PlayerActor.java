@@ -4,10 +4,10 @@ import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
 import games.shithead.game.GameState;
 import games.shithead.game.PlayerTurnInfo;
-import games.shithead.gameManagement.NotifyPlayersTurn;
-import games.shithead.gameManagement.RegisterPlayer;
-import games.shithead.gameManagement.AllocateIdRequest;
-import games.shithead.gameManagement.IdMessage;
+import games.shithead.messages.AllocateIdRequest;
+import games.shithead.messages.IdMessage;
+import games.shithead.messages.NotifyPlayersTurnMessage;
+import games.shithead.messages.RegisterPlayerMessage;
 
 public abstract class PlayerActor extends AbstractActor {
 
@@ -27,18 +27,20 @@ public abstract class PlayerActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 //after getting back the allocated id, we can register the player
-                .match(IdMessage.class, idMessage -> {
-                    this.playerId = idMessage.playerId;
-                    sender().tell(new RegisterPlayer(playerId, playerName), self());
-                })
+                .match(IdMessage.class, this::receiveId)
                 .match(GameState.class, this::analyzeGameState)
-                .match(NotifyPlayersTurn.class, this::makeMove)
+                .match(NotifyPlayersTurnMessage.class, this::makeMove)
                 .matchAny(this::unhandled)
                 .build();
     }
+    
+    private void receiveId(IdMessage idMessage) {
+    	this.playerId = idMessage.playerId;
+        sender().tell(new RegisterPlayerMessage(playerId, playerName), self());
+    }
 
-    private  void makeMove(NotifyPlayersTurn notification){
-        if(playerId!=notification.playerToNotify){
+    private void makeMove(NotifyPlayersTurnMessage notification){
+        if(playerId != notification.playerToNotify){
             System.out.println("Got request to make a move with wrong id");
             return;
         }

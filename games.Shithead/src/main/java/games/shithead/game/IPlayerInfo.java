@@ -1,7 +1,7 @@
 package games.shithead.game;
 
 import akka.actor.ActorRef;
-import games.shithead.deck.ICard;
+import games.shithead.deck.ICardFace;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ public interface IPlayerInfo {
 	
 	ActorRef getPlayerRef();
 	
-	List<ICard> getHandCards();
+	List<IGameCard> getHandCards();
 	
-	List<ICard> getRevealedTableCards();
+	List<IGameCard> getRevealedTableCards();
 	
-	List<ICard> getHiddenTableCards();
+	List<IGameCard> getHiddenTableCards();
 
 }

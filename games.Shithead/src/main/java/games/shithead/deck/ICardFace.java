@@ -1,12 +1,10 @@
 package games.shithead.deck;
 
-public interface ICard {
+public interface ICardFace {
 
 	int getValue();
 	
 	int getKind();
-	
-	int getUniqueId();
 
 	boolean isSpecialCard();
 }

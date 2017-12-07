@@ -1,23 +1,20 @@
 package games.shithead.deck;
 
-public class Card implements ICard {
+public class CardFace implements ICardFace {
 
-	private int value;
-	private int kind;
-	private int uniqueId;
+	private final int value;
+	private final int kind;
 	private boolean isSpecialCard;
 	
-	public Card(int value, int kind, int uniqueId) {
+	public CardFace(int value, int kind) {
 		this.value = value;
 		this.kind = kind;
-		this.uniqueId = uniqueId;
 		this.isSpecialCard = determineIfSpecial();
 	}
 
-	public Card(ICard cardToCopyFrom) {
+	public CardFace(ICardFace cardToCopyFrom) {
 		this.value = cardToCopyFrom.getValue();
 		this.kind = cardToCopyFrom.getKind();
-		this.uniqueId = cardToCopyFrom.getUniqueId();
 		this.isSpecialCard = cardToCopyFrom.isSpecialCard();
 	}
 
@@ -34,11 +31,6 @@ public class Card implements ICard {
 	@Override
 	public int getKind() {
 		return kind;
-	}
-
-	@Override
-	public int getUniqueId() {
-		return uniqueId;
 	}
 
 	@Override

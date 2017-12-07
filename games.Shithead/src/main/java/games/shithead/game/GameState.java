@@ -1,8 +1,8 @@
 package games.shithead.game;
 
 import akka.actor.ActorRef;
-import games.shithead.deck.Card;
-import games.shithead.deck.ICard;
+import games.shithead.deck.CardFace;
+import games.shithead.deck.ICardFace;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 public class GameState {
 
     private Map<Integer, PlayerInfo> players;
-    private ICard currentTopCard;
+    private ICardFace currentTopCard;
 
-    public GameState(int targetPlayerId, Map<Integer, PlayerInfo> players, ICard currentTopCard) {
+    public GameState(int targetPlayerId, Map<Integer, PlayerInfo> players, ICardFace currentTopCard) {
         this.players = new HashMap<>();
 
         players.forEach((id, info)->{
             this.players.put(id, classifyInfo(info, id, targetPlayerId));
         });
 
-        this.currentTopCard = new Card(currentTopCard);
+        this.currentTopCard = new CardFace(currentTopCard);
 
     }
 
@@ -29,7 +29,6 @@ public class GameState {
         PlayerInfo classifiedInfo = new PlayerInfo(playerRef);
 
         classifiedInfo.getRevealedTableCards().addAll(info.getRevealedTableCards());
-
         classifiedInfo.getHiddenTableCards().addAll(info.getHiddenTableCards()
             .stream()
             .map(this::classifyCard)
@@ -41,15 +40,15 @@ public class GameState {
         return classifiedInfo;
     }
 
-    private ICard classifyCard(ICard card) {
-        return new Card(-1, -1, card.getUniqueId());
+    private IGameCard classifyCard(IGameCard card) {
+        return new GameCard(null, card.getUniqueId());
     }
 
     public Map<Integer, PlayerInfo> getPlayers() {
         return players;
     }
 
-    public ICard getCurrentTopCard() {
+    public ICardFace getCurrentTopCard() {
         return currentTopCard;
     }
 }
