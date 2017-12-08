@@ -3,11 +3,11 @@ package games.shithead.actors;
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
 import games.shithead.game.GameState;
+import games.shithead.game.IGameCard;
 import games.shithead.game.PlayerTurnInfo;
-import games.shithead.messages.AllocateIdRequest;
-import games.shithead.messages.IdMessage;
-import games.shithead.messages.NotifyPlayersTurnMessage;
-import games.shithead.messages.RegisterPlayerMessage;
+import games.shithead.messages.*;
+
+import java.util.List;
 
 public abstract class PlayerActor extends AbstractActor {
 
@@ -29,11 +29,20 @@ public abstract class PlayerActor extends AbstractActor {
                 //after getting back the allocated id, we can register the player
                 .match(IdMessage.class, this::receiveId)
                 .match(GameState.class, this::analyzeGameState)
+                .match(HandSelectionRequest.class, this::chooseCardsForHand)
                 .match(NotifyPlayersTurnMessage.class, this::makeMove)
                 .matchAny(this::unhandled)
                 .build();
     }
-    
+
+    private void chooseCardsForHand(HandSelectionRequest request) {
+        List<IGameCard> cardsForChoosing = request.getCardsForChoosing();
+        HandSelectionReply selection = makeStartCardsSelection(cardsForChoosing);
+        sender().tell(selection, self());
+    }
+
+    protected abstract HandSelectionReply makeStartCardsSelection(List<IGameCard> cardsForChoosing);
+
     private void receiveId(IdMessage idMessage) {
     	this.playerId = idMessage.playerId;
         sender().tell(new RegisterPlayerMessage(playerId, playerName), self());

@@ -5,17 +5,16 @@ import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
-import games.shithead.messages.AllocateIdRequest;
-import games.shithead.messages.IdMessage;
-import games.shithead.messages.NotifyPlayersTurnMessage;
-import games.shithead.messages.RegisterPlayerMessage;
-import games.shithead.messages.StartGameMessage;
+import games.shithead.messages.*;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.*;
+
+import static akka.pattern.PatternsCS.ask;
 
 public class GameActor extends AbstractActor {
 
+    public static final int HAND_SELECTION_TIMEOUT = 1000;
     private int idAllocator = 1;
     private Random rnd = new Random();
 
@@ -103,12 +102,34 @@ public class GameActor extends AbstractActor {
     }
 
     private void dealInitialCards() {
+        CountDownLatch dealingLatch = new CountDownLatch(players.size());
         players.forEach((id, playerInfo) -> {
-        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getHandCards(), id);
         	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getHiddenTableCards(), id);
-        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getRevealedTableCards(), id);
+
+        	List<IGameCard> cardsForChoosing = new ArrayList<>(6);
+        	dealCardsToPlayer(deck.getNextCardFaces(6), cardsForChoosing, id);
+
+        	HandSelectionRequest request = new HandSelectionRequest(cardsForChoosing);
+            CompletionStage<Object> replyFuture = ask(playerInfo.getPlayerRef(), request, HAND_SELECTION_TIMEOUT);
+            replyFuture.thenAccept(replyObj -> {
+                HandSelectionReply reply = (HandSelectionReply) replyObj;
+                playerInfo.getHandCards().addAll(reply.getHandCards());
+                playerInfo.getRevealedTableCards().addAll(reply.getFaceupCards());
+                dealingLatch.countDown();
+            }).exceptionally(throwable -> {
+                playerInfo.getHandCards().addAll(cardsForChoosing.subList(0,3));
+                playerInfo.getRevealedTableCards().addAll(cardsForChoosing.subList(4,6));
+                dealingLatch.countDown();
+                return null;
+            });
         });
-	}
+
+        try {
+            dealingLatch.await(HAND_SELECTION_TIMEOUT * players.size(), TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            System.out.println("error thrown while waiting for card selection");
+        }
+    }
     
     private void dealCardsToPlayer(List<ICardFace> cardFaces, List<IGameCard> listToAddCardsTo, int playerId) {
     	for(ICardFace cardFace : cardFaces) {
