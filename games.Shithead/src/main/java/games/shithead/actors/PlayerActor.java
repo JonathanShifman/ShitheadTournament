@@ -46,6 +46,18 @@ public abstract class PlayerActor extends AbstractActor {
     	this.playerId = idMessage.playerId;
         sender().tell(new RegisterPlayerMessage(playerId, playerName), self());
     }
+    
+	private void receivePrivateDeal(PrivateDealMessage message) {
+	    	
+	}
+    
+	private void receivePublicDeal(PublicDealMessage message) {
+		
+	}
+
+	private void receivePlayersOrder(PlayersOrderMessage message) {
+	
+	}
 
     private void makeMove(NotifyPlayersTurnMessage notification){
         if(playerId != notification.playerToNotify){
