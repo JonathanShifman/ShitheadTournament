@@ -8,8 +8,10 @@ import games.shithead.game.*;
 import games.shithead.messages.AllocateIdRequest;
 import games.shithead.messages.PlayerIdMessage;
 import games.shithead.messages.NotifyPlayersTurnMessage;
+import games.shithead.messages.PlayerActionInfo;
 import games.shithead.messages.RegisterPlayerMessage;
 import games.shithead.messages.StartGameMessage;
+import games.shithead.messages.TableCardsSelectionMessage;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -23,8 +25,8 @@ public class GameActor extends AbstractActor {
     private Map<Integer, PlayerInfo> players = new HashMap<>();
     
     private IMultiDeck deck;
-    private int[] cardDatabase; 
     //For efficient mapping of cards to players
+    private CardStatus[] cardStatuses; 
     private int cardUniqueIdAllocator = 0;
     
     //Queue of ids of players defining the order of their turns
@@ -41,7 +43,8 @@ public class GameActor extends AbstractActor {
                 .match(AllocateIdRequest.class, this::allocateId)
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
-                .match(PlayerTurnInfo.class, this::handleTurn)
+                .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
+                .match(PlayerActionInfo.class, this::handleAction)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -72,13 +75,16 @@ public class GameActor extends AbstractActor {
         distributeDealtCards();
         determinePlayersOrder();
         distributePlayersOrder();
-        startCycle();
+        //notifyPlayerTurn(currentTurnPlayerId);
     }
 
 	private void initDecks() {
         //try to match deck size to number of players - change if it's not working well
         deck = new MultiDeck((int) Math.ceil(players.size()/4));
-        cardDatabase = new int[deck.getNumberOfCards()];
+        cardStatuses = new CardStatus[deck.getNumberOfCards()];
+        for(int i = 0; i < cardStatuses.length; i++) {
+        	cardStatuses[i] = CardStatus.DECK;
+        }
     }
 
     private void dealInitialCards() {
@@ -92,9 +98,13 @@ public class GameActor extends AbstractActor {
     private void dealCardsToPlayer(List<ICardFace> cardFaces, List<IGameCard> listToAddCardsTo, int playerId) {
     	for(ICardFace cardFace : cardFaces) {
     		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
-    		cardDatabase[cardUniqueIdAllocator++] = playerId;
+    		cardStatuses[cardUniqueIdAllocator++] = new CardStatus(playerId);
     		listToAddCardsTo.add(gameCard);
     	}
+    }
+    
+    private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
+    	
     }
 
 	private void distributeDealtCards() {
@@ -114,30 +124,16 @@ public class GameActor extends AbstractActor {
 		
 	}
 
-	private void startCycle() {
-		while (playingQueue.size() > 1) {
-			//Play
-		}
-		finalStandings.add(playingQueue.removeFirst());
-		//Finish game
-	}
-
-    private void notifyPlayerTurn(int playerToNotify) {
-        players.get(playerToNotify).getPlayerRef().tell(new NotifyPlayersTurnMessage(playerToNotify), self());
-        //maybe start timer or something so if one player crashes it doesn't stop the game
-    }
-
-    private void handleTurn(PlayerTurnInfo turnInfo) {
-        boolean isMoveValid = MoveValidator.validateMove(turnInfo, currentTurnPlayerId);
-        if(!isMoveValid){
-            System.out.println("Player " + turnInfo.getPlayerId() + " made an illegal move");
+    private void handleAction(PlayerActionInfo actionInfo) {
+        boolean isActionValid = ActionValidator.validateAction(actionInfo, currentTurnPlayerId);
+        if(!isActionValid){
+            System.out.println("Player " + actionInfo.getPlayerId() + " made an illegal action");
             return;
         }
 
         //perform move here
-        performMove(turnInfo);
-
-        sendStateOfGameToPlayers();
+        performAcceptedAction(actionInfo);
+        distributeAcceptedAction();
 
         boolean gameIsOver = checkGameOver();
         if(gameIsOver){
@@ -145,26 +141,24 @@ public class GameActor extends AbstractActor {
         }else {
             playingQueue.addLast(currentTurnPlayerId);
             currentTurnPlayerId = playingQueue.poll();
-            notifyPlayerTurn(currentTurnPlayerId);
+            //notifyPlayerTurn(currentTurnPlayerId);
         }
     }
 
-    private void performMove(PlayerTurnInfo turnInfo) {
+	private void performAcceptedAction(PlayerActionInfo turnInfo) {
         //FIXME: implement the move itself
     }
 
-    private void sendStateOfGameToPlayers(){
-        players.forEach((id, playerInfo)-> {
-            playerInfo.getPlayerRef().tell(new GameState(id, players, currentTopCard), self());
-        });
-    }
-
-    private void notifyGameResult() {
-        //FIXME: send game result to all players
-    }
+    private void distributeAcceptedAction() {
+		// TODO Auto-generated method stub
+	}
 
     private boolean checkGameOver() {
         //FIXME: implement check if game is over
         return false;
+    }
+
+    private void notifyGameResult() {
+        //FIXME: send game result to all players
     }
 }

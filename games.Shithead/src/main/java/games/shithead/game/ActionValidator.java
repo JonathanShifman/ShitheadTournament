@@ -1,8 +1,10 @@
 package games.shithead.game;
 
-public class MoveValidator {
+import games.shithead.messages.PlayerActionInfo;
 
-    public static boolean validateMove(PlayerTurnInfo turnInfo, int currentPlayer){
+public class ActionValidator {
+
+    public static boolean validateAction(PlayerActionInfo turnInfo, int currentPlayer){
         if(turnInfo.getPlayerId()!=currentPlayer && !turnInfo.isInterruption()){
             return false;
         }
