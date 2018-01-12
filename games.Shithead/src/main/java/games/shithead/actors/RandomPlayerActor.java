@@ -14,22 +14,25 @@ public class RandomPlayerActor extends PlayerActor {
 	}
 
 	@Override
-	protected void chooseRevealedTableCards(List<IGameCard> cards) {
+	protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards) {
 		int remainingNumberOfCardsToChoose = 3;
+		List<Integer> chosenRevealdTableCardIds = new ArrayList<Integer>();
 		for(IGameCard card : cards) {
 			if(remainingNumberOfCardsToChoose > 0) {
 				this.handCards.add(card);
+				chosenRevealdTableCardIds.add(card.getUniqueId());
 				remainingNumberOfCardsToChoose--;
 			}
 			else {
 				this.revealedTableCards.add(card);
 			}
 		}
+		return chosenRevealdTableCardIds;
 	}
 
 	@Override
 	protected void handlePublicDeal() {
-		// TODO Auto-generated method stub
+		// Random Player doesn't give a shit about such subtleties 
 	}
 
 	@Override
@@ -46,8 +49,7 @@ public class RandomPlayerActor extends PlayerActor {
 
 	@Override
 	protected void considerInterruption() {
-		// TODO Auto-generated method stub
-		
+		// Nah
 	}
 
 }
