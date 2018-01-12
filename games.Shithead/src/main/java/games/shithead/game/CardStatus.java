@@ -7,9 +7,16 @@ public class CardStatus {
 	public static final CardStatus BURNT = new CardStatus(-3);
 
 	private final int holderId;
+	private HeldCardPosition heldCardPosition;
 	
-	public CardStatus(int holderId) {
+	public CardStatus(int holderId, HeldCardPosition heldCardPosition) {
 		this.holderId = holderId;
+		this.heldCardPosition = heldCardPosition;
+	}
+	
+	private CardStatus(int holderId) {
+		this.holderId = holderId;
+		this.heldCardPosition = null;
 	}
 	
 	public boolean isHeldByAPlayer() {
@@ -18,6 +25,10 @@ public class CardStatus {
 	
 	public int getHolderId() {
 		return holderId;
+	}
+	
+	public HeldCardPosition getHeldCardPosition() {
+		return heldCardPosition;
 	}
 	
 }

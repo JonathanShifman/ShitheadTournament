@@ -25,8 +25,7 @@ public class GameActor extends AbstractActor {
     private Map<Integer, PlayerInfo> players = new HashMap<>();
     
     private IMultiDeck deck;
-    //For efficient mapping of cards to players
-    private CardStatus[] cardStatuses; 
+    private CardStatus[] cardStatuses; //For efficient mapping of cards to players
     private int cardUniqueIdAllocator = 0;
     
     //Queue of ids of players defining the order of their turns
@@ -71,11 +70,6 @@ public class GameActor extends AbstractActor {
         isGameStarted = true;
         initDecks();
         dealInitialCards();
-        //Wait for table cards selection
-        distributeDealtCards();
-        determinePlayersOrder();
-        distributePlayersOrder();
-        //notifyPlayerTurn(currentTurnPlayerId);
     }
 
 	private void initDecks() {
@@ -89,27 +83,26 @@ public class GameActor extends AbstractActor {
 
     private void dealInitialCards() {
         players.forEach((id, playerInfo) -> {
-        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getHandCards(), id);
-        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getHiddenTableCards(), id);
-        	dealCardsToPlayer(deck.getNextCardFaces(3), playerInfo.getRevealedTableCards(), id);
+        	List<ICardFace> cardFaces = deck.getNextCardFaces(6);
+        	for(ICardFace cardFace : cardFaces) {
+        		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
+        		cardStatuses[cardUniqueIdAllocator++] = new CardStatus(id, HeldCardPosition.TO_BE_DETERMINED);
+        	}
+        	//Send PrivateDealMessage
         });
 	}
     
-    private void dealCardsToPlayer(List<ICardFace> cardFaces, List<IGameCard> listToAddCardsTo, int playerId) {
-    	for(ICardFace cardFace : cardFaces) {
-    		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
-    		cardStatuses[cardUniqueIdAllocator++] = new CardStatus(playerId);
-    		listToAddCardsTo.add(gameCard);
-    	}
-    }
-    
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
-    	
+    	//Validate selection
+    	//If invalid, return cards to deck
+    	//Put cards in appropriate lists
+    	//Increase count of players who made their choice. 
+    	//If all did, determine players order and distribute full deal
     }
 
 	private void distributeDealtCards() {
-		// TODO Auto-generated method stub
-		
+		//Send public deal (with players order) to all players
+		//Start waiting for actions  
 	}
 
     private void determinePlayersOrder() {
@@ -117,11 +110,6 @@ public class GameActor extends AbstractActor {
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
         currentTurnPlayerId = playingQueue.poll();
-	}
-
-	private void distributePlayersOrder() {
-		// TODO Auto-generated method stub
-		
 	}
 
     private void handleAction(PlayerActionInfo actionInfo) {
@@ -134,6 +122,7 @@ public class GameActor extends AbstractActor {
         //perform move here
         performAcceptedAction(actionInfo);
         distributeAcceptedAction();
+        //send ReceivedCardsMessage
 
         boolean gameIsOver = checkGameOver();
         if(gameIsOver){
@@ -141,7 +130,6 @@ public class GameActor extends AbstractActor {
         }else {
             playingQueue.addLast(currentTurnPlayerId);
             currentTurnPlayerId = playingQueue.poll();
-            //notifyPlayerTurn(currentTurnPlayerId);
         }
     }
 
