@@ -45,7 +45,7 @@ public class MultiDeck implements IMultiDeck {
 	}
 	
 	private void shuffle() {
-		
+		//FIXME: Implement shuffle
 	}
 
 	@Override
