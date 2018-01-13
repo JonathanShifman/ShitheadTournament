@@ -7,7 +7,6 @@ import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
 import games.shithead.messages.AllocateIdRequest;
 import games.shithead.messages.PlayerIdMessage;
-import games.shithead.messages.NotifyPlayersTurnMessage;
 import games.shithead.messages.PlayerActionInfo;
 import games.shithead.messages.RegisterPlayerMessage;
 import games.shithead.messages.StartGameMessage;
