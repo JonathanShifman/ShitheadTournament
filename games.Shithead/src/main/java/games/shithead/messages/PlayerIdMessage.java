@@ -6,9 +6,14 @@ package games.shithead.messages;
  *
  */
 public class PlayerIdMessage {
-    public int playerId;
+    private final int playerId;
 
     public PlayerIdMessage(int id) {
         this.playerId = id;
     }
+
+	public int getPlayerId() {
+		return playerId;
+	}
+    
 }

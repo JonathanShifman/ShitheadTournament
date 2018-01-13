@@ -52,7 +52,7 @@ public abstract class PlayerActor extends AbstractActor {
     public abstract String getName();
     
     private void receiveId(PlayerIdMessage idMessage) {
-    	this.playerId = idMessage.playerId;
+    	this.playerId = idMessage.getPlayerId();
         sender().tell(new RegisterPlayerMessage(playerId, getName()), self());
     }
     
