@@ -3,6 +3,7 @@ package games.shithead.actors;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
@@ -19,7 +20,7 @@ import games.shithead.messages.TableCardsSelectionMessage;
 
 public abstract class PlayerActor extends AbstractActor {
 
-    private int playerId = -1;
+    private Optional<Integer> playerId = Optional.empty();
     private int numberOfPlayers = -1;
     private Deque<Integer> playingQueue = null;
     private int currentPlayerTurn = -1;
@@ -30,9 +31,10 @@ public abstract class PlayerActor extends AbstractActor {
 
     public PlayerActor(){
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
-                .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_MASTER_ACTOR_NAME));
+                .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
 
         //upon creation all players ask the game actor to allocate player id so it's unique
+        System.out.println(getLoggingPrefix() + "Sending AllocateIdRequest");
         gameActor.tell(new AllocateIdRequest(), self());
     }
 
@@ -51,9 +53,13 @@ public abstract class PlayerActor extends AbstractActor {
     
     public abstract String getName();
     
+    public String getLoggingPrefix() {
+    	return "[" + playerId.orElse(-1) + "] " + getName() + ": ";
+    }
+    
     private void receiveId(PlayerIdMessage idMessage) {
-    	this.playerId = idMessage.getPlayerId();
-        sender().tell(new RegisterPlayerMessage(playerId, getName()), self());
+    	this.playerId = Optional.of(idMessage.getPlayerId());
+        sender().tell(new RegisterPlayerMessage(playerId.get(), getName()), self());
     }
     
 	private void receivePrivateDeal(PrivateDealMessage message) {
@@ -89,7 +95,7 @@ public abstract class PlayerActor extends AbstractActor {
 	}
 
 	private boolean isPlayersTurn() {
-		return playingQueue.getFirst() == playerId;
+		return playingQueue.getFirst() == playerId.get();
 	}
 	
     private void attemptMove(){
@@ -101,7 +107,7 @@ public abstract class PlayerActor extends AbstractActor {
 	protected abstract void considerInterruption();
 
 	private void receiveAcceptedAction(AcceptedActionMessage message) {
-		if(message.getPlayerId() == playerId) {
+		if(message.getPlayerId() == playerId.get()) {
 			removeCards(message.getCards());
 		}
 		currentPlayerTurn = message.getNextPlayerTurn();

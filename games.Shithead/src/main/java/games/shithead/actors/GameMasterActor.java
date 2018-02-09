@@ -2,6 +2,7 @@ package games.shithead.actors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
+import games.shithead.log.Logger;
 import games.shithead.messages.GameResult;
 import games.shithead.messages.StartGameMessage;
 
@@ -17,14 +18,20 @@ public class GameMasterActor extends AbstractActor {
     }
 
     private void startGame(StartGameMessage startGame) {
+    	Logger.log(getLoggingPrefix() + "Received StartGameMessage");
+    	
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
-
+        Logger.log(getLoggingPrefix() + "Sending StartGameMessage to GameActor");
         gameActor.tell(startGame, self());
     }
 
     private void logGameResult(GameResult result) {
         System.out.println("Player " + result.losingPlayerName + " (" + result.losingPlayerId + ") lost");
+    }
+    
+    private String getLoggingPrefix() {
+    	return "GameMasterActor: ";
     }
 
 }

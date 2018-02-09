@@ -5,6 +5,7 @@ import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
+import games.shithead.log.Logger;
 import games.shithead.messages.AllocateIdRequest;
 import games.shithead.messages.PlayerIdMessage;
 import games.shithead.messages.PlayerActionInfo;
@@ -35,6 +36,10 @@ public class GameActor extends AbstractActor {
     
     private int currentTurnPlayerId = -1;
     private ICardFace currentTopCard = null;
+    
+    private String getLoggingPrefix() {
+    	return "GameActor: ";
+    }
 
     public Receive createReceive() {
         return receiveBuilder()
@@ -48,21 +53,27 @@ public class GameActor extends AbstractActor {
     }
 
     private void allocateId(AllocateIdRequest request) {
+    	System.out.println(getLoggingPrefix() + "Received AllocateIdRequest");
+    	System.out.println(getLoggingPrefix() + "Sending PlayerIdMessage with playerId=" + playerIdAllocator);
         getSender().tell(new PlayerIdMessage(playerIdAllocator++), self());
     }
 
 	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
+    	System.out.println(getLoggingPrefix() + "Received RegisterPlayerMessage");
         if(isGameStarted){
             //too late for registration
             return;
         }
         //FIXME: Save player's name as well
+    	System.out.println(getLoggingPrefix() + "Registering player");
         players.put(playerRegistration.playerId, new PlayerInfo(getSender()));
     }
 
     private void startGame(StartGameMessage gameStarter) {
+    	Logger.log(getLoggingPrefix() + "Received StartGameMessage");
+    	
         if(players.size() <= 1){
-            System.out.println("Not enough players, waiting...");
+            System.out.println(getLoggingPrefix() + "Not enough players, waiting...");
             return;
         }
         
