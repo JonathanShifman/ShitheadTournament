@@ -8,6 +8,7 @@ import games.shithead.game.*;
 import games.shithead.log.Logger;
 import games.shithead.messages.AllocateIdRequest;
 import games.shithead.messages.PlayerIdMessage;
+import games.shithead.messages.PrivateDealMessage;
 import games.shithead.messages.PlayerActionInfo;
 import games.shithead.messages.RegisterPlayerMessage;
 import games.shithead.messages.StartGameMessage;
@@ -84,6 +85,7 @@ public class GameActor extends AbstractActor {
 
 	private void initDecks() {
         //try to match deck size to number of players - change if it's not working well
+		System.out.println(getLoggingPrefix() + "Initializing deck");
         deck = new MultiDeck((int) Math.ceil(players.size()/4));
         cardStatuses = new CardStatus[deck.getNumberOfCards()];
         for(int i = 0; i < cardStatuses.length; i++) {
@@ -93,16 +95,20 @@ public class GameActor extends AbstractActor {
 
     private void dealInitialCards() {
         players.forEach((id, playerInfo) -> {
+        	List<IGameCard> cardsToDeal = new ArrayList<IGameCard>();
         	List<ICardFace> cardFaces = deck.getNextCardFaces(6);
         	for(ICardFace cardFace : cardFaces) {
         		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
+        		cardsToDeal.add(gameCard);
         		cardStatuses[cardUniqueIdAllocator++] = new CardStatus(id, HeldCardPosition.TO_BE_DETERMINED);
         	}
-        	//Send PrivateDealMessage
+        	System.out.println(getLoggingPrefix() + "Sending PrivateDealMessage to player " + id);
+        	playerInfo.getPlayerRef().tell(new PrivateDealMessage(cardsToDeal), self());
         });
 	}
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
+    	Logger.log(getLoggingPrefix() + "Received TableCardsSelectionMessage");
     	//Validate selection
     	//If invalid, return cards to deck
     	//Put cards in appropriate lists

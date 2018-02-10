@@ -1,5 +1,7 @@
 package games.shithead.game;
 
+import java.util.Optional;
+
 import games.shithead.deck.ICardFace;
 
 /**
@@ -13,16 +15,16 @@ import games.shithead.deck.ICardFace;
  */
 public class GameCard implements IGameCard {
 
-	private final ICardFace cardFace;
+	private final Optional<ICardFace> cardFace;
 	private final int uniqueId;
 	
 	public GameCard(ICardFace cardFace, int uniqueId) {
-		this.cardFace = cardFace;
+		this.cardFace = Optional.ofNullable(cardFace);
 		this.uniqueId = uniqueId;
 	}
 
 	@Override
-	public ICardFace getCardFace() {
+	public Optional<ICardFace> getCardFace() {
 		return cardFace;
 	}
 

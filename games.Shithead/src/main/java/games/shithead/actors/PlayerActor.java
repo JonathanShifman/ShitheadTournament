@@ -58,17 +58,24 @@ public abstract class PlayerActor extends AbstractActor {
     }
     
     private void receiveId(PlayerIdMessage idMessage) {
+    	System.out.println(getLoggingPrefix() + "Received PlayerIdMessage");
     	this.playerId = Optional.of(idMessage.getPlayerId());
+    	
+    	System.out.println(getLoggingPrefix() + "Sending RegisterPlayerMessage");
         sender().tell(new RegisterPlayerMessage(playerId.get(), getName()), self());
     }
     
 	private void receivePrivateDeal(PrivateDealMessage message) {
+    	System.out.println(getLoggingPrefix() + "Received PrivateDealMessage");
+    	
         //FIXME: LinkedList?
         this.handCards = new ArrayList<IGameCard>();
         this.revealedTableCards = new ArrayList<IGameCard>();
         
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(message.getCards());
-        
+    	System.out.println(getLoggingPrefix() + "Chosen revealed table card ids: [0, 1, 2]"); //FIXME: Real ids
+
+    	System.out.println(getLoggingPrefix() + "Sending TableCardsSelectionMessage");
         sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
 	}
     

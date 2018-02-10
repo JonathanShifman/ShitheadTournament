@@ -19,12 +19,12 @@ public class RandomPlayerActor extends PlayerActor {
 		List<Integer> chosenRevealdTableCardIds = new ArrayList<Integer>();
 		for(IGameCard card : cards) {
 			if(remainingNumberOfCardsToChoose > 0) {
-				this.handCards.add(card);
+				this.revealedTableCards.add(card);
 				chosenRevealdTableCardIds.add(card.getUniqueId());
 				remainingNumberOfCardsToChoose--;
 			}
 			else {
-				this.revealedTableCards.add(card);
+				this.handCards.add(card);
 			}
 		}
 		return chosenRevealdTableCardIds;
