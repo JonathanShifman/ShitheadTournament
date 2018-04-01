@@ -1,8 +1,6 @@
 package games.shithead.deck;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MultiDeck implements IMultiDeck {
 	
@@ -15,7 +13,7 @@ public class MultiDeck implements IMultiDeck {
 	
 	private int numberOfDecks;
 	private int currentCardFaceIndex;
-	private ICardFace[] cardFaces;
+	private List<ICardFace> cardFaces;
 	
 	public MultiDeck(int numberOfDecks) {
 		this.numberOfDecks = numberOfDecks;
@@ -25,35 +23,35 @@ public class MultiDeck implements IMultiDeck {
 	}
 	
 	private void init() {
-		cardFaces = new ICardFace[CARDS_PER_DECK * numberOfDecks];
+		cardFaces = new ArrayList<>(CARDS_PER_DECK * numberOfDecks);
 		for(int i = 0; i < numberOfDecks; i++) {
 			insertSingleDeck(cardFaces, CARDS_PER_DECK * i);
 		}
 	}
 	
-	private void insertSingleDeck(ICardFace[] cardFaces, int indexToStart) {
+	private void insertSingleDeck(List<ICardFace> cardFaces, int indexToStart) {
 		int currentIndex = indexToStart;
 		for(int value = MIN_VALUE; value <= MAX_VALUE; value++) {
 			for(int kind = MIN_KIND; kind <= MAX_KIND; kind++) {
 				if(value == MAX_VALUE && kind > NUMBER_OF_JOKERS) {
 					break;
 				}
-				cardFaces[currentIndex] = new CardFace(value, kind);
+				cardFaces.add(currentIndex, new CardFace(value, kind));
 				currentIndex++;
 			}
 		}
 	}
 	
 	private void shuffle() {
-		//FIXME: Implement shuffle
+		Collections.shuffle(cardFaces);
 	}
 
 	@Override
 	public ICardFace getNextCardFace() {
-		if (currentCardFaceIndex >= cardFaces.length) {
+		if (currentCardFaceIndex >= cardFaces.size()) {
 			return null;
 		}
-		ICardFace cardFace = cardFaces[currentCardFaceIndex];
+		ICardFace cardFace = cardFaces.get(currentCardFaceIndex);
 		currentCardFaceIndex++;
 		return cardFace;
 	}
@@ -82,7 +80,7 @@ public class MultiDeck implements IMultiDeck {
 
 	@Override
 	public boolean isEmpty() {
-		return currentCardFaceIndex >= cardFaces.length;
+		return currentCardFaceIndex >= cardFaces.size();
 	}
 
 
