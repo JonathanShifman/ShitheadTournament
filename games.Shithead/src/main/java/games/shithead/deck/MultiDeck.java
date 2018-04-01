@@ -80,5 +80,10 @@ public class MultiDeck implements IMultiDeck {
 		return numberOfDecks * CARDS_PER_DECK;
 	}
 
-	
+	@Override
+	public boolean isEmpty() {
+		return currentCardFaceIndex >= cardFaces.length;
+	}
+
+
 }

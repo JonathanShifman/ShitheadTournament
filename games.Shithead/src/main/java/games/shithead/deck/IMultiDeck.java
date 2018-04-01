@@ -11,5 +11,7 @@ public interface IMultiDeck {
 	int getNumberOfDecks();
 	
 	int getNumberOfCards();
+
+	boolean isEmpty();
 	
 }

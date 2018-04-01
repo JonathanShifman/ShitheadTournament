@@ -174,14 +174,15 @@ public class GameActor extends AbstractActor {
             return;
         }
 
+        ReceivedCardsMessage receivedCardsMessage = prepareReceivedCardsMessage(actionInfo.getPlayerId());
         playingQueue.addLast(playingQueue.poll());
         currentTurnPlayerId = playingQueue.getFirst();
         distributeAcceptedAction(actionInfo);
-        //send ReceivedCardsMessage
+        players.get(actionInfo.getPlayerId()).getPlayerRef().tell(receivedCardsMessage, self());
     }
 
-	private void performAcceptedAction(PlayerActionInfo actionInfo) {
-        Logger.log(getLoggingPrefix() + "Performing action");
+    private void performAcceptedAction(PlayerActionInfo actionInfo) {
+        Logger.log(getLoggingPrefix() + "Performing action: cards " + actionInfo.getCardsToPut().toString() + " by player " + actionInfo.getPlayerId());
         IPlayerInfo playerInfo = players.get(actionInfo.getPlayerId());
         List<Integer> cardsToRemoveFromHand = new LinkedList<>();
         for(int cardId : actionInfo.getCardsToPut()) {
@@ -189,6 +190,24 @@ public class GameActor extends AbstractActor {
             cardsToRemoveFromHand.add(cardId);
         }
         playerInfo.getHandCardIds().removeAll(cardsToRemoveFromHand);
+    }
+
+    private ReceivedCardsMessage prepareReceivedCardsMessage(int playerId) {
+        IPlayerInfo playerInfo = players.get(playerId);
+        int neededCards = 3 - playerInfo.getHandCardIds().size();
+        ReceivedCardsMessage receivedCardsMessage = new ReceivedCardsMessage();
+        if(neededCards > 0) {
+            List<ICardFace> cardFaces = deck.getNextCardFaces(neededCards);
+            for(ICardFace cardFace : cardFaces) {
+                final int newUniqueId = cardUniqueIdAllocator++;
+                IGameCard gameCard = new GameCard(cardFace, newUniqueId);
+                cardStatuses[newUniqueId] = new CardStatus(playerId, HeldCardPosition.IN_HAND);
+                cards[newUniqueId] = gameCard;
+                playerInfo.getHandCardIds().add(newUniqueId);
+                receivedCardsMessage.addCard(gameCard);
+            }
+        }
+        return receivedCardsMessage;
     }
 
     private void distributeAcceptedAction(PlayerActionInfo acceptedActionInfo) {
@@ -200,6 +219,9 @@ public class GameActor extends AbstractActor {
 	}
 
     private boolean checkGameOver() {
+        if(!deck.isEmpty()) {
+            return false;
+        }
         for(Integer playerId : players.keySet()) {
             if(players.get(playerId).getHandCardIds().size() == 0) {
                 return true;
