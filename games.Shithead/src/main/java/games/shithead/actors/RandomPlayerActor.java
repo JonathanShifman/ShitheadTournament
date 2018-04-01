@@ -1,6 +1,7 @@
 package games.shithead.actors;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import games.shithead.game.IGameCard;
@@ -15,7 +16,7 @@ public class RandomPlayerActor extends PlayerActor {
 
 	@Override
 	protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards) {
-		int remainingNumberOfCardsToChoose = 3;
+		int remainingNumberOfCardsToChoose = 0;
 		List<Integer> chosenRevealdTableCardIds = new ArrayList<Integer>();
 		for(IGameCard card : cards) {
 			if(remainingNumberOfCardsToChoose > 0) {
@@ -37,14 +38,9 @@ public class RandomPlayerActor extends PlayerActor {
 
 	@Override
 	protected PlayerActionInfo getPlayerMove() {
-		if(!handCards.isEmpty()) {
-			//return first possible hand card
-			return null;
-		}
-		else {
-			//return first possible table card
-			return null;
-		}
+		List<Integer> cardsToPut = new LinkedList<>();
+		cardsToPut.add(handCards.get(0).getUniqueId());
+		return new PlayerActionInfo(playerId.get(), cardsToPut, false);
 	}
 
 	@Override

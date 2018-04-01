@@ -17,28 +17,28 @@ public class GameState {
         this.players = new HashMap<>();
 
         players.forEach((id, info)->{
-            this.players.put(id, classifyInfo(info, id, targetPlayerId));
+            //this.players.put(id, classifyInfo(info, id, targetPlayerId));
         });
 
         this.currentTopCard = new CardFace(currentTopCard);
 
     }
 
-    private PlayerInfo classifyInfo(PlayerInfo info, int idOfCardsOwner, int idOfPlayerToSendTo) {
-        ActorRef playerRef = (idOfPlayerToSendTo==idOfCardsOwner) ? info.getPlayerRef() : null;
-        PlayerInfo classifiedInfo = new PlayerInfo(playerRef);
-
-        classifiedInfo.getRevealedTableCards().addAll(info.getRevealedTableCards());
-        classifiedInfo.getHiddenTableCards().addAll(info.getHiddenTableCards()
-            .stream()
-            .map(this::classifyCard)
-            .collect(Collectors.toList()));
-        classifiedInfo.getHandCards().addAll(info.getHandCards()
-                .stream()
-                .map(card -> (idOfCardsOwner==idOfPlayerToSendTo) ? card : classifyCard(card))
-                .collect(Collectors.toList()));
-        return classifiedInfo;
-    }
+//    private PlayerInfo classifyInfo(PlayerInfo info, int idOfCardsOwner, int idOfPlayerToSendTo) {
+//        ActorRef playerRef = (idOfPlayerToSendTo==idOfCardsOwner) ? info.getPlayerRef() : null;
+//        PlayerInfo classifiedInfo = new PlayerInfo(playerRef);
+//
+//        classifiedInfo.getRevealedTableCardIds().addAll(info.getRevealedTableCardIds());
+//        classifiedInfo.getHiddenTableCardIds().addAll(info.getHiddenTableCardIds()
+//            .stream()
+//            .map(this::classifyCard)
+//            .collect(Collectors.toList()));
+//        classifiedInfo.getHandCardIds().addAll(info.getHandCardIds()
+//                .stream()
+//                .map(card -> (idOfCardsOwner==idOfPlayerToSendTo) ? card : classifyCard(card))
+//                .collect(Collectors.toList()));
+//        return classifiedInfo;
+//    }
 
     private IGameCard classifyCard(IGameCard card) {
         return new GameCard(null, card.getUniqueId());

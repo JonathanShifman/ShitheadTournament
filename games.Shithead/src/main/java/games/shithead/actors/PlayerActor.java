@@ -20,10 +20,10 @@ import games.shithead.messages.TableCardsSelectionMessage;
 
 public abstract class PlayerActor extends AbstractActor {
 
-    private Optional<Integer> playerId = Optional.empty();
-    private int numberOfPlayers = -1;
-    private Deque<Integer> playingQueue = null;
-    private int currentPlayerTurn = -1;
+    protected Optional<Integer> playerId = Optional.empty();
+	protected int numberOfPlayers = -1;
+	protected Deque<Integer> playingQueue = null;
+	protected int currentPlayerTurn = -1;
 
     //FIXME: Getters
     protected List<IGameCard> handCards;
@@ -73,15 +73,16 @@ public abstract class PlayerActor extends AbstractActor {
         this.revealedTableCards = new ArrayList<IGameCard>();
         
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(message.getCards());
-    	System.out.println(getLoggingPrefix() + "Chosen revealed table card ids: [0, 1, 2]"); //FIXME: Real ids
+    	//System.out.println(getLoggingPrefix() + "Chosen revealed table card ids: [0, 1, 2]"); //FIXME: Real ids
 
     	System.out.println(getLoggingPrefix() + "Sending TableCardsSelectionMessage");
-        sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
+        sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds, this.playerId.get()), self());
 	}
     
 	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards);
 
 	private void receivePublicDeal(PublicDealMessage message) {
+		System.out.println(getLoggingPrefix() + "Received PublicDealMessage");
 		this.numberOfPlayers = message.getNumberOfPlayers();
 		this.playingQueue = message.getPlayingQueue();
 		this.currentPlayerTurn = playingQueue.getFirst();
@@ -106,6 +107,7 @@ public abstract class PlayerActor extends AbstractActor {
 	}
 	
     private void attemptMove(){
+		System.out.println(getLoggingPrefix() + "Attempting Move");
         sender().tell(getPlayerMove(), self());
     }
 
@@ -114,18 +116,18 @@ public abstract class PlayerActor extends AbstractActor {
 	protected abstract void considerInterruption();
 
 	private void receiveAcceptedAction(AcceptedActionMessage message) {
-		if(message.getPlayerId() == playerId.get()) {
-			removeCards(message.getCards());
+		if(message.getActionInfo().getPlayerId() == playerId.get()) {
+			removeCards(message.getActionInfo().getCardsToPut());
 		}
 		currentPlayerTurn = message.getNextPlayerTurn();
 		
 		takeAction();
 	}
 
-	private void removeCards(List<IGameCard> cards) {
+	private void removeCards(List<Integer> cardsToRemove) {
 		//FIXME: More efficient
-		for(IGameCard card : cards) {
-			removeCard(card.getUniqueId());
+		for(int cardId : cardsToRemove) {
+			removeCard(cardId);
 		}
 		
 	}

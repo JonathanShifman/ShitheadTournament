@@ -1,7 +1,6 @@
 package games.shithead.game;
 
 import akka.actor.ActorRef;
-import games.shithead.deck.ICardFace;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +8,17 @@ import java.util.List;
 public class PlayerInfo implements IPlayerInfo {
 
 	private final ActorRef playerRef;
-	private List<IGameCard> handCards;
-	private List<IGameCard> revealedTableCards;
-	private List<IGameCard> hiddenTableCards;
+	private List<Integer> handCardIds;
+	private List<Integer> revealedTableCardIds;
+	private List<Integer> hiddenTableCardIds;
+	private List<Integer> pendingSelectionCardIds;
 	
 	public PlayerInfo(ActorRef playerRef) {
 		this.playerRef = playerRef;
-		this.handCards = new ArrayList<>();
-		this.revealedTableCards = new ArrayList<>();
-		this.hiddenTableCards = new ArrayList<>();
+		this.handCardIds = new ArrayList<>();
+		this.revealedTableCardIds = new ArrayList<>();
+		this.hiddenTableCardIds = new ArrayList<>();
+		this.pendingSelectionCardIds = new ArrayList<>();
 	}
 
 	@Override
@@ -26,18 +27,22 @@ public class PlayerInfo implements IPlayerInfo {
 	}
 
 	@Override
-	public List<IGameCard> getHandCards() {
-		return handCards;
+	public List<Integer> getHandCardIds() {
+		return handCardIds;
 	}
 
 	@Override
-	public List<IGameCard> getRevealedTableCards() {
-		return revealedTableCards;
+	public List<Integer> getRevealedTableCardIds() {
+		return revealedTableCardIds;
 	}
 
 	@Override
-	public List<IGameCard> getHiddenTableCards() {
-		return hiddenTableCards;
+	public List<Integer> getHiddenTableCardIds() {
+		return hiddenTableCardIds;
 	}
-	
+
+	@Override
+	public List<Integer> getPendingSelectionCardIds() {
+		return pendingSelectionCardIds;
+	}
 }

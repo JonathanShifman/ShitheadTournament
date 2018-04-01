@@ -26,7 +26,7 @@ public class Main {
 		}
 		
 
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 
 		Logger.log("Main: Sending StartGameMessage to GameMasterActor");
 		gmActor.tell(new StartGameMessage(), ActorRef.noSender());

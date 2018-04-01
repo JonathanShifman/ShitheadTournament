@@ -6,7 +6,7 @@ public class CardStatus {
 	public static final CardStatus PILE = new CardStatus(-2);
 	public static final CardStatus BURNT = new CardStatus(-3);
 
-	private final int holderId;
+	private int holderId;
 	private HeldCardPosition heldCardPosition;
 	
 	public CardStatus(int holderId, HeldCardPosition heldCardPosition) {
@@ -30,5 +30,12 @@ public class CardStatus {
 	public HeldCardPosition getHeldCardPosition() {
 		return heldCardPosition;
 	}
-	
+
+	public void setHeldCardPosition(HeldCardPosition heldCardPosition) {
+		this.heldCardPosition = heldCardPosition;
+	}
+
+	public void setHolderId(int holderId) {
+		this.holderId = holderId;
+	}
 }

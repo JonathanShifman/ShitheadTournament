@@ -6,13 +6,7 @@ import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.*;
 import games.shithead.log.Logger;
-import games.shithead.messages.AllocateIdRequest;
-import games.shithead.messages.PlayerIdMessage;
-import games.shithead.messages.PrivateDealMessage;
-import games.shithead.messages.PlayerActionInfo;
-import games.shithead.messages.RegisterPlayerMessage;
-import games.shithead.messages.StartGameMessage;
-import games.shithead.messages.TableCardsSelectionMessage;
+import games.shithead.messages.*;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -23,10 +17,11 @@ public class GameActor extends AbstractActor {
     private boolean isGameStarted = false;
     
     private int playerIdAllocator = 1;
-    private Map<Integer, PlayerInfo> players = new HashMap<>();
+    private Map<Integer, IPlayerInfo> players = new HashMap<>();
     
     private IMultiDeck deck;
     private CardStatus[] cardStatuses; //For efficient mapping of cards to players
+    private IGameCard[] cards; //For efficient mapping of cards to players
     private int cardUniqueIdAllocator = 0;
     
     //Queue of ids of players defining the order of their turns
@@ -37,6 +32,8 @@ public class GameActor extends AbstractActor {
     
     private int currentTurnPlayerId = -1;
     private ICardFace currentTopCard = null;
+
+    private int playersPendingTableCardsSelection;
     
     private String getLoggingPrefix() {
     	return "GameActor: ";
@@ -86,21 +83,26 @@ public class GameActor extends AbstractActor {
 	private void initDecks() {
         //try to match deck size to number of players - change if it's not working well
 		System.out.println(getLoggingPrefix() + "Initializing deck");
-        deck = new MultiDeck((int) Math.ceil(players.size()/4));
+        deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
         cardStatuses = new CardStatus[deck.getNumberOfCards()];
+        cards = new IGameCard[deck.getNumberOfCards()];
         for(int i = 0; i < cardStatuses.length; i++) {
         	cardStatuses[i] = CardStatus.DECK;
         }
     }
 
     private void dealInitialCards() {
+        this.playersPendingTableCardsSelection = this.players.size();
+        //Deal each player his initial cards
         players.forEach((id, playerInfo) -> {
         	List<IGameCard> cardsToDeal = new ArrayList<IGameCard>();
-        	List<ICardFace> cardFaces = deck.getNextCardFaces(6);
+        	List<ICardFace> cardFaces = deck.getNextCardFaces(3);
         	for(ICardFace cardFace : cardFaces) {
-        		IGameCard gameCard = new GameCard(cardFace, cardUniqueIdAllocator);
-        		cardsToDeal.add(gameCard);
-        		cardStatuses[cardUniqueIdAllocator++] = new CardStatus(id, HeldCardPosition.TO_BE_DETERMINED);
+        	    final int newUniqueId = cardUniqueIdAllocator++;
+        		IGameCard gameCard = new GameCard(cardFace, newUniqueId);
+        		cardStatuses[newUniqueId] = new CardStatus(id, HeldCardPosition.PENDING_SELECTION);
+        		cards[newUniqueId] = gameCard;
+                cardsToDeal.add(gameCard);
         	}
         	System.out.println(getLoggingPrefix() + "Sending PrivateDealMessage to player " + id);
         	playerInfo.getPlayerRef().tell(new PrivateDealMessage(cardsToDeal), self());
@@ -109,26 +111,54 @@ public class GameActor extends AbstractActor {
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
     	Logger.log(getLoggingPrefix() + "Received TableCardsSelectionMessage");
-    	//Validate selection
-    	//If invalid, return cards to deck
-    	//Put cards in appropriate lists
-    	//Increase count of players who made their choice. 
-    	//If all did, determine players order and distribute full deal
+        //Validate selection
+        //If invalid, return cards to deck
+        IPlayerInfo playerInfo = players.get(message.getPlayerId());
+        for(int selectedCardId : message.getSelectedCardsIds()) {
+            cardStatuses[selectedCardId].setHolderId(message.getPlayerId());
+            cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_REVEALED);
+            playerInfo.getRevealedTableCardIds().add(selectedCardId);
+        }
+        for(int i = 0; i < cards.length; i++) {
+            CardStatus cardStatus = cardStatuses[i];
+            IGameCard card = cards[i];
+            if(cardStatus.getHolderId() == message.getPlayerId() && cardStatus.getHeldCardPosition() == HeldCardPosition.PENDING_SELECTION) {
+                cardStatus.setHeldCardPosition(HeldCardPosition.IN_HAND);
+                playerInfo.getHandCardIds().add(card.getUniqueId());
+            }
+        }
+    	playersPendingTableCardsSelection--;
+    	if(playersPendingTableCardsSelection == 0) {
+    	    determinePlayersOrder();
+    	    distributePublicDeal();
+        }
     }
-
-	private void distributeDealtCards() {
-		//Send public deal (with players order) to all players
-		//Start waiting for actions  
-	}
 
     private void determinePlayersOrder() {
     	List<Integer> playerIds = new ArrayList<>(players.keySet());
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
-        currentTurnPlayerId = playingQueue.poll();
+        currentTurnPlayerId = playingQueue.getFirst();
+        Logger.log(getLoggingPrefix() + "Players order: " + playingQueue.toString());
 	}
 
+    private void distributePublicDeal() {
+        PublicDealMessage publicDealMessage = new PublicDealMessage(players.size(), playingQueue);
+        players.forEach((id, playerInfo) -> {
+            List<IGameCard> deal = new LinkedList<>();
+            for(int cardId : playerInfo.getHandCardIds()) {
+                deal.add(cards[cardId]);
+            }
+            publicDealMessage.setDeal(id, deal);
+        });
+        players.forEach((id, playerInfo) -> {
+            Logger.log(getLoggingPrefix() + "Sending public deal to player " + id);
+            playerInfo.getPlayerRef().tell(publicDealMessage, self());
+        });
+    }
+
     private void handleAction(PlayerActionInfo actionInfo) {
+        Logger.log(getLoggingPrefix() + "Received attempted action");
         boolean isActionValid = ActionValidator.validateAction(actionInfo, currentTurnPlayerId);
         if(!isActionValid){
             System.out.println("Player " + actionInfo.getPlayerId() + " made an illegal action");
@@ -137,32 +167,50 @@ public class GameActor extends AbstractActor {
 
         //perform move here
         performAcceptedAction(actionInfo);
-        distributeAcceptedAction();
-        //send ReceivedCardsMessage
-
         boolean gameIsOver = checkGameOver();
         if(gameIsOver){
             notifyGameResult();
-        }else {
-            playingQueue.addLast(currentTurnPlayerId);
-            currentTurnPlayerId = playingQueue.poll();
+            Logger.log(getLoggingPrefix() + "Game over");
+            return;
         }
+
+        playingQueue.addLast(playingQueue.poll());
+        currentTurnPlayerId = playingQueue.getFirst();
+        distributeAcceptedAction(actionInfo);
+        //send ReceivedCardsMessage
     }
 
-	private void performAcceptedAction(PlayerActionInfo turnInfo) {
-        //FIXME: implement the move itself
+	private void performAcceptedAction(PlayerActionInfo actionInfo) {
+        Logger.log(getLoggingPrefix() + "Performing action");
+        IPlayerInfo playerInfo = players.get(actionInfo.getPlayerId());
+        List<Integer> cardsToRemoveFromHand = new LinkedList<>();
+        for(int cardId : actionInfo.getCardsToPut()) {
+            cardStatuses[cardId] = CardStatus.PILE;
+            cardsToRemoveFromHand.add(cardId);
+        }
+        playerInfo.getHandCardIds().removeAll(cardsToRemoveFromHand);
     }
 
-    private void distributeAcceptedAction() {
-		// TODO Auto-generated method stub
+    private void distributeAcceptedAction(PlayerActionInfo acceptedActionInfo) {
+        AcceptedActionMessage acceptedActionMessage = new AcceptedActionMessage(acceptedActionInfo, currentTurnPlayerId);
+        Logger.log(getLoggingPrefix() + "Distributing accepted action");
+        players.forEach((id, playerInfo) -> {
+            playerInfo.getPlayerRef().tell(acceptedActionMessage, self());
+        });
 	}
 
     private boolean checkGameOver() {
-        //FIXME: implement check if game is over
+        for(Integer playerId : players.keySet()) {
+            if(players.get(playerId).getHandCardIds().size() == 0) {
+                return true;
+            }
+        }
         return false;
     }
 
     private void notifyGameResult() {
-        //FIXME: send game result to all players
+        players.forEach((id, playerInfo) -> {
+            playerInfo.getPlayerRef().tell(new GameResult(), self());
+        });
     }
 }

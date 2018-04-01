@@ -12,16 +12,16 @@ import java.util.List;
 public class PlayerActionInfo {
 
     private final int playerId;
-    private final List<IGameCard> cardsToPut;
+    private final List<Integer> cardsToPut;
     private final boolean isInterruption;
 
-    public PlayerActionInfo(int playerId, List<IGameCard> cardsToPut, boolean isInterruption) {
+    public PlayerActionInfo(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
         this.playerId = playerId;
         this.cardsToPut = cardsToPut;
         this.isInterruption = isInterruption;
     }
 
-    public List<IGameCard> getCardsToPut() {
+    public List<Integer> getCardsToPut() {
         return cardsToPut;
     }
 

@@ -12,22 +12,16 @@ import games.shithead.game.IGameCard;
  */
 public class AcceptedActionMessage {
 	
-	private int playerId;
-	private List<IGameCard> cards;
+	private PlayerActionInfo actionInfo;
 	private int nextPlayerTurn;
 	
-	public AcceptedActionMessage(int playerId, List<IGameCard> cards, int nextPlayerTurn) {
-		this.playerId = playerId;
-		this.cards = cards;
+	public AcceptedActionMessage(PlayerActionInfo actionInfo, int nextPlayerTurn) {
+		this.actionInfo = actionInfo;
 		this.nextPlayerTurn = nextPlayerTurn;
 	}
 
-	public int getPlayerId() {
-		return playerId;
-	}
-
-	public List<IGameCard> getCards() {
-		return cards;
+	public PlayerActionInfo getActionInfo() {
+		return actionInfo;
 	}
 
 	public int getNextPlayerTurn() {
