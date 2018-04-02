@@ -27,6 +27,10 @@ public class GameState {
 
     private int playersPendingTableCardsSelection;
 
+    private int lastPerformedActionPlayer = -1;
+    private boolean shouldAwardTurnToLastPerformedActionPlayer = false;
+    private boolean shouldSkipOne = false;
+
     private List<IGameCard> pile;
 
     //Queue of ids of players defining the order of their turns
@@ -166,9 +170,33 @@ public class GameState {
             }
             pile = new LinkedList<>();
         }
+        lastPerformedActionPlayer = playerId;
+        updatePlayerTurn();
+    }
 
+    private void updatePlayerTurn() {
+        if(shouldAwardTurnToLastPerformedActionPlayer) {
+            shouldAwardTurnToLastPerformedActionPlayer = false;
+            currentTurnPlayerId = lastPerformedActionPlayer;
+            advancePlayingQueue(currentTurnPlayerId);
+            return;
+        }
+        if(shouldSkipOne) {
+            shouldSkipOne = false;
+            advancePlayingQueue();
+        }
+        advancePlayingQueue();
+    }
+
+    private void advancePlayingQueue() {
         playingQueue.addLast(playingQueue.poll());
         currentTurnPlayerId = playingQueue.getFirst();
+    }
+
+    private void advancePlayingQueue(int currentTurnPlayerId) {
+        while (playingQueue.getFirst() != currentTurnPlayerId) {
+            playingQueue.addLast(playingQueue.poll());
+        }
     }
 
     private void dealPlayerCardsIfNeeded(int playerId) {
@@ -192,6 +220,8 @@ public class GameState {
         }
         for(Integer playerId : players.keySet()) {
             if(players.get(playerId).getHandCards().size() == 0) {
+                playingQueue.remove(playerId);
+                currentTurnPlayerId = playingQueue.getFirst();
                 return true;
             }
         }
