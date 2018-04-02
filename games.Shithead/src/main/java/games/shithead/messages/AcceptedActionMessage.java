@@ -13,12 +13,10 @@ import games.shithead.game.IGameCard;
 public class AcceptedActionMessage {
 	
 	private int playerId;
-	private List<IGameCard> playedCards;
 	private int nextPlayerTurn;
 	
-	public AcceptedActionMessage(int playerId, List<IGameCard> playedCards, int nextPlayerTurn) {
+	public AcceptedActionMessage(int playerId, int nextPlayerTurn) {
 		this.playerId = playerId;
-		this.playedCards = playedCards;
 		this.nextPlayerTurn = nextPlayerTurn;
 	}
 
@@ -26,15 +24,7 @@ public class AcceptedActionMessage {
 		return playerId;
 	}
 
-	public List<IGameCard> getPlayedCards() {
-		return playedCards;
-	}
-
 	public int getNextPlayerTurn() {
 		return nextPlayerTurn;
-	}
-
-	public boolean isTakingPile() {
-		return playedCards.isEmpty();
 	}
 }

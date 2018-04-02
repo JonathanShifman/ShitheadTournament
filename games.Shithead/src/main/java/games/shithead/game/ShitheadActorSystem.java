@@ -1,4 +1,4 @@
-package games.shithead.actors;
+package games.shithead.game;
 
 import akka.actor.ActorSystem;
 

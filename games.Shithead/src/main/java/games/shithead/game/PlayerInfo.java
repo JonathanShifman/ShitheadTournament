@@ -7,42 +7,35 @@ import java.util.List;
 
 public class PlayerInfo implements IPlayerInfo {
 
-	private final ActorRef playerRef;
-	private List<Integer> handCardIds;
-	private List<Integer> revealedTableCardIds;
-	private List<Integer> hiddenTableCardIds;
-	private List<Integer> pendingSelectionCardIds;
+	private List<IGameCard> handCards;
+	private List<IGameCard> revealedTableCards;
+	private List<IGameCard> hiddenTableCards;
+	private List<IGameCard> pendingSelectionCards;
 	
-	public PlayerInfo(ActorRef playerRef) {
-		this.playerRef = playerRef;
-		this.handCardIds = new ArrayList<>();
-		this.revealedTableCardIds = new ArrayList<>();
-		this.hiddenTableCardIds = new ArrayList<>();
-		this.pendingSelectionCardIds = new ArrayList<>();
+	public PlayerInfo() {
+		this.handCards = new ArrayList<>();
+		this.revealedTableCards = new ArrayList<>();
+		this.hiddenTableCards = new ArrayList<>();
+		this.pendingSelectionCards = new ArrayList<>();
 	}
 
 	@Override
-	public ActorRef getPlayerRef() {
-		return playerRef;
+	public List<IGameCard> getHandCards() {
+		return handCards;
 	}
 
 	@Override
-	public List<Integer> getHandCardIds() {
-		return handCardIds;
+	public List<IGameCard> getRevealedTableCards() {
+		return revealedTableCards;
 	}
 
 	@Override
-	public List<Integer> getRevealedTableCardIds() {
-		return revealedTableCardIds;
+	public List<IGameCard> getHiddenTableCards() {
+		return hiddenTableCards;
 	}
 
 	@Override
-	public List<Integer> getHiddenTableCardIds() {
-		return hiddenTableCardIds;
-	}
-
-	@Override
-	public List<Integer> getPendingSelectionCardIds() {
-		return pendingSelectionCardIds;
+	public List<IGameCard> getPendingSelectionCards() {
+		return pendingSelectionCards;
 	}
 }

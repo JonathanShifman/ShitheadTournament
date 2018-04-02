@@ -6,14 +6,12 @@ import java.util.List;
 
 public interface IPlayerInfo {
 	
-	ActorRef getPlayerRef();
+	List<IGameCard> getHandCards();
 	
-	List<Integer> getHandCardIds();
+	List<IGameCard> getRevealedTableCards();
 	
-	List<Integer> getRevealedTableCardIds();
-	
-	List<Integer> getHiddenTableCardIds();
+	List<IGameCard> getHiddenTableCards();
 
-	List<Integer> getPendingSelectionCardIds();
+	List<IGameCard> getPendingSelectionCards();
 
 }

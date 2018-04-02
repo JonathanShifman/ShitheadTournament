@@ -3,10 +3,10 @@ package games.shithead.main;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
-import games.shithead.actors.GameActor;
-import games.shithead.actors.GameMasterActor;
-import games.shithead.actors.RandomPlayerActor;
-import games.shithead.actors.ShitheadActorSystem;
+import games.shithead.game.GameActor;
+import games.shithead.game.GameMasterActor;
+import games.shithead.players.RandomPlayerActor;
+import games.shithead.game.ShitheadActorSystem;
 import games.shithead.log.Logger;
 import games.shithead.messages.StartGameMessage;
 
