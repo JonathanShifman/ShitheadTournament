@@ -3,12 +3,19 @@ package games.shithead.game;
 import games.shithead.messages.PlayerActionInfo;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ActionValidator {
 
     public static boolean canTake(List<IGameCard> pile) {
         return !pile.isEmpty();
+    }
+
+    public static boolean canPlay(IGameCard cardToPlay, List<IGameCard> pile){
+        List<IGameCard> cardsToPlay = new LinkedList<>();
+        cardsToPlay.add(cardToPlay);
+        return canPlay(cardsToPlay, pile);
     }
 
     public static boolean canPlay(List<IGameCard> cardsToPlay, List<IGameCard> pile){

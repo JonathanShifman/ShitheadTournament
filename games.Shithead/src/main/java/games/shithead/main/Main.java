@@ -9,6 +9,7 @@ import games.shithead.players.RandomPlayerActor;
 import games.shithead.game.ShitheadActorSystem;
 import games.shithead.log.Logger;
 import games.shithead.messages.StartGameMessage;
+import games.shithead.players.SimplePlayerActor;
 
 public class Main {
 
@@ -20,9 +21,9 @@ public class Main {
 		Logger.log("Main: Initializing players");
 		int numberOfPlayers = 2;
 		for(int i = 0; i < numberOfPlayers; i++) {
-			String name = "RandomPlayerActor" + i;
+			String name = "SimplePlayerActor" + i;
 			Logger.log("Main: Initializing player " + name);
-			actorSystem.actorOf(Props.create(RandomPlayerActor.class), "RandomPlayerActor" + i);
+			actorSystem.actorOf(Props.create(SimplePlayerActor.class), "SimplePlayerActor" + i);
 		}
 		
 
