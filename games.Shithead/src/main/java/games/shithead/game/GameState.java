@@ -21,8 +21,8 @@ public class GameState {
     private Map<Integer, IPlayerInfo> players;
 
     private IMultiDeck deck;
-    private CardStatus[] cardStatuses; //For efficient mapping of cards to players
-    private IGameCard[] cards; //For efficient mapping of cards to players
+    private CardStatus[] cardStatuses;
+    private IGameCard[] cards;
     private int cardUniqueIdAllocator = 0;
 
     private int playersPendingTableCardsSelection;
@@ -75,7 +75,7 @@ public class GameState {
     }
 
     private void initDecks() {
-        //try to match deck size to number of players - change if it's not working well
+        //Try to match deck size to number of players
         System.out.println(getLoggingPrefix() + "Initializing deck");
         deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
         cardStatuses = new CardStatus[deck.getNumberOfCards()];
@@ -162,6 +162,7 @@ public class GameState {
             }
             playerInfo.getHandCards().removeAll(cardsToRemoveFromHand);
             dealPlayerCardsIfNeeded(playerId);
+            updateSpecialEffects(pile.get(0).getCardFace().get().getValue());
         }
         else { // Take pile
             for(IGameCard gameCard : pile) {
@@ -172,6 +173,28 @@ public class GameState {
         }
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
+    }
+
+    private void updateSpecialEffects(int pileTopValue) {
+        switch (pileTopValue) {
+            case 8:
+                shouldSkipOne = true;
+                break;
+            case 10:
+                shouldAwardTurnToLastPerformedActionPlayer = true;
+                burnPile();
+                break;
+            case 15:
+                shouldAwardTurnToLastPerformedActionPlayer = true;
+                burnPile();
+        }
+    }
+
+    private void burnPile() {
+        for(IGameCard gameCard : pile) {
+            cardStatuses[gameCard.getUniqueId()] = CardStatus.BURNT;
+        }
+        pile = new LinkedList<>();
     }
 
     private void updatePlayerTurn() {
