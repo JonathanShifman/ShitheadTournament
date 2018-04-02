@@ -162,7 +162,7 @@ public class GameState {
             }
             playerInfo.getHandCards().removeAll(cardsToRemoveFromHand);
             dealPlayerCardsIfNeeded(playerId);
-            updateSpecialEffects(pile.get(0).getCardFace().get().getValue());
+            updateSpecialEffects();
         }
         else { // Take pile
             for(IGameCard gameCard : pile) {
@@ -183,8 +183,13 @@ public class GameState {
         return "[" + cardValues + "]";
     }
 
-    private void updateSpecialEffects(int pileTopValue) {
-        switch (pileTopValue) {
+    private void updateSpecialEffects() {
+        if(completedFour()) {
+            shouldAwardTurnToLastPerformedActionPlayer = true;
+            burnPile();
+            return;
+        }
+        switch (pile.get(0).getCardFace().get().getValue()) {
             case 8:
                 shouldSkipOne = true;
                 break;
@@ -195,7 +200,31 @@ public class GameState {
             case 15:
                 shouldAwardTurnToLastPerformedActionPlayer = true;
                 burnPile();
+                break;
         }
+    }
+
+    private boolean completedFour() {
+        if(pile.size() < 4) {
+            return false;
+        }
+        int valueToCompareTo = -1;
+        int count = 0;
+        for(IGameCard gameCard : pile) {
+            count++;
+            if(valueToCompareTo < 0) {
+                valueToCompareTo = gameCard.getCardFace().get().getValue();
+                continue;
+            }
+            if(valueToCompareTo != gameCard.getCardFace().get().getValue()) {
+                return false;
+            }
+            if(count == 4) {
+                break;
+            }
+        }
+        return true;
+
     }
 
     private void burnPile() {
