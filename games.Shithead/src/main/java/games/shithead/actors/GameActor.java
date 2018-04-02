@@ -10,6 +10,7 @@ import games.shithead.messages.*;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.stream.Collectors;
 
 public class GameActor extends AbstractActor {
 
@@ -23,6 +24,8 @@ public class GameActor extends AbstractActor {
     private CardStatus[] cardStatuses; //For efficient mapping of cards to players
     private IGameCard[] cards; //For efficient mapping of cards to players
     private int cardUniqueIdAllocator = 0;
+
+    private List<IGameCard> pile;
     
     //Queue of ids of players defining the order of their turns
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
@@ -45,7 +48,7 @@ public class GameActor extends AbstractActor {
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
                 .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
-                .match(PlayerActionInfo.class, this::handleAction)
+                .match(PlayerActionInfo.class, this::handleAttemptedAction)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -76,6 +79,7 @@ public class GameActor extends AbstractActor {
         }
         
         isGameStarted = true;
+        pile = new ArrayList<>();
         initDecks();
         dealInitialCards();
     }
@@ -157,9 +161,14 @@ public class GameActor extends AbstractActor {
         });
     }
 
-    private void handleAction(PlayerActionInfo actionInfo) {
-        Logger.log(getLoggingPrefix() + "Received attempted action");
-        boolean isActionValid = ActionValidator.validateAction(actionInfo, currentTurnPlayerId);
+    private void handleAttemptedAction(PlayerActionInfo actionInfo) {
+        Logger.log(getLoggingPrefix() + "Received attempted action: cards " + actionInfo.getCardsToPut().toString() + " by player " + actionInfo.getPlayerId());
+        List<IGameCard> playedCards = actionInfo.getCardsToPut().stream()
+                .map(cardId -> cards[cardId])
+                .collect(Collectors.toList());
+        boolean isActionValid = actionInfo.isTakingPile() ?
+                ActionValidator.canTake(pile) :
+                ActionValidator.canPlay(playedCards, pile);
         if(!isActionValid){
             System.out.println("Player " + actionInfo.getPlayerId() + " made an illegal action");
             return;
@@ -182,14 +191,24 @@ public class GameActor extends AbstractActor {
     }
 
     private void performAcceptedAction(PlayerActionInfo actionInfo) {
-        Logger.log(getLoggingPrefix() + "Performing action: cards " + actionInfo.getCardsToPut().toString() + " by player " + actionInfo.getPlayerId());
+        Logger.log(getLoggingPrefix() + "Performing action");
         IPlayerInfo playerInfo = players.get(actionInfo.getPlayerId());
-        List<Integer> cardsToRemoveFromHand = new LinkedList<>();
-        for(int cardId : actionInfo.getCardsToPut()) {
-            cardStatuses[cardId] = CardStatus.PILE;
-            cardsToRemoveFromHand.add(cardId);
+        if(!actionInfo.isTakingPile()) {
+            List<Integer> cardsToRemoveFromHand = new LinkedList<>();
+            for (int cardId : actionInfo.getCardsToPut()) {
+                cardStatuses[cardId] = CardStatus.PILE;
+                cardsToRemoveFromHand.add(cardId);
+                pile.add(cards[cardId]);
+            }
+            playerInfo.getHandCardIds().removeAll(cardsToRemoveFromHand);
         }
-        playerInfo.getHandCardIds().removeAll(cardsToRemoveFromHand);
+        else { // Take pile
+            for(IGameCard gameCard : pile) {
+                playerInfo.getHandCardIds().add(gameCard.getUniqueId());
+                cardStatuses[gameCard.getUniqueId()] = new CardStatus(actionInfo.getPlayerId(), HeldCardPosition.IN_HAND);
+            }
+            pile = new LinkedList<>();
+        }
     }
 
     private ReceivedCardsMessage prepareReceivedCardsMessage(int playerId) {
@@ -211,7 +230,11 @@ public class GameActor extends AbstractActor {
     }
 
     private void distributeAcceptedAction(PlayerActionInfo acceptedActionInfo) {
-        AcceptedActionMessage acceptedActionMessage = new AcceptedActionMessage(acceptedActionInfo, currentTurnPlayerId);
+        AcceptedActionMessage acceptedActionMessage;
+        List<IGameCard> playedCards = acceptedActionInfo.getCardsToPut().stream()
+                .map(cardId -> cards[cardId])
+                .collect(Collectors.toList());
+        acceptedActionMessage = new AcceptedActionMessage(acceptedActionInfo.getPlayerId(), playedCards, currentTurnPlayerId);
         Logger.log(getLoggingPrefix() + "Distributing accepted action");
         players.forEach((id, playerInfo) -> {
             playerInfo.getPlayerRef().tell(acceptedActionMessage, self());

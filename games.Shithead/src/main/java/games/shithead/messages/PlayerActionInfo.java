@@ -2,6 +2,7 @@ package games.shithead.messages;
 
 import games.shithead.game.IGameCard;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,6 +32,10 @@ public class PlayerActionInfo {
 
     public boolean isInterruption() {
         return isInterruption;
+    }
+
+    public boolean isTakingPile() {
+        return cardsToPut.isEmpty();
     }
 
 }

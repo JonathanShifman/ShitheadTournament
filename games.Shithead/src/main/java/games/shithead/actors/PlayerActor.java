@@ -1,9 +1,6 @@
 package games.shithead.actors;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
@@ -25,9 +22,10 @@ public abstract class PlayerActor extends AbstractActor {
 	protected Deque<Integer> playingQueue = null;
 	protected int currentPlayerTurn = -1;
 
-    //FIXME: Getters
     protected List<IGameCard> handCards;
     protected List<IGameCard> revealedTableCards;
+
+    protected List<IGameCard> pile;
 
     public PlayerActor(){
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
@@ -70,7 +68,8 @@ public abstract class PlayerActor extends AbstractActor {
     	
         //FIXME: LinkedList?
         this.handCards = new ArrayList<IGameCard>();
-        this.revealedTableCards = new ArrayList<IGameCard>();
+		this.revealedTableCards = new ArrayList<IGameCard>();
+		this.pile = new LinkedList<>();
         
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(message.getCards());
     	//System.out.println(getLoggingPrefix() + "Chosen revealed table card ids: [0, 1, 2]"); //FIXME: Real ids
@@ -116,18 +115,29 @@ public abstract class PlayerActor extends AbstractActor {
 	protected abstract void considerInterruption();
 
 	private void receiveAcceptedAction(AcceptedActionMessage message) {
-		if(message.getActionInfo().getPlayerId() == playerId.get()) {
-			removeCards(message.getActionInfo().getCardsToPut());
+		if(message.getPlayerId() == playerId.get()) {
+			if(!message.isTakingPile()) {
+				removeCards(message.getPlayedCards());
+			}
+			else {
+				for(IGameCard gameCard : pile) {
+					handCards.add(gameCard);
+				}
+			}
 		}
+		if(message.isTakingPile()) {
+			pile = new LinkedList<>();
+		}
+		putCardsInPile(message.getPlayedCards());
 		currentPlayerTurn = message.getNextPlayerTurn();
 		
 		takeAction();
 	}
 
-	private void removeCards(List<Integer> cardsToRemove) {
+	private void removeCards(List<IGameCard> cardsToRemove) {
 		//FIXME: More efficient
-		for(int cardId : cardsToRemove) {
-			removeCard(cardId);
+		for(IGameCard card : cardsToRemove) {
+			removeCard(card.getUniqueId());
 		}
 		
 	}
@@ -146,7 +156,12 @@ public abstract class PlayerActor extends AbstractActor {
 				return;
 			}
 		}
-		
+	}
+
+	private void putCardsInPile(List<IGameCard> playedCards) {
+		for(IGameCard gameCard : playedCards) {
+			pile.add(0, gameCard);
+		}
 	}
 
 	private void receiveCards(ReceivedCardsMessage message) {
