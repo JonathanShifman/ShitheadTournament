@@ -2,6 +2,7 @@ package games.shithead.game;
 
 import games.shithead.messages.PlayerActionInfo;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ActionValidator {
@@ -14,8 +15,27 @@ public class ActionValidator {
         if(cardsToPlay.isEmpty() || !allCardsHaveTheSameValue(cardsToPlay)) {
             return false;
         }
-        int topCardValue = pile.isEmpty() ? 0 : pile.get(0).getCardFace().get().getValue();
-        return cardsToPlay.get(0).getCardFace().get().getValue() >= topCardValue;
+        int playedValue = cardsToPlay.get(0).getCardFace().get().getValue();
+        if(valueIsAlwaysValid(playedValue)) {
+            return true;
+        }
+
+        int effectiveTopCardValue = 0;
+        for(IGameCard gameCard : pile) {
+            int currentCardValue = gameCard.getCardFace().get().getValue();
+            if(currentCardValue == 3) {
+                continue;
+            }
+            effectiveTopCardValue = currentCardValue == 2 ? 0 : currentCardValue;
+            break;
+        }
+        return effectiveTopCardValue == 7 ?
+                playedValue <= effectiveTopCardValue :
+                playedValue >= effectiveTopCardValue;
+    }
+
+    private static boolean valueIsAlwaysValid(int playedValue) {
+        return Arrays.asList(new int[] {2, 3, 10, 15}).contains(playedValue);
     }
 
     /**
