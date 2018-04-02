@@ -135,6 +135,7 @@ public class GameState {
     }
 
     public boolean attemptPlayerAction(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
+        Logger.log(getLoggingPrefix() + "Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
         List<IGameCard> playedCards = cardsToPut.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList());
@@ -150,14 +151,14 @@ public class GameState {
     }
 
     public void performPlayerAction(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
-        Logger.log(getLoggingPrefix() + "Performing action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
+        Logger.log(getLoggingPrefix() + "Performing action");
         IPlayerInfo playerInfo = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
             List<IGameCard> cardsToRemoveFromHand = new LinkedList<>();
             for (int cardId : cardsToPut) {
                 cardStatuses[cardId] = CardStatus.PILE;
                 cardsToRemoveFromHand.add(cards[cardId]);
-                pile.add(cards[cardId]);
+                pile.add(0, cards[cardId]);
             }
             playerInfo.getHandCards().removeAll(cardsToRemoveFromHand);
             dealPlayerCardsIfNeeded(playerId);
@@ -198,6 +199,7 @@ public class GameState {
     }
 
     private void burnPile() {
+        Logger.log(getLoggingPrefix() + "Burning pile");
         for(IGameCard gameCard : pile) {
             cardStatuses[gameCard.getUniqueId()] = CardStatus.BURNT;
         }

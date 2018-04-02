@@ -89,13 +89,14 @@ public class GameActor extends AbstractActor {
         });
     }
 
-    private void handleAttemptedAction(PlayerActionInfo actionInfo) {
+    private void handleAttemptedAction(PlayerActionInfo actionInfo) throws InterruptedException {
         gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut(), actionInfo.isInterruption());
         if(gameState.checkGameOver()){
             notifyGameResult();
             Logger.log(getLoggingPrefix() + "Game over");
             return;
         }
+        Thread.sleep(500);
         distributeAcceptedAction(actionInfo.getPlayerId());
     }
 
