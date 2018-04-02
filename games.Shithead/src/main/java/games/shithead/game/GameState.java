@@ -135,7 +135,6 @@ public class GameState {
     }
 
     public boolean attemptPlayerAction(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
-        Logger.log(getLoggingPrefix() + "Received attempted action: cards " + cardsToPut + " by player " + playerId);
         List<IGameCard> playedCards = cardsToPut.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList());
@@ -151,7 +150,7 @@ public class GameState {
     }
 
     public void performPlayerAction(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
-        Logger.log(getLoggingPrefix() + "Performing action");
+        Logger.log(getLoggingPrefix() + "Performing action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
         IPlayerInfo playerInfo = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
             List<IGameCard> cardsToRemoveFromHand = new LinkedList<>();
@@ -173,6 +172,14 @@ public class GameState {
         }
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
+    }
+
+    private String toCardDescriptions(List<Integer> cardsToPut) {
+        String cardValues = "";
+        for(int cardId : cardsToPut) {
+            cardValues += cards[cardId].getCardFace().get().getValue() + ", ";
+        }
+        return "[" + cardValues + "]";
     }
 
     private void updateSpecialEffects(int pileTopValue) {

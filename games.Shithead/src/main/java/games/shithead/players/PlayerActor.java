@@ -34,7 +34,6 @@ public abstract class PlayerActor extends AbstractActor {
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
 
         //upon creation all players ask the game actor to allocate player id so it's unique
-        System.out.println(getLoggingPrefix() + "Sending AllocateIdRequest");
         gameActor.tell(new AllocateIdRequest(), self());
     }
 
@@ -66,25 +65,19 @@ public abstract class PlayerActor extends AbstractActor {
 	}
     
     private void receiveId(PlayerIdMessage idMessage) {
-    	System.out.println(getLoggingPrefix() + "Received PlayerIdMessage");
     	this.playerId = idMessage.getPlayerId();
-    	
-    	System.out.println(getLoggingPrefix() + "Sending RegisterPlayerMessage");
         sender().tell(new RegisterPlayerMessage(playerId, getName()), self());
     }
     
 	private void receiveChooseTableCardsMessage(ChooseTableCardsMessage message) {
     	updateInfo();
-    	System.out.println(getLoggingPrefix() + "Received ChooseTableCardsMessage");
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(pendingSelectionCards);
-    	System.out.println(getLoggingPrefix() + "Sending TableCardsSelectionMessage");
         sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds, this.playerId), self());
 	}
     
 	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards);
 
 	private void receiveStartCycleMessage(StartCycleMessage message) {
-		System.out.println(getLoggingPrefix() + "Received StartCycleMessage");
 		takeAction();
 	}
 	
@@ -99,7 +92,6 @@ public abstract class PlayerActor extends AbstractActor {
 	}
 	
     private void makeMove(){
-		System.out.println(getLoggingPrefix() + "Making Move");
         sender().tell(getPlayerMove(), self());
     }
 

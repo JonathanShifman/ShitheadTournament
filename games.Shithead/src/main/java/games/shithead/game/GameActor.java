@@ -102,7 +102,6 @@ public class GameActor extends AbstractActor {
     private void distributeAcceptedAction(int playerId) {
         AcceptedActionMessage acceptedActionMessage;
         acceptedActionMessage = new AcceptedActionMessage(playerId, gameState.getCurrentPlayerTurn());
-        Logger.log(getLoggingPrefix() + "Distributing accepted action");
         playerRefs.forEach((id, playerRef) -> {
             playerRef.tell(acceptedActionMessage, self());
         });
