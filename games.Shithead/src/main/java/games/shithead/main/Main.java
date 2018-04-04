@@ -5,11 +5,13 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import games.shithead.game.GameActor;
 import games.shithead.game.GameMasterActor;
-import games.shithead.players.RandomPlayerActor;
 import games.shithead.game.ShitheadActorSystem;
 import games.shithead.log.Logger;
 import games.shithead.messages.StartGameMessage;
 import games.shithead.players.SimplePlayerActor;
+
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class Main {
 
