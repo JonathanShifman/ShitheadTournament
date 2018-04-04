@@ -134,23 +134,29 @@ public class GameState {
         determinePlayersOrder();
     }
 
-    public boolean attemptPlayerAction(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
+    public boolean attemptPlayerAction(int playerId, List<Integer> cardsToPut) {
         Logger.log(getLoggingPrefix() + "Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
         List<IGameCard> playedCards = cardsToPut.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList());
-        boolean isActionValid = cardsToPut.isEmpty() ?
+        boolean isActionValid;
+        if(playerId == currentTurnPlayerId) {
+            isActionValid = cardsToPut.isEmpty() ?
                 ActionValidator.canTake(pile) :
                 ActionValidator.canPlay(playedCards, pile);
+        }
+        else {
+            isActionValid = ActionValidator.canInterrupt(playedCards, pile);
+        }
         if(!isActionValid){
             System.out.println("Player " + playerId + " made an illegal action");
             return false;
         }
-        performPlayerAction(playerId, cardsToPut, isInterruption);
+        performPlayerAction(playerId, cardsToPut);
         return true;
     }
 
-    public void performPlayerAction(int playerId, List<Integer> cardsToPut, boolean isInterruption) {
+    public void performPlayerAction(int playerId, List<Integer> cardsToPut) {
         Logger.log(getLoggingPrefix() + "Performing action");
         IPlayerInfo playerInfo = players.get(playerId);
         if(!cardsToPut.isEmpty()) {

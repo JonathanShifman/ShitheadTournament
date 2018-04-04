@@ -94,7 +94,7 @@ public class GameActor extends AbstractActor {
     }
 
     private void handleAttemptedAction(PlayerActionInfo actionInfo) throws InterruptedException {
-        gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut(), actionInfo.isInterruption());
+        gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut());
         if(gameState.checkGameOver()){
             notifyGameResult();
             Logger.log(getLoggingPrefix() + "Game over");

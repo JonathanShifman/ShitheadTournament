@@ -59,6 +59,19 @@ public class ActionValidator {
     }
 
     public static boolean canInterrupt(List<IGameCard> cardsToInterrupt, List<IGameCard> pile){
-        return false;
+        if(cardsToInterrupt.isEmpty() || !allCardsHaveTheSameValue(cardsToInterrupt)) {
+            return false;
+        }
+        int interruptValue = cardsToInterrupt.get(0).getCardFace().get().getValue();
+        int count = 0;
+        for(IGameCard gameCard : pile) {
+            if(gameCard.getCardFace().get().getValue() == interruptValue) {
+                count++;
+            }
+            else {
+                break;
+            }
+        }
+        return cardsToInterrupt.size() + count == 4;
     }
 }
