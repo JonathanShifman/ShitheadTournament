@@ -14,7 +14,8 @@ public class GameActor extends AbstractActor {
 //    static Logger logger = LogManager.getLogger(GameActor.class);
 
     int playerIdAllocator;
-    private Map<Integer, ActorRef> playerRefs;
+    private Map<Integer, IPlayerInfo> playerIdsToInfos;
+    private Map<ActorRef, IPlayerInfo> playerRefsToInfos;
 
     private GameState gameState;
 
@@ -22,7 +23,8 @@ public class GameActor extends AbstractActor {
         playerIdAllocator = 1;
         gameState = new GameState();
         InfoProvider.setGameState(gameState);
-        playerRefs = new HashMap<>();
+        playerIdsToInfos = new HashMap<>();
+        playerRefsToInfos = new HashMap<>();
     }
     
     private String getLoggingPrefix() {
@@ -31,7 +33,6 @@ public class GameActor extends AbstractActor {
 
     public Receive createReceive() {
         return receiveBuilder()
-                .match(AllocateIdRequest.class, this::allocateId)
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
                 .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
@@ -40,22 +41,20 @@ public class GameActor extends AbstractActor {
                 .build();
     }
 
-    private void allocateId(AllocateIdRequest request) {
-        Logger.log(getLoggingPrefix() + "Received AllocateIdRequest");
-        Logger.log(getLoggingPrefix() + "Sending PlayerIdMessage with playerId=" + playerIdAllocator);
-        getSender().tell(new PlayerIdMessage(playerIdAllocator++), self());
-    }
-
 	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
         Logger.log(getLoggingPrefix() + "Received RegisterPlayerMessage");
         if(gameState.isGameStarted()){
             //too late for registration
             return;
         }
-        //FIXME: Save player's name as well
         Logger.log(getLoggingPrefix() + "Registering player");
-        playerRefs.put(playerRegistration.playerId, getSender());
-        gameState.addPlayer(playerRegistration.playerId);
+        int playerId = playerIdAllocator++;
+        IPlayerInfo playerInfo = new PlayerInfo(playerId, playerRegistration.getPlayerName(), getSender());
+        playerIdsToInfos.put(playerId, playerInfo);
+        playerRefsToInfos.put(getSender(), playerInfo);
+        gameState.addPlayer(playerId);
+        Logger.log(getLoggingPrefix() + "Sending PlayerIdMessage with playerId=" + playerIdAllocator);
+        getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
     @SuppressWarnings("unused")

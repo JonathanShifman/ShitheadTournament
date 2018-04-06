@@ -5,11 +5,10 @@ import java.util.*;
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
 import games.shithead.game.IGameCard;
-import games.shithead.game.IPlayerInfo;
+import games.shithead.game.IPlayerHand;
 import games.shithead.game.InfoProvider;
 import games.shithead.game.ShitheadActorSystem;
 import games.shithead.messages.AcceptedActionMessage;
-import games.shithead.messages.AllocateIdRequest;
 import games.shithead.messages.PlayerIdMessage;
 import games.shithead.messages.ChooseTableCardsMessage;
 import games.shithead.messages.StartCycleMessage;
@@ -21,7 +20,7 @@ import games.shithead.messages.TableCardsSelectionMessage;
 public abstract class PlayerActor extends AbstractActor {
 
     protected int playerId = -1;
-    protected Map<Integer, IPlayerInfo> players = new HashMap<>();
+    protected Map<Integer, IPlayerHand> players = new HashMap<>();
 
 	protected List<IGameCard> handCards;
 	protected List<IGameCard> revealedTableCards;
@@ -33,8 +32,7 @@ public abstract class PlayerActor extends AbstractActor {
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
 
-        //upon creation all players ask the game actor to allocate player id so it's unique
-        gameActor.tell(new AllocateIdRequest(), self());
+        gameActor.tell(new RegisterPlayerMessage(getName()), self());
     }
 
     @Override
@@ -66,7 +64,6 @@ public abstract class PlayerActor extends AbstractActor {
     
     private void receiveId(PlayerIdMessage idMessage) {
     	this.playerId = idMessage.getPlayerId();
-        sender().tell(new RegisterPlayerMessage(playerId, getName()), self());
     }
     
 	private void receiveChooseTableCardsMessage(ChooseTableCardsMessage message) {

@@ -1,7 +1,5 @@
 package games.shithead.game;
 
-import scala.Int;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,17 +25,17 @@ public class InfoProvider {
         return new LinkedList<>(gameState.getPile());
     }
 
-    public static Map<Integer,IPlayerInfo> getPlayerInfos() {
-        Map<Integer, IPlayerInfo> players = gameState.getPlayers();
-        Map<Integer, IPlayerInfo> playersCopy = new HashMap<>();
+    public static Map<Integer,IPlayerHand> getPlayerInfos() {
+        Map<Integer, IPlayerHand> players = gameState.getPlayers();
+        Map<Integer, IPlayerHand> playersCopy = new HashMap<>();
         players.forEach((id, playerInfo) -> {
             playersCopy.put(id, copyPlayerInfo(playerInfo));
         });
         return playersCopy;
     }
 
-    private static IPlayerInfo copyPlayerInfo(IPlayerInfo playerInfo) {
-        IPlayerInfo playerInfoCopy = new PlayerInfo();
+    private static IPlayerHand copyPlayerInfo(IPlayerHand playerInfo) {
+        IPlayerHand playerInfoCopy = new PlayerHand();
         copyList(playerInfo.getHandCards(), playerInfoCopy.getHandCards());
         copyList(playerInfo.getRevealedTableCards(), playerInfoCopy.getRevealedTableCards());
         copyList(playerInfo.getHiddenTableCards(), playerInfoCopy.getHiddenTableCards());

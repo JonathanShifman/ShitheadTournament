@@ -7,11 +7,13 @@ package games.shithead.messages;
  */
 public class RegisterPlayerMessage {
 
-    public int playerId;
-    public String playerName;
+    private String playerName;
 
-    public RegisterPlayerMessage(int playerId, String playerName) {
-        this.playerId = playerId;
+    public RegisterPlayerMessage(String playerName) {
         this.playerName = playerName;
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 }

@@ -1,12 +1,9 @@
 package games.shithead.game;
 
-import akka.actor.ActorRef;
-import games.shithead.deck.CardFace;
 import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.log.Logger;
-import games.shithead.messages.ReceivedCardsMessage;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -18,7 +15,7 @@ public class GameState {
 
     private boolean isGameStarted;
 
-    private Map<Integer, IPlayerInfo> players;
+    private Map<Integer, IPlayerHand> players;
 
     private IMultiDeck deck;
     private CardStatus[] cardStatuses;
@@ -54,7 +51,7 @@ public class GameState {
         return isGameStarted;
     }
 
-    public Map<Integer, IPlayerInfo> getPlayers() {
+    public Map<Integer, IPlayerHand> getPlayers() {
         return players;
     }
 
@@ -63,7 +60,7 @@ public class GameState {
     }
 
     public void addPlayer(int playerId) {
-        PlayerInfo playerInfo = new PlayerInfo();
+        PlayerHand playerInfo = new PlayerHand();
         players.put(playerId, playerInfo);
     }
 
@@ -99,7 +96,7 @@ public class GameState {
     }
 
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
-        IPlayerInfo playerInfo = players.get(playerId);
+        IPlayerHand playerInfo = players.get(playerId);
         for(int selectedCardId : selectedCardsIds) {
             cardStatuses[selectedCardId].setHolderId(playerId);
             cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_REVEALED);
@@ -158,7 +155,7 @@ public class GameState {
 
     public void performPlayerAction(int playerId, List<Integer> cardsToPut) {
         Logger.log(getLoggingPrefix() + "Performing action");
-        IPlayerInfo playerInfo = players.get(playerId);
+        IPlayerHand playerInfo = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
             List<IGameCard> cardsToRemoveFromHand = new LinkedList<>();
             for (int cardId : cardsToPut) {
@@ -267,7 +264,7 @@ public class GameState {
     }
 
     private void dealPlayerCardsIfNeeded(int playerId) {
-        IPlayerInfo playerInfo = players.get(playerId);
+        IPlayerHand playerInfo = players.get(playerId);
         int neededCards = 3 - playerInfo.getHandCards().size();
         if(neededCards > 0) {
             List<ICardFace> cardFaces = deck.getNextCardFaces(neededCards);
