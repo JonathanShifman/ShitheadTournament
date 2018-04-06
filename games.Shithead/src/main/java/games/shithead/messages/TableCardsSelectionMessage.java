@@ -10,18 +10,12 @@ import java.util.List;
 public class TableCardsSelectionMessage {
 	
 	private List<Integer> selectedCardsIds;
-	private int playerId;
 	
-	public TableCardsSelectionMessage(List<Integer> selectedCardsIds, int playerId) {
+	public TableCardsSelectionMessage(List<Integer> selectedCardsIds) {
 		this.selectedCardsIds = selectedCardsIds;
-		this.playerId = playerId;
 	}
 	
 	public List<Integer> getSelectedCardsIds() {
 		return selectedCardsIds;
-	}
-
-	public int getPlayerId() {
-		return playerId;
 	}
 }

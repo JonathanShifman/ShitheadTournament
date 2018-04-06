@@ -299,4 +299,11 @@ public class GameState {
     public List<IGameCard> getPile() {
         return pile;
     }
+
+    public boolean alreadySelectedTableCards(int playerId) {
+        if(!players.containsKey(playerId)) {
+            return false;
+        }
+        return players.get(playerId).getPendingSelectionCards().size() == 0;
+    }
 }

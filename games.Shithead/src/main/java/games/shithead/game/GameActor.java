@@ -11,7 +11,7 @@ import java.util.*;
 
 public class GameActor extends AbstractActor {
 
-//    static Logger logger = LogManager.getLogger(GameActor.class);
+//  static Logger logger = LogManager.getLogger(GameActor.class);
 
     int playerIdAllocator;
     private Map<Integer, IPlayerInfo> playerIdsToInfos;
@@ -44,23 +44,33 @@ public class GameActor extends AbstractActor {
 	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
         Logger.log(getLoggingPrefix() + "Received RegisterPlayerMessage");
         if(gameState.isGameStarted()){
-            // Too late for registration
+            Logger.log(getLoggingPrefix() + "Game has already started, too late for registration");
             return;
         }
+        if(playerExists(getSender())){
+            Logger.log(getLoggingPrefix() + "Player has already been registered");
+            return;
+        }
+
         Logger.log(getLoggingPrefix() + "Registering player");
         int playerId = playerIdAllocator++;
         IPlayerInfo playerInfo = new PlayerInfo(playerId, playerRegistration.getPlayerName(), getSender());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);
-        Logger.log(getLoggingPrefix() + "Sending PlayerIdMessage with playerId=" + playerIdAllocator);
+        Logger.log(getLoggingPrefix() + "Sending PlayerIdMessage with playerId=" + playerId);
         getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
     @SuppressWarnings("unused")
-    private void startGame(StartGameMessage gameStarter) {
+    private void startGame(StartGameMessage startGameMessage) {
         Logger.log(getLoggingPrefix() + "Received StartGameMessage");
-//        Logger.log("Warn visible");
+//      Logger.log("Warn visible");
+        // TODO: Make sure message came from Main
+        if(gameState.isGameStarted()){
+            Logger.log(getLoggingPrefix() + "Game has already started");
+            return;
+        }
         if(!gameState.enoughPlayersToStartGame()){
             Logger.log(getLoggingPrefix() + "Not enough players");
             return;
@@ -71,7 +81,16 @@ public class GameActor extends AbstractActor {
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
         Logger.log(getLoggingPrefix() + "Received TableCardsSelectionMessage");
-    	gameState.performTableCardsSelection(message.getPlayerId(), message.getSelectedCardsIds());
+        if(!playerExists(getSender())) {
+            Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
+            return;
+        }
+        IPlayerInfo playerInfo = playerRefsToInfos.get(getSender());
+        if(gameState.alreadySelectedTableCards(playerInfo.getPlayerId())) {
+            Logger.log(getLoggingPrefix() + "Player had already selected cards, ignoring message");
+            return;
+        }
+    	gameState.performTableCardsSelection(playerInfo.getPlayerId(), message.getSelectedCardsIds());
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
             distributeMessage(new StartCycleMessage());
@@ -79,9 +98,14 @@ public class GameActor extends AbstractActor {
     }
 
     private void handleAttemptedAction(PlayerActionInfo actionInfo) throws InterruptedException {
+        Logger.log(getLoggingPrefix() + "Received PlayerActionInfo");
+        if(!playerExists(getSender())) {
+            Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
+            return;
+        }
         gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut());
         if(gameState.checkGameOver()){
-            notifyGameResult();
+            distributeMessage(new GameResult());
             Logger.log(getLoggingPrefix() + "Game over");
             return;
         }
@@ -95,13 +119,17 @@ public class GameActor extends AbstractActor {
         distributeMessage(acceptedActionMessage);
 	}
 
-    private void notifyGameResult() {
-        distributeMessage(new GameResult());
-    }
-
     private void distributeMessage(Object message) {
         playerIdsToInfos.forEach((id, playerInfo) -> {
             playerInfo.getPlayerRef().tell(message, self());
         });
+    }
+
+    private boolean playerExists(int playerId) {
+        return playerIdsToInfos.containsKey(playerId);
+    }
+
+    private boolean playerExists(ActorRef playerRef) {
+        return playerRefsToInfos.containsKey(playerRef);
     }
 }
