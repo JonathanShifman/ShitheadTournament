@@ -44,7 +44,7 @@ public class GameActor extends AbstractActor {
 	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
         Logger.log(getLoggingPrefix() + "Received RegisterPlayerMessage");
         if(gameState.isGameStarted()){
-            //too late for registration
+            // Too late for registration
             return;
         }
         Logger.log(getLoggingPrefix() + "Registering player");
@@ -66,30 +66,16 @@ public class GameActor extends AbstractActor {
             return;
         }
         gameState.startGame();
-        sendChooseTableCardsMessages();
+        distributeMessage(new ChooseTableCardsMessage());
     }
-
-    private void sendChooseTableCardsMessages() {
-        playerRefs.forEach((id, playerRef) -> {
-            Logger.log(getLoggingPrefix() + "Sending ChooseTableCardsMessage to player " + id);
-            playerRef.tell(new ChooseTableCardsMessage(), self());
-        });
-	}
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
         Logger.log(getLoggingPrefix() + "Received TableCardsSelectionMessage");
     	gameState.performTableCardsSelection(message.getPlayerId(), message.getSelectedCardsIds());
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
-    	    sendStartCycleMessages();
+            distributeMessage(new StartCycleMessage());
         }
-    }
-
-    private void sendStartCycleMessages() {
-        playerRefs.forEach((id, playerRef) -> {
-            Logger.log(getLoggingPrefix() + "Sending StartCycleMessage to player " + id);
-            playerRef.tell(new StartCycleMessage(), self());
-        });
     }
 
     private void handleAttemptedAction(PlayerActionInfo actionInfo) throws InterruptedException {
@@ -106,14 +92,16 @@ public class GameActor extends AbstractActor {
     private void distributeAcceptedAction(int playerId) {
         AcceptedActionMessage acceptedActionMessage;
         acceptedActionMessage = new AcceptedActionMessage(playerId, gameState.getCurrentPlayerTurn());
-        playerRefs.forEach((id, playerRef) -> {
-            playerRef.tell(acceptedActionMessage, self());
-        });
+        distributeMessage(acceptedActionMessage);
 	}
 
     private void notifyGameResult() {
-        playerRefs.forEach((id, playerRef) -> {
-            playerRef.tell(new GameResult(), self());
+        distributeMessage(new GameResult());
+    }
+
+    private void distributeMessage(Object message) {
+        playerIdsToInfos.forEach((id, playerInfo) -> {
+            playerInfo.getPlayerRef().tell(message, self());
         });
     }
 }
