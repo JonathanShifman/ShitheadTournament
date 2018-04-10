@@ -14,10 +14,12 @@ public class AcceptedActionMessage {
 	
 	private int playerId;
 	private int nextPlayerTurn;
+	private int nextMoveId;
 	
-	public AcceptedActionMessage(int playerId, int nextPlayerTurn) {
+	public AcceptedActionMessage(int playerId, int nextPlayerTurn, int nextMoveId) {
 		this.playerId = playerId;
 		this.nextPlayerTurn = nextPlayerTurn;
+		this.nextMoveId = nextMoveId;
 	}
 
 	public int getPlayerId() {
@@ -26,5 +28,9 @@ public class AcceptedActionMessage {
 
 	public int getNextPlayerTurn() {
 		return nextPlayerTurn;
+	}
+
+	public int getNextMoveId() {
+		return nextMoveId;
 	}
 }

@@ -93,7 +93,7 @@ public class GameActor extends AbstractActor {
     	gameState.performTableCardsSelection(playerInfo.getPlayerId(), message.getSelectedCardsIds());
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
-            distributeMessage(new StartCycleMessage());
+            distributeMessage(new StartCycleMessage(gameState.getCurrentMoveId()));
         }
     }
 
@@ -103,19 +103,26 @@ public class GameActor extends AbstractActor {
             Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
             return;
         }
-        gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut());
-        if(gameState.checkGameOver()){
-            distributeMessage(new GameResult());
-            Logger.log(getLoggingPrefix() + "Game over");
-            return;
+        IAttemptedActionResult attemptedActionResult =
+                gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut(), actionInfo.getMoveId());
+        if(attemptedActionResult.isSuccessful()) {
+            if(gameState.checkGameOver()){
+                distributeMessage(new GameResult());
+                Logger.log(getLoggingPrefix() + "Game over");
+                return;
+            }
+            Thread.sleep(500);
+            distributeAcceptedAction(actionInfo.getPlayerId());
         }
-        Thread.sleep(500);
-        distributeAcceptedAction(actionInfo.getPlayerId());
+        else {
+            Logger.log(getLoggingPrefix() + "Illegal action - " + attemptedActionResult.getFailureReason());
+        }
     }
 
     private void distributeAcceptedAction(int playerId) {
         AcceptedActionMessage acceptedActionMessage;
-        acceptedActionMessage = new AcceptedActionMessage(playerId, gameState.getCurrentPlayerTurn());
+        acceptedActionMessage = new AcceptedActionMessage(playerId, gameState.getCurrentPlayerTurn(),
+                gameState.getCurrentMoveId());
         distributeMessage(acceptedActionMessage);
 	}
 

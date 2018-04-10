@@ -46,4 +46,8 @@ public class InfoProvider {
     private static void copyList(List<IGameCard> sourceList, List<IGameCard> destinationList) {
         destinationList.addAll(sourceList);
     }
+
+    public static int getNextMoveId() {
+        return gameState.getCurrentMoveId();
+    }
 }

@@ -24,6 +24,8 @@ public class GameState {
 
     private int playersPendingTableCardsSelection;
 
+    private int currentMoveId = 1;
+
     private int lastPerformedActionPlayer = -1;
     private boolean shouldAwardTurnToLastPerformedActionPlayer = false;
     private boolean shouldSkipOne = false;
@@ -131,7 +133,7 @@ public class GameState {
         determinePlayersOrder();
     }
 
-    public boolean attemptPlayerAction(int playerId, List<Integer> cardsToPut) {
+    public IAttemptedActionResult attemptPlayerAction(int playerId, List<Integer> cardsToPut, int moveId) {
         Logger.log(getLoggingPrefix() + "Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
         List<IGameCard> playedCards = cardsToPut.stream()
                 .map(cardId -> cards[cardId])
@@ -146,11 +148,10 @@ public class GameState {
             isActionValid = ActionValidator.canInterrupt(playedCards, pile);
         }
         if(!isActionValid){
-            System.out.println("Player " + playerId + " made an illegal action");
-            return false;
+            return new AttemptedActionResult("Failure Reason");
         }
         performPlayerAction(playerId, cardsToPut);
-        return true;
+        return new AttemptedActionResult();
     }
 
     public void performPlayerAction(int playerId, List<Integer> cardsToPut) {
@@ -176,6 +177,15 @@ public class GameState {
         }
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
+        updateCurrentMoveId();
+    }
+
+    public int getCurrentMoveId() {
+        return currentMoveId;
+    }
+
+    private void updateCurrentMoveId() {
+        currentMoveId++;
     }
 
     private String toCardDescriptions(List<Integer> cardsToPut) {

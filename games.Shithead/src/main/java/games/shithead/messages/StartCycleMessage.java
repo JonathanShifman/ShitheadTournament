@@ -16,4 +16,13 @@ import games.shithead.game.IGameCard;
  */
 public class StartCycleMessage {
 
+    private int firstMoveId;
+
+    public StartCycleMessage(int firstMoveId) {
+        this.firstMoveId = firstMoveId;
+    }
+
+    public int getFirstMoveId() {
+        return firstMoveId;
+    }
 }

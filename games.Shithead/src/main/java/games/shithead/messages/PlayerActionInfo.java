@@ -14,10 +14,12 @@ public class PlayerActionInfo {
 
     private final int playerId;
     private final List<Integer> cardsToPut;
+    private final int moveId;
 
-    public PlayerActionInfo(int playerId, List<Integer> cardsToPut) {
+    public PlayerActionInfo(int playerId, List<Integer> cardsToPut, int moveId) {
         this.playerId = playerId;
         this.cardsToPut = cardsToPut;
+        this.moveId = moveId;
     }
 
     public List<Integer> getCardsToPut() {
@@ -28,4 +30,7 @@ public class PlayerActionInfo {
         return playerId;
     }
 
+    public int getMoveId() {
+        return moveId;
+    }
 }

@@ -28,6 +28,8 @@ public abstract class PlayerActor extends AbstractActor {
 
 	protected List<IGameCard> pile;
 
+	protected int nextMoveId;
+
     public PlayerActor(){
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
@@ -54,6 +56,8 @@ public abstract class PlayerActor extends AbstractActor {
     }
 
     protected void updateInfo() {
+		nextMoveId = InfoProvider.getNextMoveId();
+
     	players = InfoProvider.getPlayerInfos();
 		handCards = players.get(playerId).getHandCards();
 		revealedTableCards = players.get(playerId).getRevealedTableCards();
@@ -69,7 +73,7 @@ public abstract class PlayerActor extends AbstractActor {
 	private void receiveChooseTableCardsMessage(ChooseTableCardsMessage message) {
     	updateInfo();
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(pendingSelectionCards);
-        sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds, this.playerId), self());
+        sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
 	}
     
 	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards);
