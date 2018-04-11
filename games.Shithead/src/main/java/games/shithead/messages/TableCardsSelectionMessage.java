@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class TableCardsSelectionMessage {
 	
-	private List<Integer> selectedCardsIds;
+	private final List<Integer> selectedCardsIds;
 	
 	public TableCardsSelectionMessage(List<Integer> selectedCardsIds) {
 		this.selectedCardsIds = selectedCardsIds;

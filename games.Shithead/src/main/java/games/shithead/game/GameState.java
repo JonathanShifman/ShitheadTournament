@@ -13,8 +13,10 @@ public class GameState {
 
     private Random rnd = new Random();
 
+    //True if the time for registration is over, and the participants have been determined
     private boolean isGameStarted;
 
+    //Maps player ids to their hands (the cards in their possession)
     private Map<Integer, IPlayerHand> players;
 
     private IMultiDeck deck;
@@ -314,6 +316,7 @@ public class GameState {
         if(!players.containsKey(playerId)) {
             return false;
         }
-        return players.get(playerId).getPendingSelectionCards().size() == 0;
+        // return players.get(playerId).getPendingSelectionCards().size() == 0;
+        return false;
     }
 }

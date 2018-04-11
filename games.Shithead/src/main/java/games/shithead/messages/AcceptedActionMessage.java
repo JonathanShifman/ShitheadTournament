@@ -12,9 +12,9 @@ import games.shithead.game.IGameCard;
  */
 public class AcceptedActionMessage {
 	
-	private int playerId;
-	private int nextPlayerTurn;
-	private int nextMoveId;
+	private final int playerId;
+	private final int nextPlayerTurn;
+	private final int nextMoveId;
 	
 	public AcceptedActionMessage(int playerId, int nextPlayerTurn, int nextMoveId) {
 		this.playerId = playerId;

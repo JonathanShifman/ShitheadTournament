@@ -15,11 +15,20 @@ public class PlayerActionInfo {
     private final int playerId;
     private final List<Integer> cardsToPut;
     private final int moveId;
+    private final int victimId;
 
     public PlayerActionInfo(int playerId, List<Integer> cardsToPut, int moveId) {
         this.playerId = playerId;
         this.cardsToPut = cardsToPut;
         this.moveId = moveId;
+        this.victimId = -1;
+    }
+
+    public PlayerActionInfo(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
+        this.playerId = playerId;
+        this.cardsToPut = cardsToPut;
+        this.moveId = moveId;
+        this.victimId = victimId;
     }
 
     public List<Integer> getCardsToPut() {
@@ -32,5 +41,9 @@ public class PlayerActionInfo {
 
     public int getMoveId() {
         return moveId;
+    }
+
+    public int getVictimId() {
+        return victimId;
     }
 }
