@@ -5,3 +5,5 @@ games.Shithead/target/*
 *.idea/
 /.metadata/
 /.recommenders/
+*.log
+ShitheadLogAnalyzer/

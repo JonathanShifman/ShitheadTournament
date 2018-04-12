@@ -56,7 +56,7 @@ public class SimplePlayerActor extends PlayerActor {
             }
         }
 
-        return new PlayerActionInfo(playerId, cardsToPut, nextMoveId);
+        return new PlayerActionInfo(cardsToPut, nextMoveId);
     }
 
     @Override

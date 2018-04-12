@@ -27,7 +27,7 @@ public class GameMasterActor extends AbstractActor {
     }
 
     private void logGameResult(GameResult result) {
-        System.out.println("Player " + result.losingPlayerName + " (" + result.losingPlayerId + ") lost");
+        System.out.println("Player " + result.getLosingPlayerName() + " (" + result.getLosingPlayerId() + ") lost");
     }
     
     private String getLoggingPrefix() {

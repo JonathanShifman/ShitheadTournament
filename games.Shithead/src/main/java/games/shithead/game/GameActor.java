@@ -85,12 +85,13 @@ public class GameActor extends AbstractActor {
             Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
             return;
         }
-        IPlayerInfo playerInfo = playerRefsToInfos.get(getSender());
-        if(gameState.alreadySelectedTableCards(playerInfo.getPlayerId())) {
-            Logger.log(getLoggingPrefix() + "Player had already selected cards, ignoring message");
+        try {
+            gameState.performTableCardsSelection(playerRefsToInfos.get(getSender()).getPlayerId(), message.getSelectedCardsIds());
+        }
+    	catch(Exception e) {
+            Logger.log(getLoggingPrefix() + e.getMessage());
             return;
         }
-    	gameState.performTableCardsSelection(playerInfo.getPlayerId(), message.getSelectedCardsIds());
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
             distributeMessage(new StartCycleMessage(gameState.getCurrentMoveId()));
@@ -103,20 +104,21 @@ public class GameActor extends AbstractActor {
             Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
             return;
         }
-        IAttemptedActionResult attemptedActionResult =
-                gameState.attemptPlayerAction(actionInfo.getPlayerId(), actionInfo.getCardsToPut(), actionInfo.getMoveId());
-        if(attemptedActionResult.isSuccessful()) {
-            if(gameState.checkGameOver()){
-                distributeMessage(new GameResult());
-                Logger.log(getLoggingPrefix() + "Game over");
-                return;
-            }
-            Thread.sleep(500);
-            distributeAcceptedAction(actionInfo.getPlayerId());
+        int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
+        try {
+            gameState.performPlayerAction(playerId, actionInfo.getCardsToPut(), actionInfo.getMoveId());
         }
-        else {
-            Logger.log(getLoggingPrefix() + "Illegal action - " + attemptedActionResult.getFailureReason());
+        catch (Exception e) {
+            Logger.log(getLoggingPrefix() + e.getMessage());
+            return;
         }
+        if(gameState.isGameOver()){
+            distributeMessage(new GameResult(-1, ""));
+            Logger.log(getLoggingPrefix() + "Game over");
+            return;
+        }
+        Thread.sleep(500);
+        distributeAcceptedAction(playerId);
     }
 
     private void distributeAcceptedAction(int playerId) {

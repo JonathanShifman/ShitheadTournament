@@ -40,10 +40,10 @@ public class RandomPlayerActor extends PlayerActor {
 			if(ActionValidator.canPlay(cardsToPlay, pile)) {
 				List<Integer> cardsToPut = new LinkedList<>();
 				cardsToPut.add(handCard.getUniqueId());
-				return new PlayerActionInfo(playerId, cardsToPut, nextMoveId);
+				return new PlayerActionInfo(cardsToPut, nextMoveId);
 			}
 		}
-		return new PlayerActionInfo(playerId, new LinkedList<>(), nextMoveId);
+		return new PlayerActionInfo(new LinkedList<>(), nextMoveId);
 	}
 
 	@Override

@@ -12,20 +12,17 @@ import java.util.List;
  */
 public class PlayerActionInfo {
 
-    private final int playerId;
     private final List<Integer> cardsToPut;
     private final int moveId;
     private final int victimId;
 
-    public PlayerActionInfo(int playerId, List<Integer> cardsToPut, int moveId) {
-        this.playerId = playerId;
+    public PlayerActionInfo(List<Integer> cardsToPut, int moveId) {
         this.cardsToPut = cardsToPut;
         this.moveId = moveId;
         this.victimId = -1;
     }
 
     public PlayerActionInfo(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
-        this.playerId = playerId;
         this.cardsToPut = cardsToPut;
         this.moveId = moveId;
         this.victimId = victimId;
@@ -33,10 +30,6 @@ public class PlayerActionInfo {
 
     public List<Integer> getCardsToPut() {
         return cardsToPut;
-    }
-
-    public int getPlayerId() {
-        return playerId;
     }
 
     public int getMoveId() {

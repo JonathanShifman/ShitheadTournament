@@ -38,6 +38,10 @@ public class GameState {
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
     private int currentTurnPlayerId = -1;
 
+    private final int HAND_CARDS_AT_GANE_START = 3;
+    private final int REVEALED_TABLE_CARDS_AT_GAME_START = 3;
+    private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 3;
+
     public GameState() {
         isGameStarted = false;
         players = new HashMap<>();
@@ -87,33 +91,63 @@ public class GameState {
     }
 
     public void dealInitialCards() {
-        players.forEach((id, playerInfo) -> {
-            List<ICardFace> cardFaces = deck.getNextCardFaces(3);
+        int numOfCardsToDeal = HAND_CARDS_AT_GANE_START + REVEALED_TABLE_CARDS_AT_GAME_START +
+                HIDDEN_TABLE_CARDS_AT_GAME_START;
+
+        players.forEach((playerId, playerInfo) -> {
+            List<ICardFace> cardFaces = deck.getNextCardFaces(numOfCardsToDeal);
+            int remainingHiddenTableCardsToDeal = HIDDEN_TABLE_CARDS_AT_GAME_START;
             for(ICardFace cardFace : cardFaces) {
                 final int newUniqueId = cardUniqueIdAllocator++;
                 IGameCard gameCard = new GameCard(cardFace, newUniqueId);
-                cardStatuses[newUniqueId] = new CardStatus(id, HeldCardPosition.PENDING_SELECTION);
                 cards[newUniqueId] = gameCard;
+                if(remainingHiddenTableCardsToDeal == 0) {
+                    cardStatuses[newUniqueId] = new CardStatus(playerId, HeldCardPosition.PENDING_SELECTION);
+                    playerInfo.getPendingSelectionCards().add(gameCard);
+                }
+                else {
+                    cardStatuses[newUniqueId] = new CardStatus(playerId, HeldCardPosition.TABLE_HIDDEN);
+                    playerInfo.getHiddenTableCards().add(gameCard);
+                    remainingHiddenTableCardsToDeal--;
+                }
             }
         });
         playersPendingTableCardsSelection = getNumberOfPlayers();
     }
 
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
-        IPlayerHand playerInfo = players.get(playerId);
-        for(int selectedCardId : selectedCardsIds) {
-            cardStatuses[selectedCardId].setHolderId(playerId);
-            cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_REVEALED);
-            playerInfo.getRevealedTableCards().add(cards[selectedCardId]);
+        if(isGameStarted) {
+            throw new RuntimeException("Exception: Game has already started");
         }
-        for(int i = 0; i < cards.length; i++) {
-            CardStatus cardStatus = cardStatuses[i];
-            IGameCard card = cards[i];
-            if(cardStatus.getHolderId() == playerId && cardStatus.getHeldCardPosition() == HeldCardPosition.PENDING_SELECTION) {
-                cardStatus.setHeldCardPosition(HeldCardPosition.IN_HAND);
-                playerInfo.getHandCards().add(card);
+        if(!players.containsKey(playerId)) {
+            throw new RuntimeException("Exception: Unregistered player");
+        }
+        if(selectedCardsIds.size() != REVEALED_TABLE_CARDS_AT_GAME_START) {
+            throw new RuntimeException("Exception: Expected selection of " + REVEALED_TABLE_CARDS_AT_GAME_START +
+            " revealed table cards but received " + selectedCardsIds.size());
+        }
+        IPlayerHand playerHand = players.get(playerId);
+        if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GANE_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
+            throw new RuntimeException("Exception: Player has already made table cards selection");
+        }
+        for(int selectedCardId : selectedCardsIds) {
+            if(selectedCardId >= cardStatuses.length) {
+                throw new RuntimeException("Exception: Card id doesn't exist");
+            }
+            CardStatus cardStatus = cardStatuses[selectedCardId];
+            if(cardStatus.getHolderId() != playerId || cardStatus.getHeldCardPosition() != HeldCardPosition.PENDING_SELECTION) {
+                throw new RuntimeException("Exception: Card doesn't belong to player, or isn't pending selection");
+            }
+            cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_REVEALED);
+            playerHand.getRevealedTableCards().add(cards[selectedCardId]);
+        }
+        for(IGameCard gameCard : playerHand.getPendingSelectionCards()) {
+            if(cardStatuses[gameCard.getUniqueId()].getHeldCardPosition() == HeldCardPosition.PENDING_SELECTION) {
+                cardStatuses[gameCard.getUniqueId()].setHeldCardPosition(HeldCardPosition.IN_HAND);
+                playerHand.getHandCards().add(gameCard);
             }
         }
+        playerHand.getPendingSelectionCards().clear();
         playersPendingTableCardsSelection--;
     }
 
@@ -135,12 +169,18 @@ public class GameState {
         determinePlayersOrder();
     }
 
-    public IAttemptedActionResult attemptPlayerAction(int playerId, List<Integer> cardsToPut, int moveId) {
+    private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
         Logger.log(getLoggingPrefix() + "Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
+        if(!players.containsKey(playerId)) {
+            throw new RuntimeException("Exception: Unregistered player");
+        }
+        if(moveId != currentMoveId) {
+            throw new RuntimeException("Exception: Move didn't have current move id");
+        }
+        boolean isActionValid;
         List<IGameCard> playedCards = cardsToPut.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList());
-        boolean isActionValid;
         if(playerId == currentTurnPlayerId) {
             isActionValid = cardsToPut.isEmpty() ?
                 ActionValidator.canTake(pile) :
@@ -150,13 +190,12 @@ public class GameState {
             isActionValid = ActionValidator.canInterrupt(playedCards, pile);
         }
         if(!isActionValid){
-            return new AttemptedActionResult("Failure Reason");
+            throw new RuntimeException("Exception: player isn't allowed to make the given move");
         }
-        performPlayerAction(playerId, cardsToPut);
-        return new AttemptedActionResult();
     }
 
-    public void performPlayerAction(int playerId, List<Integer> cardsToPut) {
+    public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId) {
+        validateAction(playerId, cardsToPut, moveId);
         Logger.log(getLoggingPrefix() + "Performing action");
         IPlayerHand playerInfo = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
@@ -290,7 +329,7 @@ public class GameState {
         }
     }
 
-    public boolean checkGameOver() {
+    public boolean isGameOver() {
         if(!deck.isEmpty()) {
             return false;
         }
