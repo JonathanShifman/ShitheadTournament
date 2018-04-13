@@ -59,8 +59,9 @@ public class RandomPlayerActor extends PlayerActor {
 	}
 
 	@Override
-	protected void considerInterruption() {
+	protected List<IGameCard> getInterruptionCards() {
 		// Nah
+		return null;
 	}
 
 }

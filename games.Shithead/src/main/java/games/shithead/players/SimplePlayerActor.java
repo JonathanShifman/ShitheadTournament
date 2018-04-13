@@ -93,7 +93,46 @@ public class SimplePlayerActor extends PlayerActor {
     }
 
     @Override
-    protected void considerInterruption() {
-        // FIXME: Change later
+    protected List<IGameCard> getInterruptionCards() {
+        if(pile.isEmpty()) {
+            return null;
+        }
+        int pileTopValue = pile.get(0).getCardFace().get().getValue();
+        int consecutiveTopValueCards = 0;
+        Iterator<IGameCard> iterator = pile.iterator();
+        IGameCard currentCard;
+        while (iterator.hasNext()) {
+            currentCard = iterator.next();
+            if(currentCard.getCardFace().get().getValue() == pileTopValue) {
+                consecutiveTopValueCards++;
+            }
+            else {
+                break;
+            }
+        }
+
+        int cardsNeededForInterruption = 4 - consecutiveTopValueCards;
+        List<IGameCard> interruptionCards = new LinkedList<>();
+        for(IGameCard gameCard : handCards) {
+            if(gameCard.getCardFace().get().getValue() == pileTopValue) {
+                interruptionCards.add(gameCard);
+                cardsNeededForInterruption--;
+                if(cardsNeededForInterruption == 0) {
+                    return interruptionCards;
+                }
+            }
+        }
+        if(interruptionCards.size() == handCards.size()) {
+            for(IGameCard gameCard : revealedTableCards) {
+                if(gameCard.getCardFace().get().getValue() == pileTopValue) {
+                    interruptionCards.add(gameCard);
+                    cardsNeededForInterruption--;
+                    if(cardsNeededForInterruption == 0) {
+                        return interruptionCards;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

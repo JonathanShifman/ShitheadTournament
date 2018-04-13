@@ -22,7 +22,7 @@ public class PlayerActionInfo {
         this.victimId = -1;
     }
 
-    public PlayerActionInfo(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
+    public PlayerActionInfo(List<Integer> cardsToPut, int moveId, int victimId) {
         this.cardsToPut = cardsToPut;
         this.moveId = moveId;
         this.victimId = victimId;

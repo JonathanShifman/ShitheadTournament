@@ -1,6 +1,7 @@
 package games.shithead.players;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
@@ -99,7 +100,18 @@ public abstract class PlayerActor extends AbstractActor {
 
     protected abstract PlayerActionInfo getPlayerMove();
     
-	protected abstract void considerInterruption();
+	protected void considerInterruption() {
+		List<IGameCard> interruptionCards = getInterruptionCards();
+		if(interruptionCards == null) {
+			return;
+		}
+		List<Integer> interruptionCardIds = interruptionCards.stream()
+				.map(card -> card.getUniqueId())
+				.collect(Collectors.toList());
+		sender().tell(new PlayerActionInfo(interruptionCardIds, nextMoveId), self());
+	}
+
+	protected abstract List<IGameCard> getInterruptionCards();
 
 	private void receiveAcceptedAction(AcceptedActionMessage message) {
 		takeAction();
