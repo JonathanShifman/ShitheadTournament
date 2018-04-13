@@ -10,7 +10,7 @@ import games.shithead.game.InfoProvider;
 import games.shithead.game.ShitheadActorSystem;
 import games.shithead.messages.AcceptedActionMessage;
 import games.shithead.messages.PlayerIdMessage;
-import games.shithead.messages.ChooseTableCardsMessage;
+import games.shithead.messages.ChooseRevealedTableCardsMessage;
 import games.shithead.messages.StartCycleMessage;
 import games.shithead.messages.ReceivedCardsMessage;
 import games.shithead.messages.PlayerActionInfo;
@@ -41,7 +41,7 @@ public abstract class PlayerActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(PlayerIdMessage.class, this::receiveId)
-                .match(ChooseTableCardsMessage.class, this::receiveChooseTableCardsMessage)
+                .match(ChooseRevealedTableCardsMessage.class, this::receiveChooseTableCardsMessage)
                 .match(StartCycleMessage.class, this::receiveStartCycleMessage)
                 .match(AcceptedActionMessage.class, this::receiveAcceptedAction)
                 .match(ReceivedCardsMessage.class, this::receiveCards)
@@ -70,13 +70,14 @@ public abstract class PlayerActor extends AbstractActor {
     	this.playerId = idMessage.getPlayerId();
     }
     
-	private void receiveChooseTableCardsMessage(ChooseTableCardsMessage message) {
+	private void receiveChooseTableCardsMessage(ChooseRevealedTableCardsMessage message) {
     	updateInfo();
-        List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(pendingSelectionCards);
+        List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(
+        		pendingSelectionCards, message.getRevealedCardsToBeChosen());
         sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
 	}
     
-	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards);
+	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose);
 
 	private void receiveStartCycleMessage(StartCycleMessage message) {
 		takeAction();

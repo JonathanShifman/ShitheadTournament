@@ -36,4 +36,9 @@ public class PlayerHand implements IPlayerHand {
 	public List<IGameCard> getPendingSelectionCards() {
 		return pendingSelectionCards;
 	}
+
+	@Override
+	public int getNumOfCardsRemaining() {
+		return handCards.size() + revealedTableCards.size() + hiddenTableCards.size() + pendingSelectionCards.size();
+	}
 }

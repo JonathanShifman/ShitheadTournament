@@ -14,4 +14,6 @@ public interface IPlayerHand {
 
 	List<IGameCard> getPendingSelectionCards();
 
+	int getNumOfCardsRemaining();
+
 }

@@ -4,10 +4,8 @@ import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
 import games.shithead.messages.PlayerActionInfo;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SimplePlayerActor extends PlayerActor {
 
@@ -29,19 +27,55 @@ public class SimplePlayerActor extends PlayerActor {
     }
 
     @Override
-    protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards) {
-        return new LinkedList<>();
+    protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose) {
+        cards.sort(new GameCardValueComparator());
+        int remainingNumberOfCardsToChoose = numOfRevealedTableCardsToChoose;
+        List<Integer> chosenRevealedTableCardIds = new ArrayList<Integer>();
+        for(IGameCard card : cards) {
+            if(remainingNumberOfCardsToChoose > 0) {
+                this.revealedTableCards.add(card);
+                chosenRevealedTableCardIds.add(card.getUniqueId());
+                remainingNumberOfCardsToChoose--;
+            }
+            else {
+                this.handCards.add(card);
+            }
+        }
+        return chosenRevealedTableCardIds;
     }
 
     @Override
     protected PlayerActionInfo getPlayerMove() {
-        handCards.sort(new GameCardValueComparator());
-        List<Integer> cardsToPut = new LinkedList<>();
+        if(handCards.isEmpty()) {
+            List<IGameCard> cardsToPut = getWeakestPlayableSet(revealedTableCards);
+            List<Integer> cardsToPutIds = cardsToPut.stream()
+                    .map(card -> card.getUniqueId())
+                    .collect(Collectors.toList());
+            return new PlayerActionInfo(cardsToPutIds, nextMoveId);
+        }
+        List<IGameCard> cardsToPut = getWeakestPlayableSet(handCards);
+        if(!cardsToPut.isEmpty()) {
+            int selectedValue = cardsToPut.get(0).getCardFace().get().getValue();
+            for(IGameCard gameCard : revealedTableCards) {
+                if (gameCard.getCardFace().get().getValue() == selectedValue) {
+                    cardsToPut.add(gameCard);
+                }
+            }
+        }
+        List<Integer> cardsToPutIds = cardsToPut.stream()
+                .map(card -> card.getUniqueId())
+                .collect(Collectors.toList());
+        return new PlayerActionInfo(cardsToPutIds, nextMoveId);
+    }
+
+    private List<IGameCard> getWeakestPlayableSet(List<IGameCard> cards) {
+        cards.sort(new GameCardValueComparator());
+        List<IGameCard> weakestPlayableSet = new LinkedList<>();
         int chosenValue = -1;
-        for(IGameCard gameCard : handCards) {
+        for(IGameCard gameCard : cards) {
             if(chosenValue > 0) {
                 if(gameCard.getCardFace().get().getValue() == chosenValue) {
-                    cardsToPut.add(gameCard.getUniqueId());
+                    weakestPlayableSet.add(gameCard);
                     continue;
                 }
                 else {
@@ -50,13 +84,12 @@ public class SimplePlayerActor extends PlayerActor {
             }
             else {
                 if(ActionValidator.canPlay(gameCard, pile)) {
-                    cardsToPut.add(gameCard.getUniqueId());
+                    weakestPlayableSet.add(gameCard);
                     chosenValue = gameCard.getCardFace().get().getValue();
                 }
             }
         }
-
-        return new PlayerActionInfo(cardsToPut, nextMoveId);
+        return weakestPlayableSet;
     }
 
     @Override

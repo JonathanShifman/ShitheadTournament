@@ -76,7 +76,8 @@ public class GameActor extends AbstractActor {
             return;
         }
         gameState.startGame();
-        distributeMessage(new ChooseTableCardsMessage());
+        int revealedCardsAtGameStart = gameState.getRevealedCardsAtGameStart();
+        distributeMessage(new ChooseRevealedTableCardsMessage(revealedCardsAtGameStart));
     }
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {

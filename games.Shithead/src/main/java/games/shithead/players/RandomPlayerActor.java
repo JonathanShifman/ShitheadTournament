@@ -16,8 +16,8 @@ public class RandomPlayerActor extends PlayerActor {
 	}
 
 	@Override
-	protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards) {
-		int remainingNumberOfCardsToChoose = 0;
+	protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose) {
+		int remainingNumberOfCardsToChoose = numOfRevealedTableCardsToChoose;
 		List<Integer> chosenRevealedTableCardIds = new ArrayList<Integer>();
 		for(IGameCard card : cards) {
 			if(remainingNumberOfCardsToChoose > 0) {
@@ -34,16 +34,28 @@ public class RandomPlayerActor extends PlayerActor {
 
 	@Override
 	protected PlayerActionInfo getPlayerMove() {
-		for(IGameCard handCard : handCards) {
+		List<Integer> cardsToPut = new LinkedList<>();
+		int cardId;
+		if(handCards.isEmpty()) {
+			cardId = getFirstPlayableCardId(revealedTableCards);
+			cardsToPut.add(cardId);
+		}
+		else {
+			cardId = getFirstPlayableCardId(handCards);
+			cardsToPut.add(cardId);
+		}
+		return new PlayerActionInfo(cardsToPut, nextMoveId);
+	}
+
+	private int getFirstPlayableCardId(List<IGameCard> cards) {
+		for(IGameCard card : cards) {
 			List<IGameCard> cardsToPlay = new LinkedList<>();
-			cardsToPlay.add(handCard);
+			cardsToPlay.add(card);
 			if(ActionValidator.canPlay(cardsToPlay, pile)) {
-				List<Integer> cardsToPut = new LinkedList<>();
-				cardsToPut.add(handCard.getUniqueId());
-				return new PlayerActionInfo(cardsToPut, nextMoveId);
+				return card.getUniqueId();
 			}
 		}
-		return new PlayerActionInfo(new LinkedList<>(), nextMoveId);
+		return -1;
 	}
 
 	@Override

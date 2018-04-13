@@ -38,9 +38,9 @@ public class GameState {
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
     private int currentTurnPlayerId = -1;
 
-    private final int HAND_CARDS_AT_GANE_START = 3;
+    private final int HAND_CARDS_AT_GAME_START = 3;
     private final int REVEALED_TABLE_CARDS_AT_GAME_START = 3;
-    private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 3;
+    private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 0;
 
     public GameState() {
         isGameStarted = false;
@@ -91,7 +91,7 @@ public class GameState {
     }
 
     public void dealInitialCards() {
-        int numOfCardsToDeal = HAND_CARDS_AT_GANE_START + REVEALED_TABLE_CARDS_AT_GAME_START +
+        int numOfCardsToDeal = HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START +
                 HIDDEN_TABLE_CARDS_AT_GAME_START;
 
         players.forEach((playerId, playerInfo) -> {
@@ -116,8 +116,8 @@ public class GameState {
     }
 
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
-        if(isGameStarted) {
-            throw new RuntimeException("Exception: Game has already started");
+        if(playersPendingTableCardsSelection == 0) {
+            throw new RuntimeException("Exception: All players already selected table cards");
         }
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
@@ -127,7 +127,7 @@ public class GameState {
             " revealed table cards but received " + selectedCardsIds.size());
         }
         IPlayerHand playerHand = players.get(playerId);
-        if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GANE_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
+        if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
             throw new RuntimeException("Exception: Player has already made table cards selection");
         }
         for(int selectedCardId : selectedCardsIds) {
@@ -334,7 +334,7 @@ public class GameState {
             return false;
         }
         for(Integer playerId : players.keySet()) {
-            if(players.get(playerId).getHandCards().size() == 0) {
+            if(players.get(playerId).getNumOfCardsRemaining() == 0) {
                 playingQueue.remove(playerId);
                 currentTurnPlayerId = playingQueue.getFirst();
                 return true;
@@ -357,5 +357,9 @@ public class GameState {
         }
         // return players.get(playerId).getPendingSelectionCards().size() == 0;
         return false;
+    }
+
+    public int getRevealedCardsAtGameStart() {
+        return HAND_CARDS_AT_GAME_START;
     }
 }
