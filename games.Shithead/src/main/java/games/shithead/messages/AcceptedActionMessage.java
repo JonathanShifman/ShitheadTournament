@@ -1,8 +1,8 @@
 package games.shithead.messages;
 
-import java.util.List;
+		import java.util.List;
 
-import games.shithead.game.IGameCard;
+		import games.shithead.game.IGameCard;
 
 /**
  * Sent from <code>GameActor</code> to <code>PlayerActor</code>.
@@ -11,11 +11,16 @@ import games.shithead.game.IGameCard;
  *
  */
 public class AcceptedActionMessage {
-	
+
+	// The id of the player whose action has been accepted
 	private final int playerId;
+
+	// The id of the player whose turn it is to play next
 	private final int nextPlayerTurn;
+
+	// The id of the upcoming move
 	private final int nextMoveId;
-	
+
 	public AcceptedActionMessage(int playerId, int nextPlayerTurn, int nextMoveId) {
 		this.playerId = playerId;
 		this.nextPlayerTurn = nextPlayerTurn;

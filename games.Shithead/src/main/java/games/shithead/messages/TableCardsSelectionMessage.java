@@ -8,7 +8,8 @@ import java.util.List;
  *
  */
 public class TableCardsSelectionMessage {
-	
+
+	// The ids of the revealed table cards chosen by the player
 	private final List<Integer> selectedCardsIds;
 	
 	public TableCardsSelectionMessage(List<Integer> selectedCardsIds) {

@@ -7,6 +7,7 @@ package games.shithead.messages;
  */
 public class RegisterPlayerMessage {
 
+    // The name of the player asking to be registered
     private String playerName;
 
     public RegisterPlayerMessage(String playerName) {

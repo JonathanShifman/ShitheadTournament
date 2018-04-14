@@ -12,8 +12,7 @@ import games.shithead.game.ShitheadActorSystem;
 import games.shithead.messages.AcceptedActionMessage;
 import games.shithead.messages.PlayerIdMessage;
 import games.shithead.messages.ChooseRevealedTableCardsMessage;
-import games.shithead.messages.StartCycleMessage;
-import games.shithead.messages.ReceivedCardsMessage;
+import games.shithead.messages.moveRequestMessage;
 import games.shithead.messages.PlayerActionInfo;
 import games.shithead.messages.RegisterPlayerMessage;
 import games.shithead.messages.TableCardsSelectionMessage;
@@ -43,9 +42,8 @@ public abstract class PlayerActor extends AbstractActor {
         return receiveBuilder()
                 .match(PlayerIdMessage.class, this::receiveId)
                 .match(ChooseRevealedTableCardsMessage.class, this::receiveChooseTableCardsMessage)
-                .match(StartCycleMessage.class, this::receiveStartCycleMessage)
+                .match(moveRequestMessage.class, this::receiveStartCycleMessage)
                 .match(AcceptedActionMessage.class, this::receiveAcceptedAction)
-                .match(ReceivedCardsMessage.class, this::receiveCards)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -80,7 +78,7 @@ public abstract class PlayerActor extends AbstractActor {
     
 	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose);
 
-	private void receiveStartCycleMessage(StartCycleMessage message) {
+	private void receiveStartCycleMessage(moveRequestMessage message) {
 		takeAction();
 	}
 	
@@ -115,11 +113,5 @@ public abstract class PlayerActor extends AbstractActor {
 
 	private void receiveAcceptedAction(AcceptedActionMessage message) {
 		takeAction();
-	}
-
-	private void receiveCards(ReceivedCardsMessage message) {
-		for(IGameCard card : message.getCards()) {
-			this.handCards.add(card);
-		}
 	}
 }

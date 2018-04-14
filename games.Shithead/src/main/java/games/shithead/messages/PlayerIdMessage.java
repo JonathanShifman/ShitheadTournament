@@ -7,6 +7,7 @@ package games.shithead.messages;
  */
 public class PlayerIdMessage {
 
+    // The id that has been allocated for the player
     private final int playerId;
 
     public PlayerIdMessage(int id) {

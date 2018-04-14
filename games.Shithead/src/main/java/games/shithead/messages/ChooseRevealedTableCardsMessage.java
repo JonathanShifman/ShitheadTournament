@@ -11,6 +11,7 @@ import games.shithead.game.IGameCard;
  */
 public class ChooseRevealedTableCardsMessage {
 
+    // The number of revealed table cards that should be chosen
     private final int revealedCardsToBeChosen;
 
     public ChooseRevealedTableCardsMessage(int revealedCardsToBeChosen) {

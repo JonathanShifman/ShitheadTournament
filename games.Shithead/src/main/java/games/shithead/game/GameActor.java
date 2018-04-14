@@ -95,7 +95,7 @@ public class GameActor extends AbstractActor {
         }
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
-            distributeMessage(new StartCycleMessage(gameState.getCurrentMoveId()));
+            distributeMessage(new moveRequestMessage(gameState.getCurrentMoveId()));
         }
     }
 

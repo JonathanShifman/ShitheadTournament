@@ -14,15 +14,6 @@ import games.shithead.game.IGameCard;
  * This message also contains the number of players and the players order, and signals the effective start of the game.
  *
  */
-public class StartCycleMessage {
+public class moveRequestMessage {
 
-    private final int firstMoveId;
-
-    public StartCycleMessage(int firstMoveId) {
-        this.firstMoveId = firstMoveId;
-    }
-
-    public int getFirstMoveId() {
-        return firstMoveId;
-    }
 }
