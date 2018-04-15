@@ -2,7 +2,7 @@ package games.shithead.players;
 
 import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
-import games.shithead.messages.PlayerActionInfo;
+import games.shithead.messages.PlayerActionMessage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,13 +41,13 @@ public class SimplePlayerActor extends PlayerActor {
     }
 
     @Override
-    protected PlayerActionInfo getPlayerMove() {
+    protected PlayerActionMessage getPlayerMove() {
         if(handCards.isEmpty()) {
             List<IGameCard> cardsToPut = getWeakestPlayableSet(revealedTableCards);
             List<Integer> cardsToPutIds = cardsToPut.stream()
                     .map(card -> card.getUniqueId())
                     .collect(Collectors.toList());
-            return new PlayerActionInfo(cardsToPutIds, nextMoveId);
+            return new PlayerActionMessage(cardsToPutIds, nextMoveId);
         }
         List<IGameCard> cardsToPut = getWeakestPlayableSet(handCards);
         if(!cardsToPut.isEmpty()) {
@@ -61,7 +61,7 @@ public class SimplePlayerActor extends PlayerActor {
         List<Integer> cardsToPutIds = cardsToPut.stream()
                 .map(card -> card.getUniqueId())
                 .collect(Collectors.toList());
-        return new PlayerActionInfo(cardsToPutIds, nextMoveId);
+        return new PlayerActionMessage(cardsToPutIds, nextMoveId);
     }
 
     private List<IGameCard> getWeakestPlayableSet(List<IGameCard> cards) {

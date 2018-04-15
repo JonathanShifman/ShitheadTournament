@@ -10,7 +10,7 @@ import java.util.List;
  * Contains the action a player chose to make.
  *
  */
-public class PlayerActionInfo {
+public class PlayerActionMessage {
 
     /* The unique ids of the cards the player would like to play.
      * An empty list indicates the player is taking the pile. */
@@ -24,13 +24,13 @@ public class PlayerActionInfo {
      * Will be ignored if a joker wasn't played. */
     private final int victimId;
 
-    public PlayerActionInfo(List<Integer> cardsToPut, int moveId) {
+    public PlayerActionMessage(List<Integer> cardsToPut, int moveId) {
         this.cardsToPut = cardsToPut;
         this.moveId = moveId;
         this.victimId = -1;
     }
 
-    public PlayerActionInfo(List<Integer> cardsToPut, int moveId, int victimId) {
+    public PlayerActionMessage(List<Integer> cardsToPut, int moveId, int victimId) {
         this.cardsToPut = cardsToPut;
         this.moveId = moveId;
         this.victimId = victimId;

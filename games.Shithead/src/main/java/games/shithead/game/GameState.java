@@ -47,10 +47,6 @@ public class GameState {
         players = new HashMap<>();
     }
 
-    private String getLoggingPrefix() {
-        return "GameState: ";
-    }
-
     public boolean enoughPlayersToStartGame() {
         return players.size() > 1;
     }
@@ -81,7 +77,7 @@ public class GameState {
 
     private void initDecks() {
         //Try to match deck size to number of players
-        System.out.println(getLoggingPrefix() + "Initializing deck");
+        System.out.println("Initializing deck");
         deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
         cardStatuses = new CardStatus[deck.getNumberOfCards()];
         cards = new IGameCard[deck.getNumberOfCards()];
@@ -163,7 +159,7 @@ public class GameState {
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
         currentTurnPlayerId = playingQueue.getFirst();
-        Logger.log(getLoggingPrefix() + "Players order: " + playingQueue.toString());
+        Logger.log("Players order: " + playingQueue.toString());
     }
 
     public void startCycle() {
@@ -171,7 +167,7 @@ public class GameState {
     }
 
     private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
-        Logger.log(getLoggingPrefix() + "Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
+        Logger.log("Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
@@ -197,7 +193,7 @@ public class GameState {
 
     public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
         validateAction(playerId, cardsToPut, moveId);
-        Logger.log(getLoggingPrefix() + "Performing action");
+        Logger.log("Performing action");
         IPlayerHand playerHand = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
             List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
@@ -314,7 +310,7 @@ public class GameState {
     }
 
     private void burnCards(List<IGameCard> cardsToBurn) {
-        Logger.log(getLoggingPrefix() + "Burning cards");
+        Logger.log("Burning cards");
         for(IGameCard gameCard : cardsToBurn) {
             cardStatuses[gameCard.getUniqueId()] = CardStatus.BURNT;
         }

@@ -26,53 +26,49 @@ public class GameActor extends AbstractActor {
         playerIdsToInfos = new HashMap<>();
         playerRefsToInfos = new HashMap<>();
     }
-    
-    private String getLoggingPrefix() {
-    	return "GameActor: ";
-    }
 
     public Receive createReceive() {
         return receiveBuilder()
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
                 .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
-                .match(PlayerActionInfo.class, this::handleAttemptedAction)
+                .match(PlayerActionMessage.class, this::handleAttemptedAction)
                 .matchAny(this::unhandled)
                 .build();
     }
 
 	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
-        Logger.log(getLoggingPrefix() + "Received RegisterPlayerMessage");
+        Logger.log("Received RegisterPlayerMessage");
         if(gameState.isGameStarted()){
-            Logger.log(getLoggingPrefix() + "Game has already started, too late for registration");
+            Logger.log("Game has already started, too late for registration");
             return;
         }
         if(playerExists(getSender())){
-            Logger.log(getLoggingPrefix() + "Player has already been registered");
+            Logger.log("Player has already been registered");
             return;
         }
 
-        Logger.log(getLoggingPrefix() + "Registering player");
+        Logger.log("Registering player");
         int playerId = playerIdAllocator++;
         IPlayerInfo playerInfo = new PlayerInfo(playerId, playerRegistration.getPlayerName(), getSender());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);
-        Logger.log(getLoggingPrefix() + "Sending PlayerIdMessage with playerId=" + playerId);
+        Logger.log("Sending PlayerIdMessage with playerId=" + playerId);
         getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
     @SuppressWarnings("unused")
     private void startGame(StartGameMessage startGameMessage) {
-        Logger.log(getLoggingPrefix() + "Received StartGameMessage");
+        Logger.log("Received StartGameMessage");
 //      Logger.log("Warn visible");
         // TODO: Make sure message came from Main
         if(gameState.isGameStarted()){
-            Logger.log(getLoggingPrefix() + "Game has already started");
+            Logger.log("Game has already started");
             return;
         }
         if(!gameState.enoughPlayersToStartGame()){
-            Logger.log(getLoggingPrefix() + "Not enough players");
+            Logger.log("Not enough players");
             return;
         }
         gameState.startGame();
@@ -81,16 +77,16 @@ public class GameActor extends AbstractActor {
     }
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
-        Logger.log(getLoggingPrefix() + "Received TableCardsSelectionMessage");
+        Logger.log("Received TableCardsSelectionMessage");
         if(!playerExists(getSender())) {
-            Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
+            Logger.log("Unregistered Player, ignoring message");
             return;
         }
         try {
             gameState.performTableCardsSelection(playerRefsToInfos.get(getSender()).getPlayerId(), message.getSelectedCardsIds());
         }
     	catch(Exception e) {
-            Logger.log(getLoggingPrefix() + e.getMessage());
+            Logger.log(e.getMessage());
             return;
         }
     	if(gameState.allPlayersSelectedTableCards()) {
@@ -99,10 +95,10 @@ public class GameActor extends AbstractActor {
         }
     }
 
-    private void handleAttemptedAction(PlayerActionInfo actionInfo) throws InterruptedException {
-        Logger.log(getLoggingPrefix() + "Received PlayerActionInfo");
+    private void handleAttemptedAction(PlayerActionMessage actionInfo) throws InterruptedException {
+        Logger.log("Received PlayerActionMessage");
         if(!playerExists(getSender())) {
-            Logger.log(getLoggingPrefix() + "Unregistered Player, ignoring message");
+            Logger.log("Unregistered Player, ignoring message");
             return;
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
@@ -110,12 +106,12 @@ public class GameActor extends AbstractActor {
             gameState.performPlayerAction(playerId, actionInfo.getCardsToPut(), actionInfo.getMoveId(), actionInfo.getVictimId());
         }
         catch (Exception e) {
-            Logger.log(getLoggingPrefix() + e.getMessage());
+            Logger.log(e.getMessage());
             return;
         }
         if(gameState.isGameOver()){
             distributeMessage(new GameResult(-1, ""));
-            Logger.log(getLoggingPrefix() + "Game over");
+            Logger.log("Game over");
             return;
         }
         Thread.sleep(500);

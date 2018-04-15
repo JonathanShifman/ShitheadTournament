@@ -1,7 +1,5 @@
 package games.shithead.game;
 
-import games.shithead.messages.PlayerActionInfo;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

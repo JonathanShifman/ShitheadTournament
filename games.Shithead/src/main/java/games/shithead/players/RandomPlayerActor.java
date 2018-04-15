@@ -6,7 +6,7 @@ import java.util.List;
 
 import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
-import games.shithead.messages.PlayerActionInfo;
+import games.shithead.messages.PlayerActionMessage;
 
 public class RandomPlayerActor extends PlayerActor {
 
@@ -29,7 +29,7 @@ public class RandomPlayerActor extends PlayerActor {
 	}
 
 	@Override
-	protected PlayerActionInfo getPlayerMove() {
+	protected PlayerActionMessage getPlayerMove() {
 		List<Integer> cardsToPut = new LinkedList<>();
 		int cardId;
 		if(handCards.isEmpty()) {
@@ -40,7 +40,7 @@ public class RandomPlayerActor extends PlayerActor {
 			cardId = getFirstPlayableCardId(handCards);
 			cardsToPut.add(cardId);
 		}
-		return new PlayerActionInfo(cardsToPut, nextMoveId);
+		return new PlayerActionMessage(cardsToPut, nextMoveId);
 	}
 
 	private int getFirstPlayableCardId(List<IGameCard> cards) {

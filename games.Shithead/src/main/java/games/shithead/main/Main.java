@@ -20,18 +20,18 @@ public class Main {
 		ActorRef gmActor = actorSystem.actorOf(Props.create(GameMasterActor.class), ShitheadActorSystem.GAME_MASTER_ACTOR_NAME);
 		actorSystem.actorOf(Props.create(GameActor.class), ShitheadActorSystem.GAME_ACTOR_NAME);
 		
-		Logger.log("Main: Initializing players");
+		Logger.log("Initializing players");
 		int numberOfPlayers = 2;
 		for(int i = 0; i < numberOfPlayers; i++) {
 			String name = "SimplePlayerActor" + i;
-			Logger.log("Main: Initializing player " + name);
+			Logger.log("Initializing player " + name);
 			actorSystem.actorOf(Props.create(SimplePlayerActor.class), "SimplePlayerActor" + i);
 		}
 		
 
 		Thread.sleep(2000);
 
-		Logger.log("Main: Sending StartGameMessage to GameMasterActor");
+		Logger.log("Sending StartGameMessage to GameMasterActor");
 		gmActor.tell(new StartGameMessage(), ActorRef.noSender());
 
 		while (true){

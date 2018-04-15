@@ -18,20 +18,16 @@ public class GameMasterActor extends AbstractActor {
     }
 
     private void startGame(StartGameMessage startGame) {
-    	Logger.log(getLoggingPrefix() + "Received StartGameMessage");
+    	Logger.log("Received StartGameMessage");
     	
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
-        Logger.log(getLoggingPrefix() + "Sending StartGameMessage to GameActor");
+        Logger.log("Sending StartGameMessage to GameActor");
         gameActor.tell(startGame, self());
     }
 
     private void logGameResult(GameResult result) {
         System.out.println("Player " + result.getLosingPlayerName() + " (" + result.getLosingPlayerId() + ") lost");
-    }
-    
-    private String getLoggingPrefix() {
-    	return "GameMasterActor: ";
     }
 
 }

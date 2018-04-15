@@ -9,12 +9,8 @@ import games.shithead.game.IGameCard;
 import games.shithead.game.IPlayerHand;
 import games.shithead.game.InfoProvider;
 import games.shithead.game.ShitheadActorSystem;
-import games.shithead.messages.PlayerIdMessage;
-import games.shithead.messages.ChooseRevealedTableCardsMessage;
-import games.shithead.messages.MoveRequestMessage;
-import games.shithead.messages.PlayerActionInfo;
-import games.shithead.messages.RegisterPlayerMessage;
-import games.shithead.messages.TableCardsSelectionMessage;
+import games.shithead.messages.*;
+import games.shithead.messages.PlayerActionMessage;
 
 public abstract class PlayerActor extends AbstractActor {
 
@@ -48,10 +44,6 @@ public abstract class PlayerActor extends AbstractActor {
     
     public abstract String getName();
     
-    public String getLoggingPrefix() {
-    	return "[" + playerId + "] " + getName() + ": ";
-    }
-
     protected void updateInfo() {
 		nextMoveId = InfoProvider.getNextMoveId();
 
@@ -94,7 +86,7 @@ public abstract class PlayerActor extends AbstractActor {
         sender().tell(getPlayerMove(), self());
     }
 
-    protected abstract PlayerActionInfo getPlayerMove();
+    protected abstract PlayerActionMessage getPlayerMove();
     
 	protected void considerInterruption() {
 		List<IGameCard> interruptionCards = getInterruptionCards();
@@ -104,7 +96,7 @@ public abstract class PlayerActor extends AbstractActor {
 		List<Integer> interruptionCardIds = interruptionCards.stream()
 				.map(card -> card.getUniqueId())
 				.collect(Collectors.toList());
-		sender().tell(new PlayerActionInfo(interruptionCardIds, nextMoveId), self());
+		sender().tell(new PlayerActionMessage(interruptionCardIds, nextMoveId), self());
 	}
 
 	protected abstract List<IGameCard> getInterruptionCards();
