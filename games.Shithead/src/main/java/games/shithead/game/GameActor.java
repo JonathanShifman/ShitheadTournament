@@ -95,7 +95,7 @@ public class GameActor extends AbstractActor {
         }
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
-            distributeMessage(new moveRequestMessage(gameState.getCurrentMoveId()));
+            distributeMessage(new MoveRequestMessage());
         }
     }
 
@@ -118,16 +118,9 @@ public class GameActor extends AbstractActor {
             Logger.log(getLoggingPrefix() + "Game over");
             return;
         }
-        Thread.sleep(500);
-        distributeAcceptedAction(playerId);
+        Thread.sleep(1000);
+        distributeMessage(new MoveRequestMessage());
     }
-
-    private void distributeAcceptedAction(int playerId) {
-        AcceptedActionMessage acceptedActionMessage;
-        acceptedActionMessage = new AcceptedActionMessage(playerId, gameState.getCurrentPlayerTurn(),
-                gameState.getCurrentMoveId());
-        distributeMessage(acceptedActionMessage);
-	}
 
     private void distributeMessage(Object message) {
         playerIdsToInfos.forEach((id, playerInfo) -> {

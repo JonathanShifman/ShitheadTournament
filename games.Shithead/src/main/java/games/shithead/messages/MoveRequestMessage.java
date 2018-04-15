@@ -14,6 +14,6 @@ import games.shithead.game.IGameCard;
  * This message also contains the number of players and the players order, and signals the effective start of the game.
  *
  */
-public class moveRequestMessage {
+public class MoveRequestMessage {
 
 }
