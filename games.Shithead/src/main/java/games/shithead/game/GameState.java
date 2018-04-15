@@ -195,7 +195,7 @@ public class GameState {
         }
     }
 
-    public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId) {
+    public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
         validateAction(playerId, cardsToPut, moveId);
         Logger.log(getLoggingPrefix() + "Performing action");
         IPlayerHand playerHand = players.get(playerId);
@@ -207,8 +207,8 @@ public class GameState {
                 pile.add(0, cards[cardId]);
             }
             playerHand.removeAll(cardsToRemoveFromPlayerHand);
+            updateSpecialEffects(victimId);
             dealPlayerCardsIfNeeded(playerId);
-            updateSpecialEffects();
         }
         else { // Take pile
             for(IGameCard gameCard : pile) {
@@ -238,10 +238,11 @@ public class GameState {
         return "[" + cardValues + "]";
     }
 
-    private void updateSpecialEffects() {
+    private void updateSpecialEffects(int victimId) {
         if(completedFour()) {
             shouldAwardTurnToLastPerformedActionPlayer = true;
-            burnPile();
+            burnCards(pile);
+            pile = new LinkedList<>();
             return;
         }
         switch (pile.get(0).getCardFace().get().getValue()) {
@@ -250,11 +251,41 @@ public class GameState {
                 break;
             case 10:
                 shouldAwardTurnToLastPerformedActionPlayer = true;
-                burnPile();
+                burnCards(pile);
+                pile = new LinkedList<>();
                 break;
             case 15:
                 shouldAwardTurnToLastPerformedActionPlayer = true;
-                burnPile();
+                boolean collectingTopJokers = true;
+                List<IGameCard> topJokersToBurn = new LinkedList<>();
+                List<IGameCard> remainingPileCards = new LinkedList<>();
+                for(IGameCard gameCard : pile) {
+                    if(collectingTopJokers) {
+                        if(gameCard.getCardFace().get().getValue() == 15) {
+                            topJokersToBurn.add(gameCard);
+                        }
+                        else {
+                            remainingPileCards.add(gameCard);
+                            collectingTopJokers = false;
+                        }
+                    }
+                    else {
+                        remainingPileCards.add(gameCard);
+                    }
+                }
+                burnCards(topJokersToBurn);
+                if(players.containsKey(victimId)) {
+                    IPlayerHand playerHand = players.get(victimId);
+                    for(IGameCard gameCard : remainingPileCards) {
+                        playerHand.getHandCards().add(gameCard);
+                        cardStatuses[gameCard.getUniqueId()].setHolderId(victimId);
+                        cardStatuses[gameCard.getUniqueId()].setHeldCardPosition(HeldCardPosition.IN_HAND);
+                    }
+                }
+                else {
+                    burnCards(remainingPileCards);
+                }
+                pile = new LinkedList<>();
                 break;
         }
     }
@@ -282,12 +313,11 @@ public class GameState {
 
     }
 
-    private void burnPile() {
-        Logger.log(getLoggingPrefix() + "Burning pile");
-        for(IGameCard gameCard : pile) {
+    private void burnCards(List<IGameCard> cardsToBurn) {
+        Logger.log(getLoggingPrefix() + "Burning cards");
+        for(IGameCard gameCard : cardsToBurn) {
             cardStatuses[gameCard.getUniqueId()] = CardStatus.BURNT;
         }
-        pile = new LinkedList<>();
     }
 
     private void updatePlayerTurn() {
@@ -350,14 +380,6 @@ public class GameState {
 
     public List<IGameCard> getPile() {
         return pile;
-    }
-
-    public boolean alreadySelectedTableCards(int playerId) {
-        if(!players.containsKey(playerId)) {
-            return false;
-        }
-        // return players.get(playerId).getPendingSelectionCards().size() == 0;
-        return false;
     }
 
     public int getRevealedCardsAtGameStart() {

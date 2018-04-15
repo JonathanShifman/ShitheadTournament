@@ -107,7 +107,7 @@ public class GameActor extends AbstractActor {
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
         try {
-            gameState.performPlayerAction(playerId, actionInfo.getCardsToPut(), actionInfo.getMoveId());
+            gameState.performPlayerAction(playerId, actionInfo.getCardsToPut(), actionInfo.getMoveId(), actionInfo.getVictimId());
         }
         catch (Exception e) {
             Logger.log(getLoggingPrefix() + e.getMessage());
