@@ -68,8 +68,8 @@ public class GameState {
     }
 
     public void addPlayer(int playerId) {
-        PlayerHand playerInfo = new PlayerHand();
-        players.put(playerId, playerInfo);
+        PlayerHand playerHand = new PlayerHand();
+        players.put(playerId, playerHand);
     }
 
     public void startGame() {
@@ -130,6 +130,7 @@ public class GameState {
         if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
             throw new RuntimeException("Exception: Player has already made table cards selection");
         }
+        // FIXME: Only complete selection if all cards are valid (otherwise lists should remain unchanged)
         for(int selectedCardId : selectedCardsIds) {
             if(selectedCardId >= cardStatuses.length) {
                 throw new RuntimeException("Exception: Card id doesn't exist");
@@ -197,21 +198,21 @@ public class GameState {
     public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId) {
         validateAction(playerId, cardsToPut, moveId);
         Logger.log(getLoggingPrefix() + "Performing action");
-        IPlayerHand playerInfo = players.get(playerId);
+        IPlayerHand playerHand = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
-            List<IGameCard> cardsToRemoveFromHand = new LinkedList<>();
+            List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
             for (int cardId : cardsToPut) {
                 cardStatuses[cardId] = CardStatus.PILE;
-                cardsToRemoveFromHand.add(cards[cardId]);
+                cardsToRemoveFromPlayerHand.add(cards[cardId]);
                 pile.add(0, cards[cardId]);
             }
-            playerInfo.getHandCards().removeAll(cardsToRemoveFromHand);
+            playerHand.removeAll(cardsToRemoveFromPlayerHand);
             dealPlayerCardsIfNeeded(playerId);
             updateSpecialEffects();
         }
         else { // Take pile
             for(IGameCard gameCard : pile) {
-                playerInfo.getHandCards().add(gameCard);
+                playerHand.getHandCards().add(gameCard);
                 cardStatuses[gameCard.getUniqueId()] = new CardStatus(playerId, HeldCardPosition.IN_HAND);
             }
             pile = new LinkedList<>();

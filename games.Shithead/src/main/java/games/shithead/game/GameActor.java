@@ -118,7 +118,7 @@ public class GameActor extends AbstractActor {
             Logger.log(getLoggingPrefix() + "Game over");
             return;
         }
-        Thread.sleep(1000);
+        Thread.sleep(500);
         distributeMessage(new MoveRequestMessage());
     }
 

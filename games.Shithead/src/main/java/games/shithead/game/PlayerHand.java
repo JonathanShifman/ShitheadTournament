@@ -41,4 +41,13 @@ public class PlayerHand implements IPlayerHand {
 	public int getNumOfCardsRemaining() {
 		return handCards.size() + revealedTableCards.size() + hiddenTableCards.size() + pendingSelectionCards.size();
 	}
+
+	@Override
+	public void removeAll(List<IGameCard> gameCards) {
+		// FIXME: Comparing by reference?
+		this.handCards.removeAll(gameCards);
+		this.revealedTableCards.removeAll(gameCards);
+		this.hiddenTableCards.removeAll(gameCards);
+		this.pendingSelectionCards.removeAll(gameCards);
+	}
 }

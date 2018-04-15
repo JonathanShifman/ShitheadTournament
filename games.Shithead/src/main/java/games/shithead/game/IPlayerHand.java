@@ -16,4 +16,6 @@ public interface IPlayerHand {
 
 	int getNumOfCardsRemaining();
 
+	void removeAll(List<IGameCard> gameCards);
+
 }
