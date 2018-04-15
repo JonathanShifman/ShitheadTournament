@@ -3,7 +3,8 @@ package games.shithead.game;
 import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
-import games.shithead.log.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -159,7 +160,7 @@ public class GameState {
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
         currentTurnPlayerId = playingQueue.getFirst();
-        Logger.log("Players order: " + playingQueue.toString());
+        logger.info("Players order: " + playingQueue.toString());
     }
 
     public void startCycle() {
@@ -167,7 +168,7 @@ public class GameState {
     }
 
     private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
-        Logger.log("Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
+        logger.info("Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
@@ -193,7 +194,7 @@ public class GameState {
 
     public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
         validateAction(playerId, cardsToPut, moveId);
-        Logger.log("Performing action");
+        logger.info("Performing action");
         IPlayerHand playerHand = players.get(playerId);
         if(!cardsToPut.isEmpty()) {
             List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
@@ -310,7 +311,7 @@ public class GameState {
     }
 
     private void burnCards(List<IGameCard> cardsToBurn) {
-        Logger.log("Burning cards");
+        logger.info("Burning cards");
         for(IGameCard gameCard : cardsToBurn) {
             cardStatuses[gameCard.getUniqueId()] = CardStatus.BURNT;
         }

@@ -2,16 +2,15 @@ package games.shithead.game;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
-import games.shithead.log.Logger;
 import games.shithead.messages.*;
-//import org.apache.logging.log4j.Logger;
-//import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class GameActor extends AbstractActor {
 
-//  static Logger logger = LogManager.getLogger(GameActor.class);
+    static Logger logger = LogManager.getLogger(GameActor.class);
 
     int playerIdAllocator;
     private Map<Integer, IPlayerInfo> playerIdsToInfos;
@@ -38,37 +37,36 @@ public class GameActor extends AbstractActor {
     }
 
 	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
-        Logger.log("Received RegisterPlayerMessage");
+        logger.info("Received RegisterPlayerMessage");
         if(gameState.isGameStarted()){
-            Logger.log("Game has already started, too late for registration");
+            logger.info("Game has already started, too late for registration");
             return;
         }
         if(playerExists(getSender())){
-            Logger.log("Player has already been registered");
+            logger.info("Player has already been registered");
             return;
         }
 
-        Logger.log("Registering player");
+        logger.info("Registering player");
         int playerId = playerIdAllocator++;
         IPlayerInfo playerInfo = new PlayerInfo(playerId, playerRegistration.getPlayerName(), getSender());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);
-        Logger.log("Sending PlayerIdMessage with playerId=" + playerId);
+        logger.info("Sending PlayerIdMessage with playerId=" + playerId);
         getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
     @SuppressWarnings("unused")
     private void startGame(StartGameMessage startGameMessage) {
-        Logger.log("Received StartGameMessage");
-//      Logger.log("Warn visible");
+        logger.info("Received StartGameMessage");
         // TODO: Make sure message came from Main
         if(gameState.isGameStarted()){
-            Logger.log("Game has already started");
+            logger.info("Game has already started");
             return;
         }
         if(!gameState.enoughPlayersToStartGame()){
-            Logger.log("Not enough players");
+            logger.info("Not enough players");
             return;
         }
         gameState.startGame();
@@ -77,16 +75,16 @@ public class GameActor extends AbstractActor {
     }
     
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
-        Logger.log("Received TableCardsSelectionMessage");
+        logger.info("Received TableCardsSelectionMessage");
         if(!playerExists(getSender())) {
-            Logger.log("Unregistered Player, ignoring message");
+            logger.info("Unregistered Player, ignoring message");
             return;
         }
         try {
             gameState.performTableCardsSelection(playerRefsToInfos.get(getSender()).getPlayerId(), message.getSelectedCardsIds());
         }
     	catch(Exception e) {
-            Logger.log(e.getMessage());
+            logger.info(e.getMessage());
             return;
         }
     	if(gameState.allPlayersSelectedTableCards()) {
@@ -96,9 +94,9 @@ public class GameActor extends AbstractActor {
     }
 
     private void handleAttemptedAction(PlayerActionMessage actionInfo) throws InterruptedException {
-        Logger.log("Received PlayerActionMessage");
+        logger.info("Received PlayerActionMessage");
         if(!playerExists(getSender())) {
-            Logger.log("Unregistered Player, ignoring message");
+            logger.info("Unregistered Player, ignoring message");
             return;
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
@@ -106,12 +104,12 @@ public class GameActor extends AbstractActor {
             gameState.performPlayerAction(playerId, actionInfo.getCardsToPut(), actionInfo.getMoveId(), actionInfo.getVictimId());
         }
         catch (Exception e) {
-            Logger.log(e.getMessage());
+            logger.info(e.getMessage());
             return;
         }
         if(gameState.isGameOver()){
             distributeMessage(new GameResult(-1, ""));
-            Logger.log("Game over");
+            logger.info("Game over");
             return;
         }
         Thread.sleep(500);

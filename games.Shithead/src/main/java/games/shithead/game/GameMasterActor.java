@@ -2,11 +2,14 @@ package games.shithead.game;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
-import games.shithead.log.Logger;
 import games.shithead.messages.GameResult;
 import games.shithead.messages.StartGameMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GameMasterActor extends AbstractActor {
+
+    static Logger logger = LogManager.getLogger(GameMasterActor.class);
 
     @Override
     public Receive createReceive() {
@@ -18,11 +21,11 @@ public class GameMasterActor extends AbstractActor {
     }
 
     private void startGame(StartGameMessage startGame) {
-    	Logger.log("Received StartGameMessage");
+        logger.info("Received StartGameMessage");
     	
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
-        Logger.log("Sending StartGameMessage to GameActor");
+        logger.info("Sending StartGameMessage to GameActor");
         gameActor.tell(startGame, self());
     }
 
