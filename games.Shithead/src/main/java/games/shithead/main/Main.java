@@ -25,9 +25,16 @@ public class Main {
 		// FIXME: Load from config
 		int numberOfPlayers = 2;
 		for(int i = 0; i < numberOfPlayers; i++) {
-			String name = "SimplePlayerActor" + i;
+			String className = "SimplePlayerActor";
+			String name = className + (i+1);
 			logger.info("Initializing player " + name);
-			actorSystem.actorOf(Props.create(SimplePlayerActor.class), "SimplePlayerActor" + i);
+			try {
+				actorSystem.actorOf(Props.create(
+						Class.forName("games.shithead.players." + className)), name);
+			}
+			catch (Exception e) {
+				logger.error(e.getMessage());
+			}
 		}
 
 		Thread.sleep(2000);
