@@ -2,39 +2,31 @@ package games.shithead.deck;
 
 public class CardFace implements ICardFace {
 
-	private final int value;
-	private final int kind;
-	private boolean isSpecialCard;
+	private final int rank;
+	private final int suit;
 	
-	public CardFace(int value, int kind) {
-		this.value = value;
-		this.kind = kind;
-		this.isSpecialCard = determineIfSpecial();
+	public CardFace(int rank, int suit) {
+		this.rank = rank;
+		this.suit = suit;
 	}
 
-	public CardFace(ICardFace cardToCopyFrom) {
-		this.value = cardToCopyFrom.getValue();
-		this.kind = cardToCopyFrom.getKind();
-		this.isSpecialCard = cardToCopyFrom.isSpecialCard();
-	}
-
-	private boolean determineIfSpecial() {
-		//FIXME: check if special card
-		return false;
+	/**
+	 * Copy constructor
+	 * @param cardFaceToCopyFrom The card face to copy from
+	 */
+	public CardFace(ICardFace cardFaceToCopyFrom) {
+		this.rank = cardFaceToCopyFrom.getRank();
+		this.suit = cardFaceToCopyFrom.getSuit();
 	}
 
 	@Override
-	public int getValue() {
-		return value;
+	public int getRank() {
+		return rank;
 	}
 
 	@Override
-	public int getKind() {
-		return kind;
+	public int getSuit() {
+		return suit;
 	}
 
-	@Override
-	public boolean isSpecialCard() {
-		return isSpecialCard;
-	}
 }

@@ -140,8 +140,8 @@ public class GameState {
         //Try to match deck size to number of players
         System.out.println("Initializing deck");
         deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
-        cardStatuses = new CardStatus[deck.getNumberOfCards()];
-        cards = new IGameCard[deck.getNumberOfCards()];
+        cardStatuses = new CardStatus[deck.getNumberOfInitialCards()];
+        cards = new IGameCard[deck.getNumberOfInitialCards()];
         for(int i = 0; i < cardStatuses.length; i++) {
             cardStatuses[i] = CardStatus.DECK;
         }
@@ -326,7 +326,7 @@ public class GameState {
             pile = new LinkedList<>();
             return;
         }
-        switch (pile.get(0).getCardFace().get().getValue()) {
+        switch (pile.get(0).getCardFace().get().getRank()) {
             case 8:
                 shouldSkipOne = true;
                 break;
@@ -342,7 +342,7 @@ public class GameState {
                 List<IGameCard> remainingPileCards = new LinkedList<>();
                 for(IGameCard gameCard : pile) {
                     if(collectingTopJokers) {
-                        if(gameCard.getCardFace().get().getValue() == 15) {
+                        if(gameCard.getCardFace().get().getRank() == 15) {
                             topJokersToBurn.add(gameCard);
                         }
                         else {
@@ -385,10 +385,10 @@ public class GameState {
         for(IGameCard gameCard : pile) {
             count++;
             if(valueToCompareTo < 0) {
-                valueToCompareTo = gameCard.getCardFace().get().getValue();
+                valueToCompareTo = gameCard.getCardFace().get().getRank();
                 continue;
             }
-            if(valueToCompareTo != gameCard.getCardFace().get().getValue()) {
+            if(valueToCompareTo != gameCard.getCardFace().get().getRank()) {
                 return false;
             }
             if(count == 4) {
@@ -491,7 +491,7 @@ public class GameState {
     private String toCardDescriptions(List<Integer> cardsToPut) {
         String cardValues = "";
         for(int cardId : cardsToPut) {
-            cardValues += cards[cardId].getCardFace().get().getValue() + ", ";
+            cardValues += cards[cardId].getCardFace().get().getRank() + ", ";
         }
         return "[" + cardValues + "]";
     }

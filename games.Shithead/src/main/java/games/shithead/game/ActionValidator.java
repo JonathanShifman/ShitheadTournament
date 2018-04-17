@@ -20,14 +20,14 @@ public class ActionValidator {
         if(cardsToPlay.isEmpty() || !allCardsHaveTheSameValue(cardsToPlay)) {
             return false;
         }
-        int playedValue = cardsToPlay.get(0).getCardFace().get().getValue();
+        int playedValue = cardsToPlay.get(0).getCardFace().get().getRank();
         if(valueIsAlwaysValid(playedValue)) {
             return true;
         }
 
         int effectiveTopCardValue = 0;
         for(IGameCard gameCard : pile) {
-            int currentCardValue = gameCard.getCardFace().get().getValue();
+            int currentCardValue = gameCard.getCardFace().get().getRank();
             if(currentCardValue == 3) {
                 continue;
             }
@@ -51,7 +51,7 @@ public class ActionValidator {
      */
     private static boolean allCardsHaveTheSameValue(List<IGameCard> cardsToPlay) {
         return cardsToPlay.stream()
-                .map(gameCard -> gameCard.getCardFace().get().getValue())
+                .map(gameCard -> gameCard.getCardFace().get().getRank())
                 .distinct()
                 .count() == 1;
     }
@@ -60,10 +60,10 @@ public class ActionValidator {
         if(cardsToInterrupt.isEmpty() || !allCardsHaveTheSameValue(cardsToInterrupt)) {
             return false;
         }
-        int interruptValue = cardsToInterrupt.get(0).getCardFace().get().getValue();
+        int interruptValue = cardsToInterrupt.get(0).getCardFace().get().getRank();
         int count = 0;
         for(IGameCard gameCard : pile) {
-            if(gameCard.getCardFace().get().getValue() == interruptValue) {
+            if(gameCard.getCardFace().get().getRank() == interruptValue) {
                 count++;
             }
             else {

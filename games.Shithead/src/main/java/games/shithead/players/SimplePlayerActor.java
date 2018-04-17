@@ -15,9 +15,9 @@ public class SimplePlayerActor extends PlayerActor {
 
         @Override
         public int compare(IGameCard o1, IGameCard o2) {
-            int diff = specialValuesOrdering.indexOf(o1.getCardFace().get().getValue()) -
-                    specialValuesOrdering.indexOf(o2.getCardFace().get().getValue());
-            return diff != 0 ? diff : o1.getCardFace().get().getValue() - o2.getCardFace().get().getValue();
+            int diff = specialValuesOrdering.indexOf(o1.getCardFace().get().getRank()) -
+                    specialValuesOrdering.indexOf(o2.getCardFace().get().getRank());
+            return diff != 0 ? diff : o1.getCardFace().get().getRank() - o2.getCardFace().get().getRank();
         }
     }
 
@@ -51,9 +51,9 @@ public class SimplePlayerActor extends PlayerActor {
         }
         List<IGameCard> cardsToPut = getWeakestPlayableSet(handCards);
         if(!cardsToPut.isEmpty()) {
-            int selectedValue = cardsToPut.get(0).getCardFace().get().getValue();
+            int selectedValue = cardsToPut.get(0).getCardFace().get().getRank();
             for(IGameCard gameCard : revealedTableCards) {
-                if (gameCard.getCardFace().get().getValue() == selectedValue) {
+                if (gameCard.getCardFace().get().getRank() == selectedValue) {
                     cardsToPut.add(gameCard);
                 }
             }
@@ -70,7 +70,7 @@ public class SimplePlayerActor extends PlayerActor {
         int chosenValue = -1;
         for(IGameCard gameCard : cards) {
             if(chosenValue > 0) {
-                if(gameCard.getCardFace().get().getValue() == chosenValue) {
+                if(gameCard.getCardFace().get().getRank() == chosenValue) {
                     weakestPlayableSet.add(gameCard);
                     continue;
                 }
@@ -81,7 +81,7 @@ public class SimplePlayerActor extends PlayerActor {
             else {
                 if(ActionValidator.canPlay(gameCard, pile)) {
                     weakestPlayableSet.add(gameCard);
-                    chosenValue = gameCard.getCardFace().get().getValue();
+                    chosenValue = gameCard.getCardFace().get().getRank();
                 }
             }
         }
@@ -93,13 +93,13 @@ public class SimplePlayerActor extends PlayerActor {
         if(pile.isEmpty()) {
             return null;
         }
-        int pileTopValue = pile.get(0).getCardFace().get().getValue();
+        int pileTopValue = pile.get(0).getCardFace().get().getRank();
         int consecutiveTopValueCards = 0;
         Iterator<IGameCard> iterator = pile.iterator();
         IGameCard currentCard;
         while (iterator.hasNext()) {
             currentCard = iterator.next();
-            if(currentCard.getCardFace().get().getValue() == pileTopValue) {
+            if(currentCard.getCardFace().get().getRank() == pileTopValue) {
                 consecutiveTopValueCards++;
             }
             else {
@@ -110,7 +110,7 @@ public class SimplePlayerActor extends PlayerActor {
         int cardsNeededForInterruption = 4 - consecutiveTopValueCards;
         List<IGameCard> interruptionCards = new LinkedList<>();
         for(IGameCard gameCard : handCards) {
-            if(gameCard.getCardFace().get().getValue() == pileTopValue) {
+            if(gameCard.getCardFace().get().getRank() == pileTopValue) {
                 interruptionCards.add(gameCard);
                 cardsNeededForInterruption--;
                 if(cardsNeededForInterruption == 0) {
@@ -120,7 +120,7 @@ public class SimplePlayerActor extends PlayerActor {
         }
         if(interruptionCards.size() == handCards.size()) {
             for(IGameCard gameCard : revealedTableCards) {
-                if(gameCard.getCardFace().get().getValue() == pileTopValue) {
+                if(gameCard.getCardFace().get().getRank() == pileTopValue) {
                     interruptionCards.add(gameCard);
                     cardsNeededForInterruption--;
                     if(cardsNeededForInterruption == 0) {

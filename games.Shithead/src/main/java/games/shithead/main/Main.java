@@ -7,7 +7,6 @@ import games.shithead.game.GameActor;
 import games.shithead.game.GameMasterActor;
 import games.shithead.game.ShitheadActorSystem;
 import games.shithead.messages.StartGameMessage;
-import games.shithead.players.SimplePlayerActor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
