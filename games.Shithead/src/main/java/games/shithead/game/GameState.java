@@ -183,29 +183,9 @@ public class GameState {
      * @param selectedCardsIds The ids of the selected revealed table cards
      */
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
-        if(playersPendingTableCardsSelection == 0) {
-            throw new RuntimeException("Exception: All players already selected table cards");
-        }
-        if(!players.containsKey(playerId)) {
-            throw new RuntimeException("Exception: Unregistered player");
-        }
-        if(selectedCardsIds.size() != REVEALED_TABLE_CARDS_AT_GAME_START) {
-            throw new RuntimeException("Exception: Expected selection of " + REVEALED_TABLE_CARDS_AT_GAME_START +
-            " revealed table cards but received " + selectedCardsIds.size());
-        }
+        validateTableCardsSelection(playerId, selectedCardsIds);
         IPlayerHand playerHand = players.get(playerId);
-        if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
-            throw new RuntimeException("Exception: Player has already made table cards selection");
-        }
-        // FIXME: Only complete selection if all cards are valid (otherwise lists should remain unchanged)
         for(int selectedCardId : selectedCardsIds) {
-            if(selectedCardId >= cardStatuses.length) {
-                throw new RuntimeException("Exception: Card id doesn't exist");
-            }
-            CardStatus cardStatus = cardStatuses[selectedCardId];
-            if(cardStatus.getHolderId() != playerId || cardStatus.getHeldCardPosition() != HeldCardPosition.PENDING_SELECTION) {
-                throw new RuntimeException("Exception: Card doesn't belong to player, or isn't pending selection");
-            }
             cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_REVEALED);
             playerHand.getRevealedTableCards().add(cards[selectedCardId]);
         }
@@ -217,6 +197,37 @@ public class GameState {
         }
         playerHand.getPendingSelectionCards().clear();
         playersPendingTableCardsSelection--;
+    }
+
+    /**
+     * Validates an attempted table cards selection. Throws an exception in case of an invalid selection.
+     * @param playerId The id of the player attempting the selection
+     * @param selectedCardsIds The chosen revealed tabke cards
+     */
+    private void validateTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
+        if(playersPendingTableCardsSelection == 0) {
+            throw new RuntimeException("Exception: All players already selected table cards");
+        }
+        if(!players.containsKey(playerId)) {
+            throw new RuntimeException("Exception: Unregistered player");
+        }
+        if(selectedCardsIds.size() != REVEALED_TABLE_CARDS_AT_GAME_START) {
+            throw new RuntimeException("Exception: Expected selection of " + REVEALED_TABLE_CARDS_AT_GAME_START +
+                    " revealed table cards but received " + selectedCardsIds.size());
+        }
+        IPlayerHand playerHand = players.get(playerId);
+        if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
+            throw new RuntimeException("Exception: Player has already made table cards selection");
+        }
+        for(int selectedCardId : selectedCardsIds) {
+            if(selectedCardId >= cardStatuses.length) {
+                throw new RuntimeException("Exception: Card id doesn't exist");
+            }
+            CardStatus cardStatus = cardStatuses[selectedCardId];
+            if(cardStatus.getHolderId() != playerId || cardStatus.getHeldCardPosition() != HeldCardPosition.PENDING_SELECTION) {
+                throw new RuntimeException("Exception: Card doesn't belong to player, or isn't pending selection");
+            }
+        }
     }
 
     /**
@@ -243,38 +254,6 @@ public class GameState {
      */
     public void startCycle() {
         determinePlayersOrder();
-    }
-
-    /**
-     * Validates an attempted action by a player. Throws an exception in case of an invalid action.
-     * @param playerId The id of the player attempting the action
-     * @param cardsToPut The cards the player attempted to play. An empty list indicates the player is
-     *                   attempting to take the pile.
-     * @param moveId The id of the move this action is relevant for
-     */
-    private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
-        logger.info("Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
-        if(!players.containsKey(playerId)) {
-            throw new RuntimeException("Exception: Unregistered player");
-        }
-        if(moveId != currentMoveId) {
-            throw new RuntimeException("Exception: Move didn't have current move id");
-        }
-        boolean isActionValid;
-        List<IGameCard> playedCards = cardsToPut.stream()
-                .map(cardId -> cards[cardId])
-                .collect(Collectors.toList());
-        if(playerId == currentTurnPlayerId) {
-            isActionValid = cardsToPut.isEmpty() ?
-                ActionValidator.canTake(pile) :
-                ActionValidator.canPlay(playedCards, pile);
-        }
-        else {
-            isActionValid = ActionValidator.canInterrupt(playedCards, pile);
-        }
-        if(!isActionValid){
-            throw new RuntimeException("Exception: player isn't allowed to make the given move");
-        }
     }
 
     /**
@@ -311,6 +290,38 @@ public class GameState {
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
         incrementCurrentMoveId();
+    }
+
+    /**
+     * Validates an attempted action by a player. Throws an exception in case of an invalid action.
+     * @param playerId The id of the player attempting the action
+     * @param cardsToPut The cards the player attempted to play. An empty list indicates the player is
+     *                   attempting to take the pile.
+     * @param moveId The id of the move this action is relevant for
+     */
+    private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
+        logger.info("Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
+        if(!players.containsKey(playerId)) {
+            throw new RuntimeException("Exception: Unregistered player");
+        }
+        if(moveId != currentMoveId) {
+            throw new RuntimeException("Exception: Move didn't have current move id");
+        }
+        boolean isActionValid;
+        List<IGameCard> playedCards = cardsToPut.stream()
+                .map(cardId -> cards[cardId])
+                .collect(Collectors.toList());
+        if(playerId == currentTurnPlayerId) {
+            isActionValid = cardsToPut.isEmpty() ?
+                    ActionValidator.canTake(pile) :
+                    ActionValidator.canPlay(playedCards, pile);
+        }
+        else {
+            isActionValid = ActionValidator.canInterrupt(playedCards, pile);
+        }
+        if(!isActionValid){
+            throw new RuntimeException("Exception: player isn't allowed to make the given move");
+        }
     }
 
     /**
