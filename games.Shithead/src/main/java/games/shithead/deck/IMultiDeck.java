@@ -2,6 +2,10 @@ package games.shithead.deck;
 
 import java.util.List;
 
+/**
+ * This interface represents a multi deck, which consists of the combination of cards
+ * of (potentially) multiple regular card decks.
+ */
 public interface IMultiDeck {
 
 	/**
@@ -20,21 +24,20 @@ public interface IMultiDeck {
 	List<ICardFace> getNextCardFaces(int numberOfCards);
 
 	/**
-	 * Returns the number of regular decks the multi-deck was initialized with
+	 * Returns the number of regular decks the multi-deck was initialized with.
 	 * @return The number of regular decks in the multi-deck
 	 */
 	int getNumberOfDecks();
 
 	/**
-	 * Returns the number of cards the multi-deck was initialized with
+	 * Returns the number of cards the multi-deck was initialized with.
 	 * @return the number of initial cards in the multi-deck
 	 */
 	int getNumberOfInitialCards();
 
 	/**
 	 * Checks if the multi-deck is empty.
-	 * True if the multi-deck is empty, false otherwise
-	 * @return
+	 * @return True if the multi-deck is empty, false otherwise
 	 */
 	boolean isEmpty();
 	

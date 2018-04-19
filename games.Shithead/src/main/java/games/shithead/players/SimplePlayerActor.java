@@ -7,16 +7,26 @@ import games.shithead.messages.PlayerActionMessage;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the Simple Player
+ */
 public class SimplePlayerActor extends PlayerActor {
 
+    /**
+     * This class is used to compare two cards by their ranks.
+     * The comparison works as follows:
+     * Any card with a special rank is considered more valuable than a regular card.
+     * The order between regular cards is defined based on their numeric rank value.
+     * The order between special cards is defined manually within the GameCardValueComparator class.
+     */
     class GameCardValueComparator implements Comparator<IGameCard> {
 
-        private List<Integer> specialValuesOrdering = Arrays.asList(new Integer[] {2, 3, 10, 15});
+        private List<Integer> specialRanksOrdering = Arrays.asList(new Integer[] {2, 3, 10, 15});
 
         @Override
         public int compare(IGameCard o1, IGameCard o2) {
-            int diff = specialValuesOrdering.indexOf(o1.getCardFace().get().getRank()) -
-                    specialValuesOrdering.indexOf(o2.getCardFace().get().getRank());
+            int diff = specialRanksOrdering.indexOf(o1.getCardFace().get().getRank()) -
+                    specialRanksOrdering.indexOf(o2.getCardFace().get().getRank());
             return diff != 0 ? diff : o1.getCardFace().get().getRank() - o2.getCardFace().get().getRank();
         }
     }
@@ -26,6 +36,10 @@ public class SimplePlayerActor extends PlayerActor {
         return "Simple Player";
     }
 
+    /**
+     * Simple player strategy:
+     * Choose the strongest cards (as determined by the comparator) to be the revealed table cards.
+     */
     @Override
     protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose) {
         cards.sort(new GameCardValueComparator());
@@ -40,6 +54,10 @@ public class SimplePlayerActor extends PlayerActor {
         return chosenRevealedTableCardIds;
     }
 
+    /**
+     * Simple player strategy:
+     * Find the weakest playable rank, and play all cards of that rank in the player's possession.
+     */
     @Override
     protected PlayerActionMessage getPlayerMove() {
         if(handCards.isEmpty()) {
@@ -47,7 +65,7 @@ public class SimplePlayerActor extends PlayerActor {
             List<Integer> cardsToPutIds = cardsToPut.stream()
                     .map(card -> card.getUniqueId())
                     .collect(Collectors.toList());
-            return new PlayerActionMessage(cardsToPutIds, nextMoveId);
+            return new PlayerActionMessage(cardsToPutIds, currentMoveId);
         }
         List<IGameCard> cardsToPut = getWeakestPlayableSet(handCards);
         if(!cardsToPut.isEmpty()) {
@@ -61,7 +79,7 @@ public class SimplePlayerActor extends PlayerActor {
         List<Integer> cardsToPutIds = cardsToPut.stream()
                 .map(card -> card.getUniqueId())
                 .collect(Collectors.toList());
-        return new PlayerActionMessage(cardsToPutIds, nextMoveId);
+        return new PlayerActionMessage(cardsToPutIds, currentMoveId);
     }
 
     private List<IGameCard> getWeakestPlayableSet(List<IGameCard> cards) {
@@ -88,6 +106,10 @@ public class SimplePlayerActor extends PlayerActor {
         return weakestPlayableSet;
     }
 
+    /**
+     * Simple player strategy:
+     * Attempt interruption whenever possible.
+     */
     @Override
     protected List<IGameCard> getInterruptionCards() {
         if(pile.isEmpty()) {

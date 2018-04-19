@@ -8,6 +8,9 @@ import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
 import games.shithead.messages.PlayerActionMessage;
 
+/**
+ * Implementation of the Random Player
+ */
 public class RandomPlayerActor extends PlayerActor {
 
 	@Override
@@ -15,6 +18,10 @@ public class RandomPlayerActor extends PlayerActor {
 		return "Random Player";
 	}
 
+	/**
+	 * Random player strategy:
+	 * Choose table cards at random. (Surprising, huh?)
+	 */
 	@Override
 	protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose) {
 		int remainingNumberOfCardsToChoose = numOfRevealedTableCardsToChoose;
@@ -28,6 +35,10 @@ public class RandomPlayerActor extends PlayerActor {
 		return chosenRevealedTableCardIds;
 	}
 
+	/**
+	 * Random player strategy:
+	 * Put a single playable card at random, or take the pile if there are none.
+	 */
 	@Override
 	protected PlayerActionMessage getPlayerMove() {
 		List<Integer> cardsToPut = new LinkedList<>();
@@ -40,7 +51,7 @@ public class RandomPlayerActor extends PlayerActor {
 			cardId = getFirstPlayableCardId(handCards);
 			cardsToPut.add(cardId);
 		}
-		return new PlayerActionMessage(cardsToPut, nextMoveId);
+		return new PlayerActionMessage(cardsToPut, currentMoveId);
 	}
 
 	private int getFirstPlayableCardId(List<IGameCard> cards) {
@@ -54,6 +65,10 @@ public class RandomPlayerActor extends PlayerActor {
 		return -1;
 	}
 
+	/**
+	 * Random player strategy:
+	 * Random player makes no interruptions.
+	 */
 	@Override
 	protected List<IGameCard> getInterruptionCards() {
 		// Nah

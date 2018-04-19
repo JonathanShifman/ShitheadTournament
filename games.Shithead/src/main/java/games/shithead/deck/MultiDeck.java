@@ -27,14 +27,22 @@ public class MultiDeck implements IMultiDeck {
 		init();
 		shuffle();
 	}
-	
+
+	/**
+	 * Initializes the multi-deck by inserting the appropriate amount of regular decks.
+	 * The multi-deck is not shuffled after initialization.
+	 */
 	private void init() {
 		cardFaces = new ArrayList<>(CARDS_PER_DECK * numberOfDecks);
 		for(int deckIndex = 0; deckIndex < numberOfDecks; deckIndex++) {
 			insertSingleDeck(deckIndex);
 		}
 	}
-	
+
+	/**
+	 * Inserts the contents of a single regular card deck into the multi-deck.
+	 * @param deckIndex The current deck index (should increment by 1 with each inserted deck)
+	 */
 	private void insertSingleDeck(int deckIndex) {
 		int currentIndex = deckIndex * CARDS_PER_DECK;
 

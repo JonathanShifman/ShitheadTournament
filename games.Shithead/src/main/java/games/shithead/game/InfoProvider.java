@@ -47,7 +47,7 @@ public class InfoProvider {
         destinationList.addAll(sourceList);
     }
 
-    public static int getNextMoveId() {
+    public static int getCurrentMoveId() {
         return gameState.getCurrentMoveId();
     }
 }
