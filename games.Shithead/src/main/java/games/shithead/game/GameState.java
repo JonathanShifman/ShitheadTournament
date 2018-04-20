@@ -44,11 +44,8 @@ public class GameState {
     // The id of the player who performed the last accepted action
     private int lastPerformedActionPlayer = -1;
 
-    // Indicates whether or not the turn should be stolen by the player who performed the last move
-    private boolean shouldAwardTurnToLastPerformedActionPlayer = false;
-
-    // Indicated whether or not the turn of the next player should be skipped
-    private boolean shouldSkipOne = false;
+    // Holds information about the manner in which the turn of the next player to play should be determined
+    private NextTurnPolicy nextTurnPolicy = NextTurnPolicy.REGULAR;
 
     // Holds the cards that are currently in the pile
     private List<IGameCard> pile;
@@ -307,6 +304,13 @@ public class GameState {
         if(moveId != currentMoveId) {
             throw new RuntimeException("Exception: Move didn't have current move id");
         }
+        for(int cardId : cardsToPut) {
+            if(cardId > cards.length) {
+                throw new RuntimeException("Exception: Card id doesn't exist");
+            }
+            // TODO: Check that cards can be played based on their position
+        }
+
         boolean isActionValid;
         List<IGameCard> playedCards = cardsToPut.stream()
                 .map(cardId -> cards[cardId])
@@ -331,23 +335,17 @@ public class GameState {
      *                 a joker was played.
      */
     private void updateSpecialEffects(int victimId) {
-        if(completedFour()) {
-            shouldAwardTurnToLastPerformedActionPlayer = true;
-            burnCards(pile);
-            pile = new LinkedList<>();
-            return;
-        }
         switch (pile.get(0).getCardFace().get().getRank()) {
             case 8:
-                shouldSkipOne = true;
+                nextTurnPolicy = NextTurnPolicy.SKIP;
                 break;
             case 10:
-                shouldAwardTurnToLastPerformedActionPlayer = true;
+                nextTurnPolicy = NextTurnPolicy.STEAL;
                 burnCards(pile);
                 pile = new LinkedList<>();
                 break;
             case 15:
-                shouldAwardTurnToLastPerformedActionPlayer = true;
+                nextTurnPolicy = NextTurnPolicy.STEAL;
                 boolean collectingTopJokers = true;
                 List<IGameCard> topJokersToBurn = new LinkedList<>();
                 List<IGameCard> remainingPileCards = new LinkedList<>();
@@ -380,6 +378,12 @@ public class GameState {
                 pile = new LinkedList<>();
                 break;
         }
+        if(completedFour()) {
+            nextTurnPolicy = NextTurnPolicy.STEAL;
+            burnCards(pile);
+            pile = new LinkedList<>();
+            return;
+        }
     }
 
     /**
@@ -388,26 +392,25 @@ public class GameState {
      * @return True is a set of 4 has been completed, false otherwise.
      */
     private boolean completedFour() {
-        if(pile.size() < 4) {
-            return false;
-        }
+        return getTopPileSequence().size() >= 4;
+    }
+
+    private List<IGameCard> getTopPileSequence() {
         int valueToCompareTo = -1;
-        int count = 0;
+        List<IGameCard> topPileSequence = new LinkedList<>();
         for(IGameCard gameCard : pile) {
-            count++;
             if(valueToCompareTo < 0) {
                 valueToCompareTo = gameCard.getCardFace().get().getRank();
-                continue;
+                topPileSequence.add(gameCard);
             }
-            if(valueToCompareTo != gameCard.getCardFace().get().getRank()) {
-                return false;
-            }
-            if(count == 4) {
+            else if(valueToCompareTo != gameCard.getCardFace().get().getRank()) {
                 break;
             }
+            else {
+                topPileSequence.add(gameCard);
+            }
         }
-        return true;
-
+        return topPileSequence;
     }
 
     /**
@@ -426,17 +429,26 @@ public class GameState {
      * to special effects
      */
     private void updatePlayerTurn() {
-        if(shouldAwardTurnToLastPerformedActionPlayer) {
-            shouldAwardTurnToLastPerformedActionPlayer = false;
+        if(nextTurnPolicy == NextTurnPolicy.STEAL) {
             currentTurnPlayerId = lastPerformedActionPlayer;
             advancePlayingQueue(currentTurnPlayerId);
-            return;
         }
-        if(shouldSkipOne) {
-            shouldSkipOne = false;
+        else if(nextTurnPolicy == NextTurnPolicy.SKIP) {
+            // FIXME
+            advancePlayingQueue();
             advancePlayingQueue();
         }
-        advancePlayingQueue();
+        else {
+            advancePlayingQueue();
+        }
+        nextTurnPolicy = NextTurnPolicy.REGULAR;
+    }
+
+    private void checkIfPlayerWon() {
+        if(deck.isEmpty() && players.get(lastPerformedActionPlayer).getNumOfCardsRemaining() == 0) {
+            playingQueue.remove(lastPerformedActionPlayer);
+            currentTurnPlayerId = playingQueue.getFirst();
+        }
     }
 
     /**
@@ -463,7 +475,7 @@ public class GameState {
      */
     private void dealPlayerCardsIfNeeded(int playerId) {
         IPlayerHand playerInfo = players.get(playerId);
-        int neededCards = 3 - playerInfo.getHandCards().size();
+        int neededCards = HAND_CARDS_AT_GAME_START - playerInfo.getHandCards().size();
         if(neededCards > 0) {
             List<ICardFace> cardFaces = deck.getNextCardFaces(neededCards);
             for(ICardFace cardFace : cardFaces) {
