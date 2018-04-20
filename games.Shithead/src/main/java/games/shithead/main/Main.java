@@ -22,7 +22,7 @@ public class Main {
 		
 		logger.info("Initializing players");
 		// FIXME: Load from config
-		int numberOfPlayers = 2;
+		int numberOfPlayers = 3;
 		for(int i = 0; i < numberOfPlayers; i++) {
 			String className = "SimplePlayerActor";
 			String name = className + (i+1);

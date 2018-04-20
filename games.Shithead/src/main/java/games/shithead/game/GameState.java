@@ -286,6 +286,7 @@ public class GameState {
         }
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
+        checkIfPlayerWon();
         incrementCurrentMoveId();
     }
 
@@ -446,6 +447,7 @@ public class GameState {
 
     private void checkIfPlayerWon() {
         if(deck.isEmpty() && players.get(lastPerformedActionPlayer).getNumOfCardsRemaining() == 0) {
+            logger.info("Player " + lastPerformedActionPlayer + " won");
             playingQueue.remove(lastPerformedActionPlayer);
             currentTurnPlayerId = playingQueue.getFirst();
         }
@@ -493,17 +495,7 @@ public class GameState {
      * @return True if the game is over, false otherwise
      */
     public boolean isGameOver() {
-        if(!deck.isEmpty()) {
-            return false;
-        }
-        for(Integer playerId : players.keySet()) {
-            if(players.get(playerId).getNumOfCardsRemaining() == 0) {
-                playingQueue.remove(playerId);
-                currentTurnPlayerId = playingQueue.getFirst();
-                return true;
-            }
-        }
-        return false;
+        return playingQueue.size() == 1;
     }
 
     /**
