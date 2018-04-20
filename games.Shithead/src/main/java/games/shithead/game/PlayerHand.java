@@ -1,7 +1,6 @@
 package games.shithead.game;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PlayerHand implements IPlayerHand {
 
@@ -9,12 +8,19 @@ public class PlayerHand implements IPlayerHand {
 	private List<IGameCard> revealedTableCards;
 	private List<IGameCard> hiddenTableCards;
 	private List<IGameCard> pendingSelectionCards;
+	private Map<String, List<IGameCard>> cardListsMap;
 	
 	public PlayerHand() {
 		this.handCards = new ArrayList<>();
 		this.revealedTableCards = new ArrayList<>();
 		this.hiddenTableCards = new ArrayList<>();
 		this.pendingSelectionCards = new ArrayList<>();
+
+		this.cardListsMap = new LinkedHashMap<>();
+		cardListsMap.put("Hand", handCards);
+		cardListsMap.put("Table Revealed", revealedTableCards);
+		cardListsMap.put("Table Hidden", hiddenTableCards);
+		cardListsMap.put("Pending Selection", pendingSelectionCards);
 	}
 
 	@Override
@@ -49,5 +55,10 @@ public class PlayerHand implements IPlayerHand {
 		this.revealedTableCards.removeAll(gameCards);
 		this.hiddenTableCards.removeAll(gameCards);
 		this.pendingSelectionCards.removeAll(gameCards);
+	}
+
+	@Override
+	public Map<String, List<IGameCard>> getCardListsMap() {
+		return cardListsMap;
 	}
 }

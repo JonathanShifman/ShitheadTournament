@@ -251,6 +251,7 @@ public class GameState {
      */
     public void startCycle() {
         determinePlayersOrder();
+        logGameState();
     }
 
     /**
@@ -288,6 +289,7 @@ public class GameState {
         updatePlayerTurn();
         checkIfPlayerWon();
         incrementCurrentMoveId();
+        logGameState();
     }
 
     /**
@@ -298,7 +300,7 @@ public class GameState {
      * @param moveId The id of the move this action is relevant for
      */
     private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
-        logger.info("Attempting action: cards " + toCardDescriptions(cardsToPut) + " by player " + playerId);
+        logger.info("Attempting action: cards " + cardIdsToDescriptions(cardsToPut) + " by player " + playerId);
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
@@ -500,14 +502,39 @@ public class GameState {
 
     /**
      * Converts a list of cards to a string made of their values. Used for logging.
-     * @param cardsToPut The list of cards to analyze
+     * @param cards The list of cards to analyze
      * @return A String representing the sequence of the given cards' values
      */
-    private String toCardDescriptions(List<Integer> cardsToPut) {
-        String cardValues = "";
-        for(int cardId : cardsToPut) {
-            cardValues += cards[cardId].getCardFace().get().getRank() + ", ";
-        }
-        return "[" + cardValues + "]";
+    private String cardsToDescriptions(List<IGameCard> cards) {
+        String cardDescriptions = cards.stream()
+                .map(card -> card.getCardFace().get().getRank())
+                .map(rank -> rank.toString())
+                .collect(Collectors.joining(", "));
+        return "[" + cardDescriptions + "]";
+    }
+
+    /**
+     * Converts a list of cards to a string made of their values. Used for logging.
+     * @param cardIds The list of card ids to analyze
+     * @return A String representing the sequence of the given cards' values
+     */
+    private String cardIdsToDescriptions(List<Integer> cardIds) {
+        return cardsToDescriptions(cardIds.stream()
+                .map(cardId -> cards[cardId])
+                .collect(Collectors.toList()));
+    }
+
+    private void logGameState() {
+        String logMessage = "Current Game State: ";
+        logMessage +=  players.values().stream()
+                .map(playerHand -> "[" + playerHandToPlayerStateString(playerHand) + "]")
+                .collect(Collectors.joining(", "));
+        logger.info(logMessage);
+    }
+
+    private String playerHandToPlayerStateString(IPlayerHand playerHand) {
+        return playerHand.getCardListsMap().entrySet().stream()
+                .map(entry -> entry.getKey() + ": " + cardsToDescriptions(entry.getValue()))
+                .collect(Collectors.joining(", "));
     }
 }

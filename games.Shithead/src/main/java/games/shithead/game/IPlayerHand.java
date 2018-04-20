@@ -3,6 +3,7 @@ package games.shithead.game;
 import akka.actor.ActorRef;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IPlayerHand {
 	
@@ -17,5 +18,7 @@ public interface IPlayerHand {
 	int getNumOfCardsRemaining();
 
 	void removeAll(List<IGameCard> gameCards);
+
+	Map<String, List<IGameCard>> getCardListsMap();
 
 }
