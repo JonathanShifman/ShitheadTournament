@@ -1,5 +1,6 @@
 package games.shithead.game;
 
+import games.shithead.deck.CardDescriptionGenerator;
 import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
@@ -135,7 +136,7 @@ public class GameState {
      */
     private void initDeck() {
         //Try to match deck size to number of players
-        System.out.println("Initializing deck");
+        logger.info("Initializing deck");
         deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
         cardStatuses = new CardStatus[deck.getNumberOfInitialCards()];
         cards = new IGameCard[deck.getNumberOfInitialCards()];
@@ -507,8 +508,7 @@ public class GameState {
      */
     private String cardsToDescriptions(List<IGameCard> cards) {
         String cardDescriptions = cards.stream()
-                .map(card -> card.getCardFace().get().getRank())
-                .map(rank -> rank.toString())
+                .map(card -> CardDescriptionGenerator.cardFaceToDescription(card.getCardFace().get()))
                 .collect(Collectors.joining(", "));
         return "[" + cardDescriptions + "]";
     }
