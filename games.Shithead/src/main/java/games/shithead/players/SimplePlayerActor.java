@@ -2,7 +2,8 @@ package games.shithead.players;
 
 import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
-import games.shithead.messages.PlayerActionMessage;
+import games.shithead.game.PlayerActionInfo;
+import games.shithead.messages.PlayerMoveMessage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,13 +60,13 @@ public class SimplePlayerActor extends PlayerActor {
      * Find the weakest playable rank, and play all cards of that rank in the player's possession.
      */
     @Override
-    protected PlayerActionMessage getPlayerMove() {
+    protected PlayerActionInfo getPlayerMove() {
         if(handCards.isEmpty()) {
             List<IGameCard> cardsToPut = getWeakestPlayableSet(revealedTableCards);
             List<Integer> cardsToPutIds = cardsToPut.stream()
                     .map(card -> card.getUniqueId())
                     .collect(Collectors.toList());
-            return new PlayerActionMessage(cardsToPutIds, currentMoveId);
+            return new PlayerActionInfo(cardsToPutIds);
         }
         List<IGameCard> cardsToPut = getWeakestPlayableSet(handCards);
         if(!cardsToPut.isEmpty()) {
@@ -79,7 +80,7 @@ public class SimplePlayerActor extends PlayerActor {
         List<Integer> cardsToPutIds = cardsToPut.stream()
                 .map(card -> card.getUniqueId())
                 .collect(Collectors.toList());
-        return new PlayerActionMessage(cardsToPutIds, currentMoveId);
+        return new PlayerActionInfo(cardsToPutIds);
     }
 
     private List<IGameCard> getWeakestPlayableSet(List<IGameCard> cards) {

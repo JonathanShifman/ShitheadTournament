@@ -5,12 +5,9 @@ import java.util.stream.Collectors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
-import games.shithead.game.IGameCard;
-import games.shithead.game.IPlayerHand;
-import games.shithead.game.InfoProvider;
-import games.shithead.game.ShitheadActorSystem;
+import games.shithead.game.*;
 import games.shithead.messages.*;
-import games.shithead.messages.PlayerActionMessage;
+import games.shithead.messages.PlayerMoveMessage;
 
 /**
  * A generic class for players to extend.
@@ -138,15 +135,15 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Sends the move to the game actor, as chosen by the implementing player.
 	 */
     private void makeMove(){
-        sender().tell(getPlayerMove(), self());
+        sender().tell(new PlayerMoveMessage(getPlayerMove(), currentMoveId), self());
     }
 
 	/**
 	 * This method effectively calculates the move the player makes.
 	 * To be implemented by each player according to their strategy.
-	 * @return A PlayerActionMessage containing the chosen move.
+	 * @return A PlayerMoveMessage containing the chosen move.
 	 */
-    protected abstract PlayerActionMessage getPlayerMove();
+    protected abstract PlayerActionInfo getPlayerMove();
 
 	/**
 	 * Sends the interruption (if one is being made) to the game actor,
@@ -160,7 +157,8 @@ public abstract class PlayerActor extends AbstractActor {
 		List<Integer> interruptionCardIds = interruptionCards.stream()
 				.map(card -> card.getUniqueId())
 				.collect(Collectors.toList());
-		sender().tell(new PlayerActionMessage(interruptionCardIds, currentMoveId), self());
+		PlayerActionInfo playerActionInfo = new PlayerActionInfo(interruptionCardIds);
+		sender().tell(new PlayerMoveMessage(playerActionInfo, currentMoveId), self());
 	}
 
 	/**

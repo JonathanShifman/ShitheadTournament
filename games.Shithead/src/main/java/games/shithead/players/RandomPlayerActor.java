@@ -6,7 +6,8 @@ import java.util.List;
 
 import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
-import games.shithead.messages.PlayerActionMessage;
+import games.shithead.game.PlayerActionInfo;
+import games.shithead.messages.PlayerMoveMessage;
 
 /**
  * Implementation of the Random Player
@@ -40,7 +41,7 @@ public class RandomPlayerActor extends PlayerActor {
 	 * Put a single playable card at random, or take the pile if there are none.
 	 */
 	@Override
-	protected PlayerActionMessage getPlayerMove() {
+	protected PlayerActionInfo getPlayerMove() {
 		List<Integer> cardsToPut = new LinkedList<>();
 		int cardId;
 		if(handCards.isEmpty()) {
@@ -51,7 +52,7 @@ public class RandomPlayerActor extends PlayerActor {
 			cardId = getFirstPlayableCardId(handCards);
 			cardsToPut.add(cardId);
 		}
-		return new PlayerActionMessage(cardsToPut, currentMoveId);
+		return new PlayerActionInfo(cardsToPut);
 	}
 
 	private int getFirstPlayableCardId(List<IGameCard> cards) {

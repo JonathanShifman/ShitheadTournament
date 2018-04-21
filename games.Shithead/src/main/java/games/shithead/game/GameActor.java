@@ -31,7 +31,7 @@ public class GameActor extends AbstractActor {
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
                 .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
-                .match(PlayerActionMessage.class, this::handleAttemptedAction)
+                .match(PlayerMoveMessage.class, this::handleAttemptedAction)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -93,15 +93,15 @@ public class GameActor extends AbstractActor {
         }
     }
 
-    private void handleAttemptedAction(PlayerActionMessage actionInfo) throws InterruptedException {
-        logger.info("Received PlayerActionMessage");
+    private void handleAttemptedAction(PlayerMoveMessage actionInfo) throws InterruptedException {
+        logger.info("Received PlayerMoveMessage");
         if(!playerExists(getSender())) {
             logger.info("Unregistered Player, ignoring message");
             return;
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
         try {
-            gameState.performPlayerAction(playerId, actionInfo.getCardsToPut(), actionInfo.getMoveId(), actionInfo.getVictimId());
+            gameState.performPlayerAction(playerId, actionInfo.getPlayerActionInfo(), actionInfo.getMoveId());
         }
         catch (Exception e) {
             logger.info(e.getMessage());

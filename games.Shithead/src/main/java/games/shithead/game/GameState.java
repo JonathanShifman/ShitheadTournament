@@ -39,7 +39,7 @@ public class GameState {
     private int playersPendingTableCardsSelection;
 
     /* The id of the current move.
-     * Used to prevent ambiguity in case a PlayerActionMessage was delayed */
+     * Used to prevent ambiguity in case a PlayerMoveMessage was delayed */
     private int currentMoveId = 1;
 
     // The id of the player who performed the last accepted action
@@ -258,13 +258,13 @@ public class GameState {
     /**
      * Performs an action attempted by a player, as long as it is valid.
      * @param playerId The id of the player attempting the action
-     * @param cardsToPut The cards the player attempted to play. An empty list indicates the player is
-     **                  attempting to take the pile.
+     * @param playerActionInfo The PlayerActionInfo object containing info about the cards the player chose
+     *                         to play, and the victim id if relevant.
      * @param moveId The id of the move this action is relevant for
-     * @param victimId The id of the victim chosen to take the pile in case a joker was played.
-     *                 Will be ignored if a joker wasn't played.
      */
-    public void performPlayerAction(int playerId, List<Integer> cardsToPut, int moveId, int victimId) {
+    public void performPlayerAction(int playerId, PlayerActionInfo playerActionInfo, int moveId) {
+        List<Integer> cardsToPut = playerActionInfo.getCardsToPut();
+        int victimId = playerActionInfo.getVictimId();
         validateAction(playerId, cardsToPut, moveId);
         logger.info("Performing action");
         IPlayerHand playerHand = players.get(playerId);
