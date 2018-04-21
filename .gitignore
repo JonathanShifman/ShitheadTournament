@@ -1,4 +1,4 @@
-games.Shithead/target/*
+*/target/*
 .metadata/*
 .recommenders/*
 *.iml
@@ -6,4 +6,3 @@ games.Shithead/target/*
 /.metadata/
 /.recommenders/
 *.log
-ShitheadLogAnalyzer/
