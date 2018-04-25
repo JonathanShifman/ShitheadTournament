@@ -32,6 +32,7 @@ public abstract class PlayerActor extends AbstractActor {
      * Updated before each time a player is supposed to take an action. */
 	protected List<IGameCard> handCards;
 	protected List<IGameCard> revealedTableCards;
+	protected List<IGameCard> hiddenTableCards;
 	protected List<IGameCard> pendingSelectionCards;
 
 	/* Contains the cards that are currently in the pile.
@@ -40,6 +41,8 @@ public abstract class PlayerActor extends AbstractActor {
 
 	// The id of the current move. Used to prevent ambiguity in case an action message arrives too late.
 	protected int currentMoveId;
+
+	protected int currentPlayerTurn;
 
     public PlayerActor(){
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
@@ -53,7 +56,7 @@ public abstract class PlayerActor extends AbstractActor {
         return receiveBuilder()
                 .match(PlayerIdMessage.class, this::receiveId)
                 .match(ChooseRevealedTableCardsMessage.class, this::receiveChooseTableCardsMessage)
-                .match(MoveRequestMessage.class, this::receiveMoveRequestMessage)
+                .match(PostMoveMessage.class, this::receivePostMoveMessage)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -68,15 +71,16 @@ public abstract class PlayerActor extends AbstractActor {
 	/**
 	 * Updates the game info using the InfoProvider class
 	 */
-    protected void updateInfo() {
-		currentMoveId = InfoProvider.getCurrentMoveId();
-
-    	playerHands = InfoProvider.getPlayerInfos();
+    protected void updateInfo(PostMoveMessage postMoveMessage) {
+		playerHands = postMoveMessage.getPlayerHands();
 		handCards = playerHands.get(playerId).getHandCards();
 		revealedTableCards = playerHands.get(playerId).getRevealedTableCards();
+		hiddenTableCards = playerHands.get(playerId).getHiddenTableCards();
 		pendingSelectionCards = playerHands.get(playerId).getPendingSelectionCards();
 
-    	pile = InfoProvider.getPile();
+		currentMoveId = postMoveMessage.getNextPlayerTurnId();
+		currentPlayerTurn = postMoveMessage.getNextPlayerTurnId();
+    	pile = postMoveMessage.getPile();
 	}
 
 	/**
@@ -94,9 +98,8 @@ public abstract class PlayerActor extends AbstractActor {
 	 * @param message
 	 */
 	private void receiveChooseTableCardsMessage(ChooseRevealedTableCardsMessage message) {
-    	updateInfo();
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(
-        		pendingSelectionCards, message.getRevealedCardsToBeChosen());
+        		message.getCardsPendingSelection(), message.getRevealedCardsToBeChosen());
         sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
 	}
 
@@ -113,17 +116,17 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Handler method for MoveRequestMessage.
 	 * @param message A message representing a request for the player to make a move.
 	 */
-	private void receiveMoveRequestMessage(MoveRequestMessage message) {
-		takeAction();
+	private void receivePostMoveMessage(PostMoveMessage message) {
+		takeAction(message);
 	}
 
 	/**
 	 * Takes the action required of the player at a given moment: Makes a move if it's his turn,
 	 * or considers an interruption if it isn't.
 	 */
-	private void takeAction() {
-		updateInfo();
-		if(InfoProvider.getCurrentPlayerTurn() == playerId) {
+	private void takeAction(PostMoveMessage message) {
+		updateInfo(message);
+		if(currentPlayerTurn == playerId) {
 			makeMove();
 		}
 		else {

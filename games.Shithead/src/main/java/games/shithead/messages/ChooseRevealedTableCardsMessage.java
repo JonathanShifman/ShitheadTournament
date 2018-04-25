@@ -11,11 +11,18 @@ import games.shithead.game.IGameCard;
  */
 public class ChooseRevealedTableCardsMessage {
 
+    private final List<IGameCard> cardsPendingSelection;
+
     // The number of revealed table cards that should be chosen
     private final int revealedCardsToBeChosen;
 
-    public ChooseRevealedTableCardsMessage(int revealedCardsToBeChosen) {
+    public ChooseRevealedTableCardsMessage(List<IGameCard> cardsPendingSelection, int revealedCardsToBeChosen) {
+        this.cardsPendingSelection = cardsPendingSelection;
         this.revealedCardsToBeChosen = revealedCardsToBeChosen;
+    }
+
+    public List<IGameCard> getCardsPendingSelection() {
+        return cardsPendingSelection;
     }
 
     public int getRevealedCardsToBeChosen() {

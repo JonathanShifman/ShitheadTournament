@@ -21,7 +21,6 @@ public class GameActor extends AbstractActor {
     public GameActor() {
         playerIdAllocator = 1;
         gameState = new GameState();
-        InfoProvider.setGameState(gameState);
         playerIdsToInfos = new HashMap<>();
         playerRefsToInfos = new HashMap<>();
     }
@@ -71,9 +70,18 @@ public class GameActor extends AbstractActor {
         }
         gameState.startGame();
         int revealedCardsAtGameStart = gameState.getRevealedCardsAtGameStart();
-        distributeMessage(new ChooseRevealedTableCardsMessage(revealedCardsAtGameStart));
+        sendChooseRevealedTableCardsMessages();
     }
-    
+
+    private void sendChooseRevealedTableCardsMessages() {
+        playerIdsToInfos.keySet().forEach(id -> sendChooseRevealedTableCardsMessage(id));
+    }
+
+    private void sendChooseRevealedTableCardsMessage(Integer id) {
+        playerIdsToInfos.get(id).getPlayerRef().tell(new ChooseRevealedTableCardsMessage(
+                gameState.getPrivateHand(id).getPendingSelectionCards(), gameState.getRevealedCardsAtGameStart()), self());
+    }
+
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
         logger.info("Received TableCardsSelectionMessage");
         if(!playerExists(getSender())) {
@@ -89,8 +97,27 @@ public class GameActor extends AbstractActor {
         }
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
-            distributeMessage(new MoveRequestMessage());
+            sendPostMoveMessages();
         }
+    }
+
+    private void sendPostMoveMessages() {
+        playerIdsToInfos.keySet().forEach(playerId -> sendPostMoveMessage(playerId));
+    }
+
+    private void sendPostMoveMessage(Integer playerId) {
+        Map<Integer, IPlayerHand> playerHands = new HashMap<>();
+        playerIdsToInfos.keySet().forEach(id -> {
+            if(id == playerId) {
+                playerHands.put(id, gameState.getPrivateHand(id));
+            }
+            else {
+                playerHands.put(id, gameState.getPublicHand(id));
+            }
+        });
+        PostMoveMessage message = new PostMoveMessage(playerHands, gameState.getPile(),
+                gameState.getCurrentMoveId(), gameState.getCurrentPlayerTurn());
+        playerIdsToInfos.get(playerId).getPlayerRef().tell(message, self());
     }
 
     private void handleAttemptedAction(PlayerMoveMessage actionInfo) throws InterruptedException {
@@ -113,7 +140,7 @@ public class GameActor extends AbstractActor {
             return;
         }
         Thread.sleep(500);
-        distributeMessage(new MoveRequestMessage());
+        sendPostMoveMessages();
     }
 
     private void distributeMessage(Object message) {

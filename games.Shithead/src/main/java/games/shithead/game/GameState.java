@@ -265,21 +265,23 @@ public class GameState {
     public void performPlayerAction(int playerId, PlayerActionInfo playerActionInfo, int moveId) {
         List<Integer> cardsToPut = playerActionInfo.getCardsToPut();
         int victimId = playerActionInfo.getVictimId();
-        validateAction(playerId, cardsToPut, moveId);
+        ActionValidationResult validationResult = validateAction(playerId, cardsToPut, moveId);
+        if(validationResult == ActionValidationResult.FOUL) {
+            logger.info("Foul");
+            return;
+        }
         logger.info("Performing action");
         IPlayerHand playerHand = players.get(playerId);
-        if(!cardsToPut.isEmpty()) {
-            List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
-            for (int cardId : cardsToPut) {
-                cardStatuses[cardId] = CardStatus.PILE;
-                cardsToRemoveFromPlayerHand.add(cards[cardId]);
-                pile.add(0, cards[cardId]);
-            }
-            playerHand.removeAll(cardsToRemoveFromPlayerHand);
-            updateSpecialEffects(victimId);
-            dealPlayerCardsIfNeeded(playerId);
+        List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
+        for (int cardId : cardsToPut) {
+            cardStatuses[cardId] = CardStatus.PILE;
+            cardsToRemoveFromPlayerHand.add(cards[cardId]);
+            pile.add(0, cards[cardId]);
         }
-        else { // Take pile
+        playerHand.removeAll(cardsToRemoveFromPlayerHand);
+        updateSpecialEffects(victimId);
+        dealPlayerCardsIfNeeded(playerId);
+        if(validationResult == ActionValidationResult.TAKE) {
             for(IGameCard gameCard : pile) {
                 playerHand.getHandCards().add(gameCard);
                 cardStatuses[gameCard.getUniqueId()] = new CardStatus(playerId, HeldCardPosition.IN_HAND);
@@ -300,7 +302,7 @@ public class GameState {
      *                   attempting to take the pile.
      * @param moveId The id of the move this action is relevant for
      */
-    private void validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
+    private ActionValidationResult validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
         logger.info("Attempting action: cards " + cardIdsToDescriptions(cardsToPut) + " by player " + playerId);
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
@@ -308,28 +310,20 @@ public class GameState {
         if(moveId != currentMoveId) {
             throw new RuntimeException("Exception: Move didn't have current move id");
         }
-        for(int cardId : cardsToPut) {
-            if(cardId > cards.length) {
-                throw new RuntimeException("Exception: Card id doesn't exist");
-            }
-            // TODO: Check that cards can be played based on their position
+        List<IGameCard> playedCards;
+        try {
+            playedCards = cardsToPut.stream()
+                    .map(cardId -> cards[cardId])
+                    .collect(Collectors.toList());
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Exception: One or more of the card ids didn't exist");
         }
 
-        boolean isActionValid;
-        List<IGameCard> playedCards = cardsToPut.stream()
-                .map(cardId -> cards[cardId])
-                .collect(Collectors.toList());
-        if(playerId == currentTurnPlayerId) {
-            isActionValid = cardsToPut.isEmpty() ?
-                    ActionValidator.canTake(pile) :
-                    ActionValidator.canPlay(playedCards, pile);
-        }
-        else {
-            isActionValid = ActionValidator.canInterrupt(playedCards, pile);
-        }
-        if(!isActionValid){
-            throw new RuntimeException("Exception: player isn't allowed to make the given move");
-        }
+        IPlayerHand playerHand = players.get(playerId);
+        return playerId == currentTurnPlayerId ?
+            ActionValidator.validateAction(playerHand, playedCards, pile) :
+            ActionValidator.validateInterruption(playerHand, playedCards, pile);
     }
 
     /**
@@ -536,5 +530,13 @@ public class GameState {
         return playerHand.getCardListsMap().entrySet().stream()
                 .map(entry -> entry.getKey() + ": " + cardsToDescriptions(entry.getValue()))
                 .collect(Collectors.joining(", "));
+    }
+
+    public IPlayerHand getPublicHand(int playerId) {
+        return players.get(playerId).publicClone();
+    }
+
+    public IPlayerHand getPrivateHand(int playerId) {
+        return players.get(playerId).privateClone();
     }
 }

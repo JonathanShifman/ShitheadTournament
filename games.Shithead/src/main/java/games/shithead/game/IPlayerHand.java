@@ -21,4 +21,7 @@ public interface IPlayerHand {
 
 	Map<String, List<IGameCard>> getCardListsMap();
 
+    IPlayerHand publicClone();
+
+	IPlayerHand privateClone();
 }

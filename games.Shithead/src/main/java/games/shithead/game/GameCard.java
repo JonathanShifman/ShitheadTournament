@@ -33,4 +33,14 @@ public class GameCard implements IGameCard {
 		return uniqueId;
 	}
 
+	@Override
+	public IGameCard classifiedClone() {
+		return new GameCard(null, uniqueId);
+	}
+
+	@Override
+	public IGameCard revealedClone() {
+		return new GameCard(cardFace.get(), uniqueId);
+	}
+
 }

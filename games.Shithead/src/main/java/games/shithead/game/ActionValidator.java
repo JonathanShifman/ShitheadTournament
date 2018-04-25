@@ -1,28 +1,29 @@
 package games.shithead.game;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionValidator {
 
-    public static boolean canTake(List<IGameCard> pile) {
-        return !pile.isEmpty();
+    private static ActionValidationResult validateTaking(List<IGameCard> pile) {
+        return pile.isEmpty() ? ActionValidationResult.TAKE : ActionValidationResult.FOUL;
     }
 
-    public static boolean canPlay(IGameCard cardToPlay, List<IGameCard> pile){
-        List<IGameCard> cardsToPlay = new LinkedList<>();
-        cardsToPlay.add(cardToPlay);
-        return canPlay(cardsToPlay, pile);
-    }
-
-    public static boolean canPlay(List<IGameCard> cardsToPlay, List<IGameCard> pile){
-        if(cardsToPlay.isEmpty() || !allCardsHaveTheSameValue(cardsToPlay)) {
-            return false;
+    public static ActionValidationResult validateAction(IPlayerHand playerHand, List<IGameCard> cardsToPlay, List<IGameCard> pile){
+        if(cardsToPlay.isEmpty()) {
+            return validateTaking(pile);
+        }
+        if(!cardsAreAvailableForPlay(playerHand, cardsToPlay)) {
+            return ActionValidationResult.FOUL;
+        }
+        if(!allCardsHaveTheSameValue(cardsToPlay)) {
+            return ActionValidationResult.FOUL;
         }
         int playedValue = cardsToPlay.get(0).getCardFace().get().getRank();
         if(valueIsAlwaysValid(playedValue)) {
-            return true;
+            return ActionValidationResult.PROCEED;
         }
 
         int effectiveTopCardValue = 0;
@@ -34,9 +35,44 @@ public class ActionValidator {
             effectiveTopCardValue = currentCardValue == 2 ? 0 : currentCardValue;
             break;
         }
-        return effectiveTopCardValue == 7 ?
-                playedValue <= effectiveTopCardValue :
-                playedValue >= effectiveTopCardValue;
+        if(effectiveTopCardValue == 7 && playedValue <= effectiveTopCardValue ||
+                effectiveTopCardValue != 7 && playedValue >= effectiveTopCardValue) {
+            return ActionValidationResult.PROCEED;
+        }
+        else {
+            return unsuccessfulAttemptIsAllowed(playerHand, cardsToPlay) ?
+                    ActionValidationResult.TAKE :
+                    ActionValidationResult.FOUL;
+        }
+    }
+
+    private static boolean unsuccessfulAttemptIsAllowed(IPlayerHand playerHand, List<IGameCard> cardsToPlay) {
+        return cardsAreContained(playerHand.getRevealedTableCards(), cardsToPlay) ||
+                cardsAreContained(playerHand.getHiddenTableCards(), cardsToPlay);
+    }
+
+    private static boolean cardsAreAvailableForPlay(IPlayerHand playerHand, List<IGameCard> cardsToPlay) {
+        if(playerHand.getHandCards().isEmpty() && playerHand.getRevealedTableCards().isEmpty()) {
+            return cardsToPlay.size() == 1 && cardsAreContained(playerHand.getHiddenTableCards(), cardsToPlay);
+        }
+        if(playerHand.getHandCards().isEmpty()) {
+            return cardsAreContained(playerHand.getRevealedTableCards(), cardsToPlay);
+        }
+        return cardsAreContained(playerHand.getHandCards(), cardsToPlay) ||
+                (cardsAreContained(cardsToPlay, playerHand.getHandCards()) &&
+                cardsAreContained(Stream.concat(playerHand.getHandCards().stream(), playerHand.getRevealedTableCards().stream())
+                .collect(Collectors.toList()), cardsToPlay));
+    }
+
+    private static boolean cardsAreContained(List<IGameCard> containing, List<IGameCard> contained) {
+        List<Integer> containingIds = containing.stream()
+                .map(card -> card.getUniqueId())
+                .collect(Collectors.toList());
+        List<Integer> notContainedIds = contained.stream()
+                .map(card -> card.getUniqueId())
+                .filter(cardId -> !containingIds.contains(cardId))
+                .collect(Collectors.toList());
+        return notContainedIds.size() == 0;
     }
 
     private static boolean valueIsAlwaysValid(int playedValue) {
@@ -56,9 +92,9 @@ public class ActionValidator {
                 .count() == 1;
     }
 
-    public static boolean canInterrupt(List<IGameCard> cardsToInterrupt, List<IGameCard> pile){
+    public static ActionValidationResult validateInterruption(IPlayerHand playerHand, List<IGameCard> cardsToInterrupt, List<IGameCard> pile){
         if(cardsToInterrupt.isEmpty() || !allCardsHaveTheSameValue(cardsToInterrupt)) {
-            return false;
+            return ActionValidationResult.FOUL;
         }
         int interruptValue = cardsToInterrupt.get(0).getCardFace().get().getRank();
         int count = 0;
@@ -70,6 +106,8 @@ public class ActionValidator {
                 break;
             }
         }
-        return cardsToInterrupt.size() + count == 4;
+        return cardsToInterrupt.size() + count >= 4 ?
+                ActionValidationResult.PROCEED :
+                ActionValidationResult.FOUL;
     }
 }

@@ -9,5 +9,8 @@ public interface IGameCard {
 	Optional<ICardFace> getCardFace();
 	
 	int getUniqueId();
-	
+
+    IGameCard classifiedClone();
+
+	IGameCard revealedClone();
 }

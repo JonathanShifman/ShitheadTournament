@@ -1,9 +1,9 @@
 package games.shithead.players;
 
+import games.shithead.game.ActionValidationResult;
 import games.shithead.game.ActionValidator;
 import games.shithead.game.IGameCard;
 import games.shithead.game.PlayerActionInfo;
-import games.shithead.messages.PlayerMoveMessage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,6 +61,11 @@ public class SimplePlayerActor extends PlayerActor {
      */
     @Override
     protected PlayerActionInfo getPlayerMove() {
+        if(handCards.isEmpty() && revealedTableCards.isEmpty()) {
+            List<Integer> cardsToPutIds = new LinkedList<>();
+            cardsToPutIds.add(hiddenTableCards.get(0).getUniqueId());
+            return new PlayerActionInfo(cardsToPutIds);
+        }
         if(handCards.isEmpty()) {
             List<IGameCard> cardsToPut = getWeakestPlayableSet(revealedTableCards);
             List<Integer> cardsToPutIds = cardsToPut.stream()
@@ -98,7 +103,9 @@ public class SimplePlayerActor extends PlayerActor {
                 }
             }
             else {
-                if(ActionValidator.canPlay(gameCard, pile)) {
+                List<IGameCard> cardsToPlay = new LinkedList<>();
+                cardsToPlay.add(gameCard);
+                if(ActionValidator.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
                     weakestPlayableSet.add(gameCard);
                     chosenValue = gameCard.getCardFace().get().getRank();
                 }
