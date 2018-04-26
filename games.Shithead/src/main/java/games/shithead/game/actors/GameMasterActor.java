@@ -1,4 +1,4 @@
-package games.shithead.game;
+package games.shithead.game.actors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
@@ -7,6 +7,9 @@ import games.shithead.messages.StartGameMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The game master actor. Responsible for letting the game actor know when it's time to start the game.
+ */
 public class GameMasterActor extends AbstractActor {
 
     static Logger logger = LogManager.getLogger(GameMasterActor.class);

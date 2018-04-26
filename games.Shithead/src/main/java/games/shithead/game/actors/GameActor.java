@@ -1,21 +1,35 @@
-package games.shithead.game;
+package games.shithead.game.actors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
+import games.shithead.game.entities.GameState;
+import games.shithead.game.interfaces.IPlayerInfo;
+import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.game.entities.PlayerInfo;
 import games.shithead.messages.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The actor that runs the game flow. Responsible for operating the GameState instance and
+ * communicate with the participating players.
+ */
 public class GameActor extends AbstractActor {
 
     static Logger logger = LogManager.getLogger(GameActor.class);
 
+    // An allocator used to allocate incrementing ids to players
     int playerIdAllocator;
+
+    // A mapping from each player id to the appropriate IPlayerInfo
     private Map<Integer, IPlayerInfo> playerIdsToInfos;
+
+    // A mapping from each player ref to the appropriate IPlayerInfo
     private Map<ActorRef, IPlayerInfo> playerRefsToInfos;
 
+    // The game state used to perform all game operations
     private GameState gameState;
 
     public GameActor() {
@@ -35,7 +49,13 @@ public class GameActor extends AbstractActor {
                 .build();
     }
 
-	private void registerPlayer(RegisterPlayerMessage playerRegistration) {
+    /**
+     * Handler method for RegisterPlayerMessage.
+     * Registers the new player, initializes the required information, and sends the
+     * allocated id to the player.
+     * @param message The registration message.
+     */
+	private void registerPlayer(RegisterPlayerMessage message) {
         logger.info("Received RegisterPlayerMessage");
         if(gameState.isGameStarted()){
             logger.info("Game has already started, too late for registration");
@@ -48,7 +68,7 @@ public class GameActor extends AbstractActor {
 
         logger.info("Registering player");
         int playerId = playerIdAllocator++;
-        IPlayerInfo playerInfo = new PlayerInfo(playerId, playerRegistration.getPlayerName(), getSender());
+        IPlayerInfo playerInfo = new PlayerInfo(playerId, message.getPlayerName(), getSender());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);
@@ -56,7 +76,11 @@ public class GameActor extends AbstractActor {
         getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Handler method for StartGameMessage.
+     * Starts the game and asks all players to choose their visible table cards.
+     * @param startGameMessage The message that tells the game actor to start the game.
+     */
     private void startGame(StartGameMessage startGameMessage) {
         logger.info("Received StartGameMessage");
         // TODO: Make sure message came from Main
@@ -69,19 +93,30 @@ public class GameActor extends AbstractActor {
             return;
         }
         gameState.startGame();
-        int revealedCardsAtGameStart = gameState.getRevealedCardsAtGameStart();
-        sendChooseRevealedTableCardsMessages();
+        sendChooseVisibleTableCardsMessages();
     }
 
-    private void sendChooseRevealedTableCardsMessages() {
-        playerIdsToInfos.keySet().forEach(id -> sendChooseRevealedTableCardsMessage(id));
+    /**
+     * Sends each player a message asking him to choose his visible table cards
+     */
+    private void sendChooseVisibleTableCardsMessages() {
+        playerIdsToInfos.keySet().forEach(id -> sendChooseVisibleTableCardsMessage(id));
     }
 
-    private void sendChooseRevealedTableCardsMessage(Integer id) {
-        playerIdsToInfos.get(id).getPlayerRef().tell(new ChooseRevealedTableCardsMessage(
-                gameState.getPrivateHand(id).getPendingSelectionCards(), gameState.getRevealedCardsAtGameStart()), self());
+    /**
+     * Sends a single player a message asking him to choose his visible table cards
+     * @param playerId The id of the player to send the message to
+     */
+    private void sendChooseVisibleTableCardsMessage(Integer playerId) {
+        playerIdsToInfos.get(playerId).getPlayerRef().tell(new ChooseVisibleTableCardsMessage(
+                gameState.getPrivateHand(playerId).getPendingSelectionCards(), gameState.getNumOfVisibleTableCardsAtGameStart()), self());
     }
 
+    /**
+     * Handler method for TableCardsSelectionMessage.
+     * Receives the selection, validates it and sends the first SnapshotMessage (effectively starting the game cycle).
+     * @param message The message containing the table cards selection.
+     */
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
         logger.info("Received TableCardsSelectionMessage");
         if(!playerExists(getSender())) {
@@ -97,16 +132,23 @@ public class GameActor extends AbstractActor {
         }
     	if(gameState.allPlayersSelectedTableCards()) {
     	    gameState.startCycle();
-            sendPostMoveMessages();
+            sendSnapshotMessages();
         }
     }
 
-    private void sendPostMoveMessages() {
-        playerIdsToInfos.keySet().forEach(playerId -> sendPostMoveMessage(playerId));
+    /**
+     * Sends each player the appropriate snapshot message.
+     */
+    private void sendSnapshotMessages() {
+        playerIdsToInfos.keySet().forEach(playerId -> sendSnapshotMessage(playerId));
     }
 
-    private void sendPostMoveMessage(Integer playerId) {
-        Map<Integer, IPlayerHand> playerHands = new HashMap<>();
+    /**
+     * Sends a single player the appropriate snapshot message
+     * @param playerId The id of the player to send the message to
+     */
+    private void sendSnapshotMessage(Integer playerId) {
+        Map<Integer, IPlayerState> playerHands = new HashMap<>();
         playerIdsToInfos.keySet().forEach(id -> {
             if(id == playerId) {
                 playerHands.put(id, gameState.getPrivateHand(id));
@@ -115,12 +157,19 @@ public class GameActor extends AbstractActor {
                 playerHands.put(id, gameState.getPublicHand(id));
             }
         });
-        PostMoveMessage message = new PostMoveMessage(playerHands, gameState.getPile(),
+        SnapshotMessage message = new SnapshotMessage(playerHands, gameState.getPile(),
                 gameState.getCurrentMoveId(), gameState.getCurrentPlayerTurn());
         playerIdsToInfos.get(playerId).getPlayerRef().tell(message, self());
     }
 
-    private void handleAttemptedAction(PlayerMoveMessage actionInfo) throws InterruptedException {
+    /**
+     * Handler message for PlayerMoveMessage.
+     * Receives an attempted player action, performs it if valid, advances the playing queue and
+     * sends the next snapshot message.
+     * @param message The move message
+     * @throws InterruptedException
+     */
+    private void handleAttemptedAction(PlayerMoveMessage message) throws InterruptedException {
         logger.info("Received PlayerMoveMessage");
         if(!playerExists(getSender())) {
             logger.info("Unregistered Player, ignoring message");
@@ -128,7 +177,7 @@ public class GameActor extends AbstractActor {
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
         try {
-            gameState.performPlayerAction(playerId, actionInfo.getPlayerActionInfo(), actionInfo.getMoveId());
+            gameState.performPlayerAction(playerId, message.getPlayerActionInfo(), message.getMoveId());
         }
         catch (Exception e) {
             logger.info(e.getMessage());
@@ -140,19 +189,33 @@ public class GameActor extends AbstractActor {
             return;
         }
         Thread.sleep(500);
-        sendPostMoveMessages();
+        sendSnapshotMessages();
     }
 
+    /**
+     * Distributes the given message to all players.
+     * @param message The message to distribute
+     */
     private void distributeMessage(Object message) {
         playerIdsToInfos.forEach((id, playerInfo) -> {
             playerInfo.getPlayerRef().tell(message, self());
         });
     }
 
+    /**
+     * Checks if a player with the given player id exists.
+     * @param playerId The player id to look for
+     * @return True if the player exists, false otherwise
+     */
     private boolean playerExists(int playerId) {
         return playerIdsToInfos.containsKey(playerId);
     }
 
+    /**
+     * Checks if a player with the given player ref exists.
+     * @param playerRef The player ref to look for
+     * @return True if the player exists, false otherwise
+     */
     private boolean playerExists(ActorRef playerRef) {
         return playerRefsToInfos.containsKey(playerRef);
     }

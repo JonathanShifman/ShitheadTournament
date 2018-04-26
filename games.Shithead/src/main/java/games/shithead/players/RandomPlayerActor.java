@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import games.shithead.game.ActionValidationResult;
-import games.shithead.game.ActionValidator;
-import games.shithead.game.IGameCard;
-import games.shithead.game.PlayerActionInfo;
+import games.shithead.game.validation.ActionValidationResult;
+import games.shithead.game.validation.ActionValidator;
+import games.shithead.game.interfaces.IGameCard;
+import games.shithead.game.entities.PlayerActionInfo;
 
 /**
  * Implementation of the Random Player

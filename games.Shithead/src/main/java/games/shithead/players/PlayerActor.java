@@ -5,7 +5,10 @@ import java.util.stream.Collectors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
-import games.shithead.game.*;
+import games.shithead.game.actors.ShitheadActorSystem;
+import games.shithead.game.entities.PlayerActionInfo;
+import games.shithead.game.interfaces.IGameCard;
+import games.shithead.game.interfaces.IPlayerState;
 import games.shithead.messages.*;
 import games.shithead.messages.PlayerMoveMessage;
 
@@ -24,7 +27,7 @@ public abstract class PlayerActor extends AbstractActor {
      * This map contains public info only, that is to say the cards
      * that each players holds in his hand have their card faces nullified.
      * Updated before each time a player is supposed to take an action. */
-    protected Map<Integer, IPlayerHand> playerHands = new HashMap<>();
+    protected Map<Integer, IPlayerState> playerHands = new HashMap<>();
 
     /* These fields hold the card that are in the player's possession
      * at this time. This info is private and is only made available to each
@@ -55,8 +58,8 @@ public abstract class PlayerActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(PlayerIdMessage.class, this::receiveId)
-                .match(ChooseRevealedTableCardsMessage.class, this::receiveChooseTableCardsMessage)
-                .match(PostMoveMessage.class, this::receivePostMoveMessage)
+                .match(ChooseVisibleTableCardsMessage.class, this::receiveChooseTableCardsMessage)
+                .match(SnapshotMessage.class, this::receivePostMoveMessage)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -71,16 +74,16 @@ public abstract class PlayerActor extends AbstractActor {
 	/**
 	 * Updates the game info using the InfoProvider class
 	 */
-    protected void updateInfo(PostMoveMessage postMoveMessage) {
-		playerHands = postMoveMessage.getPlayerHands();
+    protected void updateInfo(SnapshotMessage snapshotMessage) {
+		playerHands = snapshotMessage.getPlayerHands();
 		handCards = playerHands.get(playerId).getHandCards();
-		revealedTableCards = playerHands.get(playerId).getRevealedTableCards();
+		revealedTableCards = playerHands.get(playerId).getVisibleTableCards();
 		hiddenTableCards = playerHands.get(playerId).getHiddenTableCards();
 		pendingSelectionCards = playerHands.get(playerId).getPendingSelectionCards();
 
-		currentMoveId = postMoveMessage.getNextPlayerTurnId();
-		currentPlayerTurn = postMoveMessage.getNextPlayerTurnId();
-    	pile = postMoveMessage.getPile();
+		currentMoveId = snapshotMessage.getNextPlayerTurnId();
+		currentPlayerTurn = snapshotMessage.getNextPlayerTurnId();
+    	pile = snapshotMessage.getPile();
 	}
 
 	/**
@@ -92,14 +95,14 @@ public abstract class PlayerActor extends AbstractActor {
     }
 
 	/**
-	 * Handler method for ChooseRevealedTableCardsMessage.
+	 * Handler method for ChooseVisibleTableCardsMessage.
 	 * Updates the game info, and sends back the revealed table card ids, as chosen
 	 * by the implementing player.
 	 * @param message
 	 */
-	private void receiveChooseTableCardsMessage(ChooseRevealedTableCardsMessage message) {
+	private void receiveChooseTableCardsMessage(ChooseVisibleTableCardsMessage message) {
         List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(
-        		message.getCardsPendingSelection(), message.getRevealedCardsToBeChosen());
+        		message.getCardsPendingSelection(), message.getNumOfVisibleTableCardsToBeChosen());
         sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
 	}
 
@@ -116,7 +119,7 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Handler method for MoveRequestMessage.
 	 * @param message A message representing a request for the player to make a move.
 	 */
-	private void receivePostMoveMessage(PostMoveMessage message) {
+	private void receivePostMoveMessage(SnapshotMessage message) {
 		takeAction(message);
 	}
 
@@ -124,7 +127,7 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Takes the action required of the player at a given moment: Makes a move if it's his turn,
 	 * or considers an interruption if it isn't.
 	 */
-	private void takeAction(PostMoveMessage message) {
+	private void takeAction(SnapshotMessage message) {
 		updateInfo(message);
 		if(currentPlayerTurn == playerId) {
 			makeMove();

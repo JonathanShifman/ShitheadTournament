@@ -1,4 +1,4 @@
-package games.shithead.game;
+package games.shithead.game.entities;
 
 import java.util.List;
 

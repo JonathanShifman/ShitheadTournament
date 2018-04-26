@@ -7,13 +7,11 @@ package games.shithead.deck;
 public interface ICardFace {
 
 	/**
-	 * Returns the rank of the card face
 	 * @return The rank of the card face
 	 */
 	int getRank();
 
 	/**
-	 * Returns the suit of the card face
 	 * @return The suit of the card face
 	 */
 	int getSuit();

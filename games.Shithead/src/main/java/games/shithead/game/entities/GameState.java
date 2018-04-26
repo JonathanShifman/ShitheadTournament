@@ -1,9 +1,13 @@
-package games.shithead.game;
+package games.shithead.game.entities;
 
 import games.shithead.deck.CardDescriptionGenerator;
 import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
+import games.shithead.game.interfaces.IGameCard;
+import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.game.validation.ActionValidationResult;
+import games.shithead.game.validation.ActionValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +25,7 @@ public class GameState {
     private boolean isGameStarted;
 
     // Maps player ids to their hands (the cards in their possession)
-    private Map<Integer, IPlayerHand> players;
+    private Map<Integer, IPlayerState> players;
 
     // The multi deck that has been allocated for the game
     private IMultiDeck deck;
@@ -76,7 +80,7 @@ public class GameState {
         return isGameStarted;
     }
 
-    public Map<Integer, IPlayerHand> getPlayers() {
+    public Map<Integer, IPlayerState> getPlayers() {
         return players;
     }
 
@@ -96,7 +100,7 @@ public class GameState {
         return currentMoveId;
     }
 
-    public int getRevealedCardsAtGameStart() {
+    public int getNumOfVisibleTableCardsAtGameStart() {
         return HAND_CARDS_AT_GAME_START;
     }
 
@@ -109,7 +113,7 @@ public class GameState {
      * @param playerId The id of the new player
      */
     public void addPlayer(int playerId) {
-        PlayerHand playerHand = new PlayerHand();
+        PlayerState playerHand = new PlayerState();
         players.put(playerId, playerHand);
     }
 
@@ -182,10 +186,10 @@ public class GameState {
      */
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
         validateTableCardsSelection(playerId, selectedCardsIds);
-        IPlayerHand playerHand = players.get(playerId);
+        IPlayerState playerHand = players.get(playerId);
         for(int selectedCardId : selectedCardsIds) {
-            cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_REVEALED);
-            playerHand.getRevealedTableCards().add(cards[selectedCardId]);
+            cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_VISIBLE);
+            playerHand.getVisibleTableCards().add(cards[selectedCardId]);
         }
         for(IGameCard gameCard : playerHand.getPendingSelectionCards()) {
             if(cardStatuses[gameCard.getUniqueId()].getHeldCardPosition() == HeldCardPosition.PENDING_SELECTION) {
@@ -213,7 +217,7 @@ public class GameState {
             throw new RuntimeException("Exception: Expected selection of " + REVEALED_TABLE_CARDS_AT_GAME_START +
                     " revealed table cards but received " + selectedCardsIds.size());
         }
-        IPlayerHand playerHand = players.get(playerId);
+        IPlayerState playerHand = players.get(playerId);
         if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
             throw new RuntimeException("Exception: Player has already made table cards selection");
         }
@@ -271,7 +275,7 @@ public class GameState {
             return;
         }
         logger.info("Performing action");
-        IPlayerHand playerHand = players.get(playerId);
+        IPlayerState playerHand = players.get(playerId);
         List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
         for (int cardId : cardsToPut) {
             cardStatuses[cardId] = CardStatus.PILE;
@@ -320,7 +324,7 @@ public class GameState {
             throw new RuntimeException("Exception: One or more of the card ids didn't exist");
         }
 
-        IPlayerHand playerHand = players.get(playerId);
+        IPlayerState playerHand = players.get(playerId);
         return playerId == currentTurnPlayerId ?
             ActionValidator.validateAction(playerHand, playedCards, pile) :
             ActionValidator.validateInterruption(playerHand, playedCards, pile);
@@ -363,7 +367,7 @@ public class GameState {
                 }
                 burnCards(topJokersToBurn);
                 if(players.containsKey(victimId)) {
-                    IPlayerHand playerHand = players.get(victimId);
+                    IPlayerState playerHand = players.get(victimId);
                     for(IGameCard gameCard : remainingPileCards) {
                         playerHand.getHandCards().add(gameCard);
                         cardStatuses[gameCard.getUniqueId()].setHolderId(victimId);
@@ -473,7 +477,7 @@ public class GameState {
      * @param playerId The id of the player to deal cards to
      */
     private void dealPlayerCardsIfNeeded(int playerId) {
-        IPlayerHand playerInfo = players.get(playerId);
+        IPlayerState playerInfo = players.get(playerId);
         int neededCards = HAND_CARDS_AT_GAME_START - playerInfo.getHandCards().size();
         if(neededCards > 0) {
             List<ICardFace> cardFaces = deck.getNextCardFaces(neededCards);
@@ -526,17 +530,17 @@ public class GameState {
         logger.info(logMessage);
     }
 
-    private String playerHandToPlayerStateString(IPlayerHand playerHand) {
+    private String playerHandToPlayerStateString(IPlayerState playerHand) {
         return playerHand.getCardListsMap().entrySet().stream()
                 .map(entry -> entry.getKey() + ": " + cardsToDescriptions(entry.getValue()))
                 .collect(Collectors.joining(", "));
     }
 
-    public IPlayerHand getPublicHand(int playerId) {
+    public IPlayerState getPublicHand(int playerId) {
         return players.get(playerId).publicClone();
     }
 
-    public IPlayerHand getPrivateHand(int playerId) {
+    public IPlayerState getPrivateHand(int playerId) {
         return players.get(playerId).privateClone();
     }
 }

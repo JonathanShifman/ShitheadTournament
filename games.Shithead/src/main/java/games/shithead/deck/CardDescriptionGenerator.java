@@ -6,7 +6,7 @@ import java.util.Map;
 public class CardDescriptionGenerator {
 
     private static Map<Integer, String> rankValuesToRepresentations = new HashMap<Integer, String>() {{
-        for(int i = 2; i <= 10; i++) {
+        for (int i = 2; i <= 10; i++) {
             put(i, Integer.toString(i));
         }
         put(11, "J");

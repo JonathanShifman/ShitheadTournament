@@ -1,6 +1,7 @@
-package games.shithead.game;
+package games.shithead.game.entities;
 
 import akka.actor.ActorRef;
+import games.shithead.game.interfaces.IPlayerInfo;
 
 public class PlayerInfo implements IPlayerInfo {
 

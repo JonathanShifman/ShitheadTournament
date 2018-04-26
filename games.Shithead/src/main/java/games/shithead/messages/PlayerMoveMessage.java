@@ -1,10 +1,6 @@
 package games.shithead.messages;
 
-import games.shithead.game.IGameCard;
-import games.shithead.game.PlayerActionInfo;
-
-import java.util.LinkedList;
-import java.util.List;
+import games.shithead.game.entities.PlayerActionInfo;
 
 /**
  * Sent from <code>PlayerActor</code> to <code>GameActor</code>.
