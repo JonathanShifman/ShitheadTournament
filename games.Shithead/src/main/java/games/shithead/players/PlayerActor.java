@@ -34,7 +34,7 @@ public abstract class PlayerActor extends AbstractActor {
      * player about his own cards.
      * Updated before each time a player is supposed to take an action. */
 	protected List<IGameCard> handCards;
-	protected List<IGameCard> revealedTableCards;
+	protected List<IGameCard> visibleTableCards;
 	protected List<IGameCard> hiddenTableCards;
 	protected List<IGameCard> pendingSelectionCards;
 
@@ -59,7 +59,7 @@ public abstract class PlayerActor extends AbstractActor {
         return receiveBuilder()
                 .match(PlayerIdMessage.class, this::receiveId)
                 .match(ChooseVisibleTableCardsMessage.class, this::receiveChooseTableCardsMessage)
-                .match(SnapshotMessage.class, this::receivePostMoveMessage)
+                .match(SnapshotMessage.class, this::receiveSnapshotMessage)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -77,11 +77,11 @@ public abstract class PlayerActor extends AbstractActor {
     protected void updateInfo(SnapshotMessage snapshotMessage) {
 		playerHands = snapshotMessage.getPlayerHands();
 		handCards = playerHands.get(playerId).getHandCards();
-		revealedTableCards = playerHands.get(playerId).getVisibleTableCards();
+		visibleTableCards = playerHands.get(playerId).getVisibleTableCards();
 		hiddenTableCards = playerHands.get(playerId).getHiddenTableCards();
 		pendingSelectionCards = playerHands.get(playerId).getPendingSelectionCards();
 
-		currentMoveId = snapshotMessage.getNextPlayerTurnId();
+		currentMoveId = snapshotMessage.getNextMoveId();
 		currentPlayerTurn = snapshotMessage.getNextPlayerTurnId();
     	pile = snapshotMessage.getPile();
 	}
@@ -116,10 +116,10 @@ public abstract class PlayerActor extends AbstractActor {
 	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose);
 
 	/**
-	 * Handler method for MoveRequestMessage.
+	 * Handler method for SnapshotMessage.
 	 * @param message A message representing a request for the player to make a move.
 	 */
-	private void receivePostMoveMessage(SnapshotMessage message) {
+	private void receiveSnapshotMessage(SnapshotMessage message) {
 		takeAction(message);
 	}
 

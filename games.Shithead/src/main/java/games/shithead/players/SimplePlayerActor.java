@@ -1,9 +1,10 @@
 package games.shithead.players;
 
 import games.shithead.game.validation.ActionValidationResult;
-import games.shithead.game.validation.ActionValidator;
+import games.shithead.game.validation.ActionValidatorForGame;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.entities.PlayerActionInfo;
+import games.shithead.game.validation.ActionValidatorForPlayer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,22 +62,22 @@ public class SimplePlayerActor extends PlayerActor {
      */
     @Override
     protected PlayerActionInfo getPlayerMove() {
-        if(handCards.isEmpty() && revealedTableCards.isEmpty()) {
+        if(handCards.isEmpty() && visibleTableCards.isEmpty()) {
             List<Integer> cardsToPutIds = new LinkedList<>();
             cardsToPutIds.add(hiddenTableCards.get(0).getUniqueId());
             return new PlayerActionInfo(cardsToPutIds);
         }
         if(handCards.isEmpty()) {
-            List<IGameCard> cardsToPut = getWeakestPlayableSet(revealedTableCards);
+            List<IGameCard> cardsToPut = getWeakestCardsWithBestResult(visibleTableCards);
             List<Integer> cardsToPutIds = cardsToPut.stream()
                     .map(card -> card.getUniqueId())
                     .collect(Collectors.toList());
             return new PlayerActionInfo(cardsToPutIds);
         }
-        List<IGameCard> cardsToPut = getWeakestPlayableSet(handCards);
-        if(!cardsToPut.isEmpty()) {
+        List<IGameCard> cardsToPut = getWeakestCardsWithBestResult(handCards);
+        if(!cardsToPut.isEmpty() && cardsToPut.size() == handCards.size()) {
             int selectedValue = cardsToPut.get(0).getCardFace().get().getRank();
-            for(IGameCard gameCard : revealedTableCards) {
+            for(IGameCard gameCard : visibleTableCards) {
                 if (gameCard.getCardFace().get().getRank() == selectedValue) {
                     cardsToPut.add(gameCard);
                 }
@@ -88,30 +89,30 @@ public class SimplePlayerActor extends PlayerActor {
         return new PlayerActionInfo(cardsToPutIds);
     }
 
-    private List<IGameCard> getWeakestPlayableSet(List<IGameCard> cards) {
-        cards.sort(new GameCardValueComparator());
-        List<IGameCard> weakestPlayableSet = new LinkedList<>();
-        int chosenValue = -1;
-        for(IGameCard gameCard : cards) {
-            if(chosenValue > 0) {
-                if(gameCard.getCardFace().get().getRank() == chosenValue) {
-                    weakestPlayableSet.add(gameCard);
-                    continue;
+    private List<IGameCard> getWeakestCardsWithBestResult(List<IGameCard> cards) {
+            cards.sort(new GameCardValueComparator());
+            List<IGameCard> weakestCardsWithBestResult = new LinkedList<>();
+            int chosenValue = -1;
+            for(IGameCard gameCard : cards) {
+                if(chosenValue > 0) {
+                    if(gameCard.getCardFace().get().getRank() == chosenValue) {
+                        weakestCardsWithBestResult.add(gameCard);
+                        continue;
+                    }
+                    else {
+                        break;
+                    }
                 }
                 else {
-                    break;
+                    List<IGameCard> cardsToPlay = new LinkedList<>();
+                    cardsToPlay.add(gameCard);
+                    if(ActionValidatorForPlayer.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
+                        weakestCardsWithBestResult.add(gameCard);
+                        chosenValue = gameCard.getCardFace().get().getRank();
+                    }
                 }
             }
-            else {
-                List<IGameCard> cardsToPlay = new LinkedList<>();
-                cardsToPlay.add(gameCard);
-                if(ActionValidator.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
-                    weakestPlayableSet.add(gameCard);
-                    chosenValue = gameCard.getCardFace().get().getRank();
-                }
-            }
-        }
-        return weakestPlayableSet;
+            return weakestCardsWithBestResult;
     }
 
     /**
@@ -149,7 +150,7 @@ public class SimplePlayerActor extends PlayerActor {
             }
         }
         if(interruptionCards.size() == handCards.size()) {
-            for(IGameCard gameCard : revealedTableCards) {
+            for(IGameCard gameCard : visibleTableCards) {
                 if(gameCard.getCardFace().get().getRank() == pileTopValue) {
                     interruptionCards.add(gameCard);
                     cardsNeededForInterruption--;

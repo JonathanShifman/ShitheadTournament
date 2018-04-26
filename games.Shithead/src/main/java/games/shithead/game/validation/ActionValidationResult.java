@@ -17,7 +17,14 @@ public enum ActionValidationResult {
     TAKE,
 
     /**
+     * The action is valid, but whether or not it will be accepted is unknown at the time of
+     * attempting the action. This result can only be returned when a player is validating an
+     * action involving cards with classified card faces.
+     */
+    UNKNOWN,
+
+    /**
      * The attempted action is invalid.
      */
-    FOUL
+    FOUL,
 }

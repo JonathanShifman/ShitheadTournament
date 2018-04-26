@@ -5,9 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import games.shithead.game.validation.ActionValidationResult;
-import games.shithead.game.validation.ActionValidator;
+import games.shithead.game.validation.ActionValidatorForGame;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.entities.PlayerActionInfo;
+import games.shithead.game.validation.ActionValidatorForPlayer;
 
 /**
  * Implementation of the Random Player
@@ -43,11 +44,11 @@ public class RandomPlayerActor extends PlayerActor {
 	@Override
 	protected PlayerActionInfo getPlayerMove() {
 		int cardId;
-		if(handCards.isEmpty() && revealedTableCards.isEmpty()) {
+		if(handCards.isEmpty() && visibleTableCards.isEmpty()) {
 			cardId = hiddenTableCards.get(0).getUniqueId();
 		}
 		else if(handCards.isEmpty()) {
-			cardId = getFirstPlayableCardId(revealedTableCards);
+			cardId = visibleTableCards.get(0).getUniqueId();
 		}
 		else {
 			cardId = getFirstPlayableCardId(handCards);
@@ -63,7 +64,7 @@ public class RandomPlayerActor extends PlayerActor {
 		for(IGameCard card : cards) {
 			List<IGameCard> cardsToPlay = new LinkedList<>();
 			cardsToPlay.add(card);
-			if(ActionValidator.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
+			if(ActionValidatorForPlayer.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
 				return card.getUniqueId();
 			}
 		}

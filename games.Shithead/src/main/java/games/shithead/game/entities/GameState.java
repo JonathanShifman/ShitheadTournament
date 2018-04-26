@@ -7,7 +7,7 @@ import games.shithead.deck.MultiDeck;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
 import games.shithead.game.validation.ActionValidationResult;
-import games.shithead.game.validation.ActionValidator;
+import games.shithead.game.validation.ActionValidatorForGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -326,8 +326,8 @@ public class GameState {
 
         IPlayerState playerHand = players.get(playerId);
         return playerId == currentTurnPlayerId ?
-            ActionValidator.validateAction(playerHand, playedCards, pile) :
-            ActionValidator.validateInterruption(playerHand, playedCards, pile);
+            ActionValidatorForGame.validateAction(playerHand, playedCards, pile) :
+            ActionValidatorForGame.validateInterruption(playerHand, playedCards, pile);
     }
 
     /**
