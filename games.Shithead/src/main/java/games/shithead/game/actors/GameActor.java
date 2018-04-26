@@ -56,7 +56,7 @@ public class GameActor extends AbstractActor {
      * @param message The registration message.
      */
 	private void registerPlayer(RegisterPlayerMessage message) {
-        logger.info("Received RegisterPlayerMessage");
+        logger.info("Received RegisterPlayerMessage from " + message.getPlayerName());
         if(gameState.isGameStarted()){
             logger.info("Game has already started, too late for registration");
             return;
@@ -66,8 +66,8 @@ public class GameActor extends AbstractActor {
             return;
         }
 
-        logger.info("Registering player");
         int playerId = playerIdAllocator++;
+        logger.info("Registering player with allocated id: " + playerId);
         IPlayerInfo playerInfo = new PlayerInfo(playerId, message.getPlayerName(), getSender());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
@@ -100,6 +100,7 @@ public class GameActor extends AbstractActor {
      * Sends each player a message asking him to choose his visible table cards
      */
     private void sendChooseVisibleTableCardsMessages() {
+        logger.info("Sending choose visible table cards messages");
         playerIdsToInfos.keySet().forEach(id -> sendChooseVisibleTableCardsMessage(id));
     }
 
@@ -123,8 +124,9 @@ public class GameActor extends AbstractActor {
             logger.info("Unregistered Player, ignoring message");
             return;
         }
+        int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
         try {
-            gameState.performTableCardsSelection(playerRefsToInfos.get(getSender()).getPlayerId(), message.getSelectedCardsIds());
+            gameState.performTableCardsSelection(playerId, message.getSelectedCardsIds());
         }
     	catch(Exception e) {
             logger.info(e.getMessage());
@@ -140,6 +142,7 @@ public class GameActor extends AbstractActor {
      * Sends each player the appropriate snapshot message.
      */
     private void sendSnapshotMessages() {
+        logger.info("Sending snapshot messages");
         playerIdsToInfos.keySet().forEach(playerId -> sendSnapshotMessage(playerId));
     }
 

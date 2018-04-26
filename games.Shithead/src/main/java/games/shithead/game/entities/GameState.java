@@ -69,7 +69,7 @@ public class GameState {
     private final int REVEALED_TABLE_CARDS_AT_GAME_START = 3;
 
     // The number of hidden table cards a player should have at the start of the game
-    private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 0;
+    private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 1;
 
     public GameState() {
         isGameStarted = false;
@@ -113,6 +113,7 @@ public class GameState {
      * @param playerId The id of the new player
      */
     public void addPlayer(int playerId) {
+        logger.info("Adding player with player id: " + playerId);
         PlayerState playerHand = new PlayerState();
         players.put(playerId, playerHand);
     }
@@ -129,6 +130,7 @@ public class GameState {
      * Starts the game by initializing the required date
      */
     public void startGame() {
+        logger.info("Starting game");
         isGameStarted = true;
         pile = new ArrayList<>();
         initDeck();
@@ -154,10 +156,11 @@ public class GameState {
      * players' selections (between being hand cards or revealed table cards)
      */
     public void dealInitialCards() {
+        logger.info("Dealing initial cards");
         int numOfCardsToDeal = HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START +
                 HIDDEN_TABLE_CARDS_AT_GAME_START;
 
-        players.forEach((playerId, playerInfo) -> {
+        players.forEach((playerId, playerState) -> {
             List<ICardFace> cardFaces = deck.getNextCardFaces(numOfCardsToDeal);
             int remainingHiddenTableCardsToDeal = HIDDEN_TABLE_CARDS_AT_GAME_START;
             for(ICardFace cardFace : cardFaces) {
@@ -166,16 +169,17 @@ public class GameState {
                 cards[newUniqueId] = gameCard;
                 if(remainingHiddenTableCardsToDeal == 0) {
                     cardStatuses[newUniqueId] = new CardStatus(playerId, HeldCardPosition.PENDING_SELECTION);
-                    playerInfo.getPendingSelectionCards().add(gameCard);
+                    playerState.getPendingSelectionCards().add(gameCard);
                 }
                 else {
                     cardStatuses[newUniqueId] = new CardStatus(playerId, HeldCardPosition.TABLE_HIDDEN);
-                    playerInfo.getHiddenTableCards().add(gameCard);
+                    playerState.getHiddenTableCards().add(gameCard);
                     remainingHiddenTableCardsToDeal--;
                 }
             }
         });
         playersPendingTableCardsSelection = getNumberOfPlayers();
+        logGameState();
     }
 
     /**
@@ -185,7 +189,9 @@ public class GameState {
      * @param selectedCardsIds The ids of the selected revealed table cards
      */
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
+        logger.info("Attempting table cards selection by player " + playerId);
         validateTableCardsSelection(playerId, selectedCardsIds);
+        logger.info("Performing table cards selection by player " + playerId);
         IPlayerState playerHand = players.get(playerId);
         for(int selectedCardId : selectedCardsIds) {
             cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_VISIBLE);
@@ -207,6 +213,7 @@ public class GameState {
      * @param selectedCardsIds The chosen revealed tabke cards
      */
     private void validateTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
+        logger.info("Validating table cards selection by player " + playerId);
         if(playersPendingTableCardsSelection == 0) {
             throw new RuntimeException("Exception: All players already selected table cards");
         }
@@ -248,13 +255,14 @@ public class GameState {
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
         currentTurnPlayerId = playingQueue.getFirst();
-        logger.info("Players order: " + playingQueue.toString());
+        logger.info("Determined players order: " + playingQueue.toString());
     }
 
     /**
      * Starts the game cycle once all players have selected their revealed table cards
      */
     public void startCycle() {
+        logger.info("Starting game cycle");
         determinePlayersOrder();
         logGameState();
     }
@@ -268,26 +276,27 @@ public class GameState {
      */
     public void performPlayerAction(int playerId, PlayerActionInfo playerActionInfo, int moveId) {
         List<Integer> cardsToPut = playerActionInfo.getCardsToPut();
+        logger.info("Attempting action by player " + playerId + ". cards: " + cardIdsToDescriptions(cardsToPut));
         int victimId = playerActionInfo.getVictimId();
         ActionValidationResult validationResult = validateAction(playerId, cardsToPut, moveId);
         if(validationResult == ActionValidationResult.FOUL) {
             logger.info("Foul");
             return;
         }
-        logger.info("Performing action");
-        IPlayerState playerHand = players.get(playerId);
+        logger.info("Performing action by player " + playerId);
+        IPlayerState playerState = players.get(playerId);
         List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
         for (int cardId : cardsToPut) {
             cardStatuses[cardId] = CardStatus.PILE;
             cardsToRemoveFromPlayerHand.add(cards[cardId]);
             pile.add(0, cards[cardId]);
         }
-        playerHand.removeAll(cardsToRemoveFromPlayerHand);
+        playerState.removeAll(cardsToRemoveFromPlayerHand);
         updateSpecialEffects(victimId);
         dealPlayerCardsIfNeeded(playerId);
         if(validationResult == ActionValidationResult.TAKE) {
             for(IGameCard gameCard : pile) {
-                playerHand.getHandCards().add(gameCard);
+                playerState.getHandCards().add(gameCard);
                 cardStatuses[gameCard.getUniqueId()] = new CardStatus(playerId, HeldCardPosition.IN_HAND);
             }
             pile = new LinkedList<>();
@@ -307,7 +316,7 @@ public class GameState {
      * @param moveId The id of the move this action is relevant for
      */
     private ActionValidationResult validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
-        logger.info("Attempting action: cards " + cardIdsToDescriptions(cardsToPut) + " by player " + playerId);
+        logger.info("Validating action by player " + playerId);
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
