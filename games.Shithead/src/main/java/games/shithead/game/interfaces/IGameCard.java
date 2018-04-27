@@ -7,7 +7,7 @@ import games.shithead.deck.ICardFace;
 /**
  * This interface represents a game card.
  * Allows to classify a card by nullifying the cardFace field, in case the player receiving the message
- * isn't allowed to know the value of the card.
+ * isn't allowed to know the face of the card.
  */
 public interface IGameCard {
 

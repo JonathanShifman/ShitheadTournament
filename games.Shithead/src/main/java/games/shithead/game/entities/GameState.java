@@ -42,9 +42,9 @@ public class GameState {
     // The number of players who are yet to select their table cards
     private int playersPendingTableCardsSelection;
 
-    /* The id of the current move.
+    /* The id of the next move.
      * Used to prevent ambiguity in case a PlayerMoveMessage was delayed */
-    private int currentMoveId = 1;
+    private int nextMoveId = 1;
 
     // The id of the player who performed the last accepted action
     private int lastPerformedActionPlayer = -1;
@@ -59,7 +59,7 @@ public class GameState {
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
 
     // The id of the player whose turn it is to play next
-    private int currentTurnPlayerId = -1;
+    private int nexttTurnPlayerId = -1;
 
 
     // The number of hand cards a player should have at the start of the game
@@ -88,24 +88,24 @@ public class GameState {
         return players.size();
     }
 
-    public int getCurrentPlayerTurn() {
-        return currentTurnPlayerId;
+    public int getNextPlayerTurn() {
+        return nexttTurnPlayerId;
     }
 
     public List<IGameCard> getPile() {
         return pile;
     }
 
-    public int getCurrentMoveId() {
-        return currentMoveId;
+    public int getNextMoveId() {
+        return nextMoveId;
     }
 
     public int getNumOfVisibleTableCardsAtGameStart() {
         return HAND_CARDS_AT_GAME_START;
     }
 
-    private void incrementCurrentMoveId() {
-        currentMoveId++;
+    private void incrementNextMoveId() {
+        nextMoveId++;
     }
 
     /**
@@ -254,7 +254,7 @@ public class GameState {
         List<Integer> playerIds = new ArrayList<>(players.keySet());
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
-        currentTurnPlayerId = playingQueue.getFirst();
+        nexttTurnPlayerId = playingQueue.getFirst();
         logger.info("Determined players order: " + playingQueue.toString());
     }
 
@@ -304,7 +304,7 @@ public class GameState {
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
         checkIfPlayerWon();
-        incrementCurrentMoveId();
+        incrementNextMoveId();
         logGameState();
     }
 
@@ -320,8 +320,8 @@ public class GameState {
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
-        if(moveId != currentMoveId) {
-            throw new RuntimeException("Exception: Move didn't have current move id");
+        if(moveId != nextMoveId) {
+            throw new RuntimeException("Exception: Move didn't have the correct move id");
         }
         List<IGameCard> playedCards;
         try {
@@ -334,7 +334,7 @@ public class GameState {
         }
 
         IPlayerState playerState = players.get(playerId);
-        return playerId == currentTurnPlayerId ?
+        return playerId == nexttTurnPlayerId ?
             ActionValidatorForGame.validateAction(playerState, playedCards, pile) :
             ActionValidatorForGame.validateInterruption(playerState, playedCards, pile);
     }
@@ -398,7 +398,7 @@ public class GameState {
     }
 
     /**
-     * Checks if the latest move completed a set of 4 cards with the same value
+     * Checks if the latest move completed a set of 4 cards with the same rank
      * at the top of the pile.
      * @return True is a set of 4 has been completed, false otherwise.
      */
@@ -407,14 +407,14 @@ public class GameState {
     }
 
     private List<IGameCard> getTopPileSequence() {
-        int valueToCompareTo = -1;
+        int rankToCompareTo = -1;
         List<IGameCard> topPileSequence = new LinkedList<>();
         for(IGameCard gameCard : pile) {
-            if(valueToCompareTo < 0) {
-                valueToCompareTo = gameCard.getCardFace().get().getRank();
+            if(rankToCompareTo < 0) {
+                rankToCompareTo = gameCard.getCardFace().get().getRank();
                 topPileSequence.add(gameCard);
             }
-            else if(valueToCompareTo != gameCard.getCardFace().get().getRank()) {
+            else if(rankToCompareTo != gameCard.getCardFace().get().getRank()) {
                 break;
             }
             else {
@@ -441,8 +441,8 @@ public class GameState {
      */
     private void updatePlayerTurn() {
         if(nextTurnPolicy == NextTurnPolicy.STEAL) {
-            currentTurnPlayerId = lastPerformedActionPlayer;
-            advancePlayingQueue(currentTurnPlayerId);
+            nexttTurnPlayerId = lastPerformedActionPlayer;
+            advancePlayingQueue(nexttTurnPlayerId);
         }
         else if(nextTurnPolicy == NextTurnPolicy.SKIP) {
             // FIXME
@@ -459,7 +459,7 @@ public class GameState {
         if(deck.isEmpty() && players.get(lastPerformedActionPlayer).getNumOfCardsRemaining() == 0) {
             logger.info("Player " + lastPerformedActionPlayer + " won");
             playingQueue.remove(lastPerformedActionPlayer);
-            currentTurnPlayerId = playingQueue.getFirst();
+            nexttTurnPlayerId = playingQueue.getFirst();
         }
     }
 
@@ -468,15 +468,15 @@ public class GameState {
      */
     private void advancePlayingQueue() {
         playingQueue.addLast(playingQueue.poll());
-        currentTurnPlayerId = playingQueue.getFirst();
+        nexttTurnPlayerId = playingQueue.getFirst();
     }
 
     /**
      * Advances the playing queue to the selected player
-     * @param currentTurnPlayerId The id of the player to advance the queue to
+     * @param nextTurnPlayerId The id of the player to advance the queue to
      */
-    private void advancePlayingQueue(int currentTurnPlayerId) {
-        while (playingQueue.getFirst() != currentTurnPlayerId) {
+    private void advancePlayingQueue(int nextTurnPlayerId) {
+        while (playingQueue.getFirst() != nextTurnPlayerId) {
             playingQueue.addLast(playingQueue.poll());
         }
     }
@@ -508,12 +508,10 @@ public class GameState {
         return playingQueue.size() == 1;
     }
 
-
-
     /**
-     * Converts a list of cards to a string made of their values. Used for logging.
+     * Converts a list of card ids to a string made of the cards' descriptions. Used for logging.
      * @param cardIds The list of card ids to analyze
-     * @return A String representing the sequence of the given cards' values
+     * @return A String representing the given cards' descriptions
      */
     private String cardIdsToDescriptions(List<Integer> cardIds) {
         return LoggingUtils.cardsToDescriptions(cardIds.stream()
@@ -523,8 +521,8 @@ public class GameState {
 
     private void logGameState() {
         logger.info("Current Game State: ");
-        logger.info("Current move id: " + currentMoveId);
-        logger.info("Current player turn id: " + currentTurnPlayerId);
+        logger.info("Next move id: " + nextMoveId);
+        logger.info("Next player turn id: " + nexttTurnPlayerId);
         players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
         logger.info("Pile: " + LoggingUtils.cardsToDescriptions(pile));
     }

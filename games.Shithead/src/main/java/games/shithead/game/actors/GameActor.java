@@ -161,7 +161,7 @@ public class GameActor extends AbstractActor {
             }
         });
         SnapshotMessage message = new SnapshotMessage(playerStates, gameState.getPile(),
-                gameState.getCurrentMoveId(), gameState.getCurrentPlayerTurn());
+                gameState.getNextMoveId(), gameState.getNextPlayerTurn());
         playerIdsToInfos.get(playerId).getPlayerRef().tell(message, self());
     }
 

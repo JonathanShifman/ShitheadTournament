@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 public class LoggingUtils {
 
     /**
-     * Converts a list of cards to a string made of their values. Used for logging.
+     * Converts a list of cards to a string made of their descriptions. Used for logging.
      * @param cards The list of cards to analyze
-     * @return A String representing the sequence of the given cards' values
+     * @return A String representing the given cards' descriptions
      */
     public static String cardsToDescriptions(List<IGameCard> cards) {
         String cardDescriptions = cards.stream()

@@ -62,16 +62,16 @@ public class ActionValidationUtils {
     }
 
     /**
-     * Checks if the given value is always accepted, regardless of the contents of the pile.
-     * @param playedValue The value to check
-     * @return True if the value is always accepted, false otherwise
+     * Checks if the given rank is always accepted, regardless of the contents of the pile.
+     * @param playedRank The rank to check
+     * @return True if the rank is always accepted, false otherwise
      */
-    public static boolean valueIsAlwaysAccepted(int playedValue) {
+    public static boolean rankIsAlwaysAccepted(int playedRank) {
         // FIXME
-        return playedValue == 2 ||
-                playedValue == 3 ||
-                playedValue == 10 ||
-                playedValue == 15;
+        return playedRank == 2 ||
+                playedRank == 3 ||
+                playedRank == 10 ||
+                playedRank == 15;
     }
 
     /**

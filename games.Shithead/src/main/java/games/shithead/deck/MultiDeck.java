@@ -4,12 +4,12 @@ import java.util.*;
 
 public class MultiDeck implements IMultiDeck {
 
-	private static final int MIN_REGULAR_VALUE = 2;
-	private static final int MAX_REGULAR_VALUE = 14;
-	private static final int NUMBER_OF_KINDS = 4;
-	private static final int JOKER_VALUE = 15;
+	private static final int MIN_REGULAR_RANK = 2;
+	private static final int MAX_REGULAR_RANK = 14;
+	private static final int NUMBER_OF_SUITS = 4;
+	private static final int JOKER_RANK = 15;
 	private static final int NUMBER_OF_JOKERS = 2;
-	private static final int CARDS_PER_DECK = (MAX_REGULAR_VALUE - MIN_REGULAR_VALUE + 1) * NUMBER_OF_KINDS +
+	private static final int CARDS_PER_DECK = (MAX_REGULAR_RANK - MIN_REGULAR_RANK + 1) * NUMBER_OF_SUITS +
 			NUMBER_OF_JOKERS;
 	
 	private int numberOfDecks;
@@ -47,16 +47,16 @@ public class MultiDeck implements IMultiDeck {
 		int currentIndex = deckIndex * CARDS_PER_DECK;
 
 		// Insert all non joker cards
-		for(int currentValue = MIN_REGULAR_VALUE; currentValue <= MAX_REGULAR_VALUE; currentValue++) {
-			for(int currentKind = 1; currentKind <= NUMBER_OF_KINDS; currentKind++) {
-				cardFaces.add(currentIndex, new CardFace(currentValue, currentKind));
+		for(int currentRank = MIN_REGULAR_RANK; currentRank <= MAX_REGULAR_RANK; currentRank++) {
+			for(int currentSuit = 1; currentSuit <= NUMBER_OF_SUITS; currentSuit++) {
+				cardFaces.add(currentIndex, new CardFace(currentRank, currentSuit));
 				currentIndex++;
 			}
 		}
 
 		// Insert jokers
-		for(int currentKind = 1; currentKind <= NUMBER_OF_JOKERS; currentKind++) {
-			cardFaces.add(currentIndex, new CardFace(JOKER_VALUE, currentKind));
+		for(int currentSuit = 1; currentSuit <= NUMBER_OF_JOKERS; currentSuit++) {
+			cardFaces.add(currentIndex, new CardFace(JOKER_RANK, currentSuit));
 			currentIndex++;
 		}
 	}

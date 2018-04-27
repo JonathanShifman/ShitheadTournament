@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
 import games.shithead.game.actors.ShitheadActorSystem;
-import games.shithead.game.entities.GameState;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
@@ -15,7 +14,6 @@ import games.shithead.messages.*;
 import games.shithead.messages.PlayerMoveMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.appender.FileAppender;
 
 /**
  * A generic class for players to extend.
@@ -49,11 +47,11 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Updated before each time a player is supposed to take an action. */
 	protected List<IGameCard> pile;
 
-	// The id of the current move. Used to prevent ambiguity in case an action message arrives too late.
-	protected int currentMoveId;
+	// The id of the next move. Used to prevent ambiguity in case an action message arrives too late.
+	protected int nextMoveId;
 
 	// The id of the player whose turn it is to play nwo.
-	protected int currentPlayerTurn;
+	protected int nexttPlayerTurn;
 
     public PlayerActor(){
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
@@ -89,8 +87,8 @@ public abstract class PlayerActor extends AbstractActor {
 		hiddenTableCards = playerStates.get(playerId).getHiddenTableCards();
 		pendingSelectionCards = playerStates.get(playerId).getPendingSelectionCards();
 
-		currentMoveId = snapshotMessage.getNextMoveId();
-		currentPlayerTurn = snapshotMessage.getNextPlayerTurnId();
+		nextMoveId = snapshotMessage.getNextMoveId();
+		nexttPlayerTurn = snapshotMessage.getNextPlayerTurnId();
     	pile = snapshotMessage.getPile();
 	}
 
@@ -137,7 +135,7 @@ public abstract class PlayerActor extends AbstractActor {
 	 */
 	private void takeAction(SnapshotMessage message) {
 		updateInfo(message);
-		if(currentPlayerTurn == playerId) {
+		if(nexttPlayerTurn == playerId) {
 			logger.info("Player " + playerId + " is making a move");
 			logger.info("Player " + playerId + " state: " + playerStates.get(playerId).toString());
 			logger.info("Pile: " + LoggingUtils.cardsToDescriptions(pile));
@@ -152,7 +150,7 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Sends the move to the game actor, as chosen by the implementing player.
 	 */
     private void makeMove(){
-        sender().tell(new PlayerMoveMessage(getPlayerMove(), currentMoveId), self());
+        sender().tell(new PlayerMoveMessage(getPlayerMove(), nextMoveId), self());
     }
 
 	/**
@@ -175,7 +173,7 @@ public abstract class PlayerActor extends AbstractActor {
 				.map(card -> card.getUniqueId())
 				.collect(Collectors.toList());
 		PlayerActionInfo playerActionInfo = new PlayerActionInfo(interruptionCardIds);
-		sender().tell(new PlayerMoveMessage(playerActionInfo, currentMoveId), self());
+		sender().tell(new PlayerMoveMessage(playerActionInfo, nextMoveId), self());
 	}
 
 	/**

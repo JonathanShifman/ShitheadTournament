@@ -36,22 +36,22 @@ public class ActionValidatorForGame {
         if(!ActionValidationUtils.allCardsHaveTheSameRank(cardsToPlay)) {
             return ActionValidationResult.FOUL;
         }
-        int playedValue = cardsToPlay.get(0).getCardFace().get().getRank();
-        if(ActionValidationUtils.valueIsAlwaysAccepted(playedValue)) {
+        int playedRank = cardsToPlay.get(0).getCardFace().get().getRank();
+        if(ActionValidationUtils.rankIsAlwaysAccepted(playedRank)) {
             return ActionValidationResult.PROCEED;
         }
 
-        int effectiveTopCardValue = 0;
+        int effectiveTopCardRank = 0;
         for(IGameCard gameCard : pile) {
-            int currentCardValue = gameCard.getCardFace().get().getRank();
-            if(currentCardValue == 3) {
+            int currentCardRank = gameCard.getCardFace().get().getRank();
+            if(currentCardRank == 3) {
                 continue;
             }
-            effectiveTopCardValue = currentCardValue == 2 ? 0 : currentCardValue;
+            effectiveTopCardRank = currentCardRank == 2 ? 0 : currentCardRank;
             break;
         }
-        if(effectiveTopCardValue == 7 && playedValue <= effectiveTopCardValue ||
-                effectiveTopCardValue != 7 && playedValue >= effectiveTopCardValue) {
+        if(effectiveTopCardRank == 7 && playedRank <= effectiveTopCardRank ||
+                effectiveTopCardRank != 7 && playedRank >= effectiveTopCardRank) {
             return ActionValidationResult.PROCEED;
         }
         else {
@@ -72,10 +72,10 @@ public class ActionValidatorForGame {
         if(cardsToInterrupt.isEmpty() || !ActionValidationUtils.allCardsHaveTheSameRank(cardsToInterrupt)) {
             return ActionValidationResult.FOUL;
         }
-        int interruptValue = cardsToInterrupt.get(0).getCardFace().get().getRank();
+        int interruptRank = cardsToInterrupt.get(0).getCardFace().get().getRank();
         int count = 0;
         for(IGameCard gameCard : pile) {
-            if(gameCard.getCardFace().get().getRank() == interruptValue) {
+            if(gameCard.getCardFace().get().getRank() == interruptRank) {
                 count++;
             }
             else {
