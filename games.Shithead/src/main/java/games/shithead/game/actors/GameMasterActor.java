@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class GameMasterActor extends AbstractActor {
 
-    static Logger logger = LogManager.getLogger(GameMasterActor.class);
+    static Logger logger = LogManager.getLogger("Game");
 
     @Override
     public Receive createReceive() {

@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import games.shithead.game.validation.ActionValidationResult;
-import games.shithead.game.validation.ActionValidatorForGame;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.validation.ActionValidatorForPlayer;
@@ -25,16 +24,16 @@ public class RandomPlayerActor extends PlayerActor {
 	 * Choose table cards at random. (Surprising, huh?)
 	 */
 	@Override
-	protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose) {
-		int remainingNumberOfCardsToChoose = numOfRevealedTableCardsToChoose;
-		List<Integer> chosenRevealedTableCardIds = new ArrayList<Integer>();
+	protected List<Integer> chooseVisibleTableCards(List<IGameCard> cards, int numOfVisibleTableCardsToChoose) {
+		int remainingNumberOfCardsToChoose = numOfVisibleTableCardsToChoose;
+		List<Integer> chosenVisibleTableCardIds = new ArrayList<Integer>();
 		for(IGameCard card : cards) {
 			if(remainingNumberOfCardsToChoose > 0) {
-				chosenRevealedTableCardIds.add(card.getUniqueId());
+				chosenVisibleTableCardIds.add(card.getUniqueId());
 				remainingNumberOfCardsToChoose--;
 			}
 		}
-		return chosenRevealedTableCardIds;
+		return chosenVisibleTableCardIds;
 	}
 
 	/**
@@ -64,7 +63,7 @@ public class RandomPlayerActor extends PlayerActor {
 		for(IGameCard card : cards) {
 			List<IGameCard> cardsToPlay = new LinkedList<>();
 			cardsToPlay.add(card);
-			if(ActionValidatorForPlayer.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
+			if(ActionValidatorForPlayer.validateAction(playerStates.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
 				return card.getUniqueId();
 			}
 		}

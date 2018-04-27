@@ -6,11 +6,16 @@ import java.util.stream.Collectors;
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
 import games.shithead.game.actors.ShitheadActorSystem;
+import games.shithead.game.entities.GameState;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.game.logging.LoggingUtils;
 import games.shithead.messages.*;
 import games.shithead.messages.PlayerMoveMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.FileAppender;
 
 /**
  * A generic class for players to extend.
@@ -20,18 +25,20 @@ import games.shithead.messages.PlayerMoveMessage;
  */
 public abstract class PlayerActor extends AbstractActor {
 
+	protected static Logger logger = LogManager.getLogger("Player");
+
 	// The player's id
     protected int playerId = -1;
 
-    /* Used to store mappings between each player's id to their hand.
+    /* Used to store mappings between each player's id to their state.
      * This map contains public info only, that is to say the cards
      * that each players holds in his hand have their card faces nullified.
      * Updated before each time a player is supposed to take an action. */
-    protected Map<Integer, IPlayerState> playerHands = new HashMap<>();
+    protected Map<Integer, IPlayerState> playerStates = new HashMap<>();
 
-    /* These fields hold the card that are in the player's possession
+    /* These fields hold the cards that are in the player's possession
      * at this time. This info is private and is only made available to each
-     * player about his own cards.
+     * player about their own cards.
      * Updated before each time a player is supposed to take an action. */
 	protected List<IGameCard> handCards;
 	protected List<IGameCard> visibleTableCards;
@@ -45,6 +52,7 @@ public abstract class PlayerActor extends AbstractActor {
 	// The id of the current move. Used to prevent ambiguity in case an action message arrives too late.
 	protected int currentMoveId;
 
+	// The id of the player whose turn it is to play nwo.
 	protected int currentPlayerTurn;
 
     public PlayerActor(){
@@ -75,11 +83,11 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Updates the game info using the InfoProvider class
 	 */
     protected void updateInfo(SnapshotMessage snapshotMessage) {
-		playerHands = snapshotMessage.getPlayerHands();
-		handCards = playerHands.get(playerId).getHandCards();
-		visibleTableCards = playerHands.get(playerId).getVisibleTableCards();
-		hiddenTableCards = playerHands.get(playerId).getHiddenTableCards();
-		pendingSelectionCards = playerHands.get(playerId).getPendingSelectionCards();
+		playerStates = snapshotMessage.getPlayerStates();
+		handCards = playerStates.get(playerId).getHandCards();
+		visibleTableCards = playerStates.get(playerId).getVisibleTableCards();
+		hiddenTableCards = playerStates.get(playerId).getHiddenTableCards();
+		pendingSelectionCards = playerStates.get(playerId).getPendingSelectionCards();
 
 		currentMoveId = snapshotMessage.getNextMoveId();
 		currentPlayerTurn = snapshotMessage.getNextPlayerTurnId();
@@ -91,29 +99,29 @@ public abstract class PlayerActor extends AbstractActor {
 	 * @param message A message containing the received player id
 	 */
 	private void receiveId(PlayerIdMessage message) {
-    	this.playerId = message.getPlayerId();
+		this.playerId = message.getPlayerId();
     }
 
 	/**
 	 * Handler method for ChooseVisibleTableCardsMessage.
-	 * Updates the game info, and sends back the revealed table card ids, as chosen
+	 * Updates the game info, and sends back the visible table card ids, as chosen
 	 * by the implementing player.
 	 * @param message
 	 */
 	private void receiveChooseTableCardsMessage(ChooseVisibleTableCardsMessage message) {
-        List<Integer> chosenRevealedTableCardIds = chooseRevealedTableCards(
+        List<Integer> chosenVisibleTableCardIds = chooseVisibleTableCards(
         		message.getCardsPendingSelection(), message.getNumOfVisibleTableCardsToBeChosen());
-        sender().tell(new TableCardsSelectionMessage(chosenRevealedTableCardIds), self());
+        sender().tell(new TableCardsSelectionMessage(chosenVisibleTableCardIds), self());
 	}
 
 	/**
-	 * This method effectively chooses the revealed table cards.
+	 * This method effectively chooses the visible table cards.
 	 * To be implemented by each player according to their strategy.
 	 * @param cards A list of the cards to choose from
-	 * @param numOfRevealedTableCardsToChoose The number of revealed table cards to choose from the list
-	 * @return The ids of the chosen revealed table cards
+	 * @param numOfVisibleTableCardsToChoose The number of visible table cards to choose from the list
+	 * @return The ids of the chosen visible table cards
 	 */
-	protected abstract List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose);
+	protected abstract List<Integer> chooseVisibleTableCards(List<IGameCard> cards, int numOfVisibleTableCardsToChoose);
 
 	/**
 	 * Handler method for SnapshotMessage.
@@ -130,6 +138,9 @@ public abstract class PlayerActor extends AbstractActor {
 	private void takeAction(SnapshotMessage message) {
 		updateInfo(message);
 		if(currentPlayerTurn == playerId) {
+			logger.info("Player " + playerId + " is making a move");
+			logger.info("Player " + playerId + " state: " + playerStates.get(playerId).toString());
+			logger.info("Pile: " + LoggingUtils.cardsToDescriptions(pile));
 			makeMove();
 		}
 		else {

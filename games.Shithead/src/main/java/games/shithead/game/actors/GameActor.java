@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class GameActor extends AbstractActor {
 
-    static Logger logger = LogManager.getLogger(GameActor.class);
+    static Logger logger = LogManager.getLogger("Game");
 
     // An allocator used to allocate incrementing ids to players
     int playerIdAllocator;
@@ -72,7 +72,7 @@ public class GameActor extends AbstractActor {
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);
-        logger.info("Sending PlayerIdMessage with playerId=" + playerId);
+        logger.info("Sending PlayerIdMessage with playerId: " + playerId);
         getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
@@ -110,7 +110,7 @@ public class GameActor extends AbstractActor {
      */
     private void sendChooseVisibleTableCardsMessage(Integer playerId) {
         playerIdsToInfos.get(playerId).getPlayerRef().tell(new ChooseVisibleTableCardsMessage(
-                gameState.getPrivateHand(playerId).getPendingSelectionCards(), gameState.getNumOfVisibleTableCardsAtGameStart()), self());
+                gameState.getPrivateState(playerId).getPendingSelectionCards(), gameState.getNumOfVisibleTableCardsAtGameStart()), self());
     }
 
     /**
@@ -151,16 +151,16 @@ public class GameActor extends AbstractActor {
      * @param playerId The id of the player to send the message to
      */
     private void sendSnapshotMessage(Integer playerId) {
-        Map<Integer, IPlayerState> playerHands = new HashMap<>();
+        Map<Integer, IPlayerState> playerStates = new HashMap<>();
         playerIdsToInfos.keySet().forEach(id -> {
             if(id == playerId) {
-                playerHands.put(id, gameState.getPrivateHand(id));
+                playerStates.put(id, gameState.getPrivateState(id));
             }
             else {
-                playerHands.put(id, gameState.getPublicHand(id));
+                playerStates.put(id, gameState.getPublicState(id));
             }
         });
-        SnapshotMessage message = new SnapshotMessage(playerHands, gameState.getPile(),
+        SnapshotMessage message = new SnapshotMessage(playerStates, gameState.getPile(),
                 gameState.getCurrentMoveId(), gameState.getCurrentPlayerTurn());
         playerIdsToInfos.get(playerId).getPlayerRef().tell(message, self());
     }
@@ -173,7 +173,7 @@ public class GameActor extends AbstractActor {
      * @throws InterruptedException
      */
     private void handleAttemptedAction(PlayerMoveMessage message) throws InterruptedException {
-        logger.info("Received PlayerMoveMessage");
+        logger.info("Received PlayerMoveMessage with move id: " + message.getMoveId());
         if(!playerExists(getSender())) {
             logger.info("Unregistered Player, ignoring message");
             return;

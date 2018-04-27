@@ -1,7 +1,7 @@
 package games.shithead.players;
 
+import games.shithead.game.logging.LoggingUtils;
 import games.shithead.game.validation.ActionValidationResult;
-import games.shithead.game.validation.ActionValidatorForGame;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.validation.ActionValidatorForPlayer;
@@ -40,20 +40,20 @@ public class SimplePlayerActor extends PlayerActor {
 
     /**
      * Simple player strategy:
-     * Choose the strongest cards (as determined by the comparator) to be the revealed table cards.
+     * Choose the strongest cards (as determined by the comparator) to be the visible table cards.
      */
     @Override
-    protected List<Integer> chooseRevealedTableCards(List<IGameCard> cards, int numOfRevealedTableCardsToChoose) {
-        cards.sort(new GameCardValueComparator());
-        int remainingNumberOfCardsToChoose = numOfRevealedTableCardsToChoose;
-        List<Integer> chosenRevealedTableCardIds = new ArrayList<Integer>();
+    protected List<Integer> chooseVisibleTableCards(List<IGameCard> cards, int numOfVisibleTableCardsToChoose) {
+        cards.sort(new GameCardValueComparator().reversed());
+        int remainingNumberOfCardsToChoose = numOfVisibleTableCardsToChoose;
+        List<Integer> chosenVisibleTableCardIds = new ArrayList<Integer>();
         for(IGameCard card : cards) {
             if(remainingNumberOfCardsToChoose > 0) {
-                chosenRevealedTableCardIds.add(card.getUniqueId());
+                chosenVisibleTableCardIds.add(card.getUniqueId());
                 remainingNumberOfCardsToChoose--;
             }
         }
-        return chosenRevealedTableCardIds;
+        return chosenVisibleTableCardIds;
     }
 
     /**
@@ -90,29 +90,29 @@ public class SimplePlayerActor extends PlayerActor {
     }
 
     private List<IGameCard> getWeakestCardsWithBestResult(List<IGameCard> cards) {
-            cards.sort(new GameCardValueComparator());
-            List<IGameCard> weakestCardsWithBestResult = new LinkedList<>();
-            int chosenValue = -1;
-            for(IGameCard gameCard : cards) {
-                if(chosenValue > 0) {
-                    if(gameCard.getCardFace().get().getRank() == chosenValue) {
-                        weakestCardsWithBestResult.add(gameCard);
-                        continue;
-                    }
-                    else {
-                        break;
-                    }
+        cards.sort(new GameCardValueComparator());
+        List<IGameCard> weakestCardsWithBestResult = new LinkedList<>();
+        int chosenValue = -1;
+        for(IGameCard gameCard : cards) {
+            if(chosenValue > 0) {
+                if(gameCard.getCardFace().get().getRank() == chosenValue) {
+                    weakestCardsWithBestResult.add(gameCard);
+                    continue;
                 }
                 else {
-                    List<IGameCard> cardsToPlay = new LinkedList<>();
-                    cardsToPlay.add(gameCard);
-                    if(ActionValidatorForPlayer.validateAction(playerHands.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
-                        weakestCardsWithBestResult.add(gameCard);
-                        chosenValue = gameCard.getCardFace().get().getRank();
-                    }
+                    break;
                 }
             }
-            return weakestCardsWithBestResult;
+            else {
+                List<IGameCard> cardsToPlay = new LinkedList<>();
+                cardsToPlay.add(gameCard);
+                if(ActionValidatorForPlayer.validateAction(playerStates.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
+                    weakestCardsWithBestResult.add(gameCard);
+                    chosenValue = gameCard.getCardFace().get().getRank();
+                }
+            }
+        }
+        return weakestCardsWithBestResult;
     }
 
     /**

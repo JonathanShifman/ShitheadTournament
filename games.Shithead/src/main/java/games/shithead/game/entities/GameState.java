@@ -1,11 +1,11 @@
 package games.shithead.game.entities;
 
-import games.shithead.deck.CardDescriptionGenerator;
 import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.game.logging.LoggingUtils;
 import games.shithead.game.validation.ActionValidationResult;
 import games.shithead.game.validation.ActionValidatorForGame;
 import org.apache.logging.log4j.LogManager;
@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 
 public class GameState {
 
-    static Logger logger = LogManager.getLogger(GameState.class);
+    static Logger logger = LogManager.getLogger("Game");
 
     private Random rnd = new Random();
 
     // True if the time for registration is over, and the participants have been determined
     private boolean isGameStarted;
 
-    // Maps player ids to their hands (the cards in their possession)
+    // Maps player ids to their states (the cards in their possession)
     private Map<Integer, IPlayerState> players;
 
     // The multi deck that has been allocated for the game
@@ -65,8 +65,8 @@ public class GameState {
     // The number of hand cards a player should have at the start of the game
     private final int HAND_CARDS_AT_GAME_START = 3;
 
-    // The number of revealed table cards a player should have at the start of the game
-    private final int REVEALED_TABLE_CARDS_AT_GAME_START = 3;
+    // The number of visible table cards a player should have at the start of the game
+    private final int VISIBLE_TABLE_CARDS_AT_GAME_START = 3;
 
     // The number of hidden table cards a player should have at the start of the game
     private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 1;
@@ -114,8 +114,8 @@ public class GameState {
      */
     public void addPlayer(int playerId) {
         logger.info("Adding player with player id: " + playerId);
-        PlayerState playerHand = new PlayerState();
-        players.put(playerId, playerHand);
+        IPlayerState playerState = new PlayerState();
+        players.put(playerId, playerState);
     }
 
     /**
@@ -153,11 +153,11 @@ public class GameState {
 
     /**
      * Deals the players their initial cards, including cards that are pending
-     * players' selections (between being hand cards or revealed table cards)
+     * players' selections (between being hand cards or visible table cards)
      */
     public void dealInitialCards() {
         logger.info("Dealing initial cards");
-        int numOfCardsToDeal = HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START +
+        int numOfCardsToDeal = HAND_CARDS_AT_GAME_START + VISIBLE_TABLE_CARDS_AT_GAME_START +
                 HIDDEN_TABLE_CARDS_AT_GAME_START;
 
         players.forEach((playerId, playerState) -> {
@@ -183,34 +183,34 @@ public class GameState {
     }
 
     /**
-     * Performs a selection of revealed table cards by a player.
+     * Performs a selection of visible table cards by a player.
      * The non-selected cards will become the player's hand cards.
      * @param playerId The id of the player making the selection
-     * @param selectedCardsIds The ids of the selected revealed table cards
+     * @param selectedCardsIds The ids of the selected visible table cards
      */
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
         logger.info("Attempting table cards selection by player " + playerId);
         validateTableCardsSelection(playerId, selectedCardsIds);
         logger.info("Performing table cards selection by player " + playerId);
-        IPlayerState playerHand = players.get(playerId);
+        IPlayerState playerState = players.get(playerId);
         for(int selectedCardId : selectedCardsIds) {
             cardStatuses[selectedCardId].setHeldCardPosition(HeldCardPosition.TABLE_VISIBLE);
-            playerHand.getVisibleTableCards().add(cards[selectedCardId]);
+            playerState.getVisibleTableCards().add(cards[selectedCardId]);
         }
-        for(IGameCard gameCard : playerHand.getPendingSelectionCards()) {
+        for(IGameCard gameCard : playerState.getPendingSelectionCards()) {
             if(cardStatuses[gameCard.getUniqueId()].getHeldCardPosition() == HeldCardPosition.PENDING_SELECTION) {
                 cardStatuses[gameCard.getUniqueId()].setHeldCardPosition(HeldCardPosition.IN_HAND);
-                playerHand.getHandCards().add(gameCard);
+                playerState.getHandCards().add(gameCard);
             }
         }
-        playerHand.getPendingSelectionCards().clear();
+        playerState.getPendingSelectionCards().clear();
         playersPendingTableCardsSelection--;
     }
 
     /**
      * Validates an attempted table cards selection. Throws an exception in case of an invalid selection.
      * @param playerId The id of the player attempting the selection
-     * @param selectedCardsIds The chosen revealed tabke cards
+     * @param selectedCardsIds The chosen visible tabke cards
      */
     private void validateTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
         logger.info("Validating table cards selection by player " + playerId);
@@ -220,12 +220,12 @@ public class GameState {
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
-        if(selectedCardsIds.size() != REVEALED_TABLE_CARDS_AT_GAME_START) {
-            throw new RuntimeException("Exception: Expected selection of " + REVEALED_TABLE_CARDS_AT_GAME_START +
-                    " revealed table cards but received " + selectedCardsIds.size());
+        if(selectedCardsIds.size() != VISIBLE_TABLE_CARDS_AT_GAME_START) {
+            throw new RuntimeException("Exception: Expected selection of " + VISIBLE_TABLE_CARDS_AT_GAME_START +
+                    " visible table cards but received " + selectedCardsIds.size());
         }
-        IPlayerState playerHand = players.get(playerId);
-        if(playerHand.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + REVEALED_TABLE_CARDS_AT_GAME_START) {
+        IPlayerState playerState = players.get(playerId);
+        if(playerState.getPendingSelectionCards().size() != HAND_CARDS_AT_GAME_START + VISIBLE_TABLE_CARDS_AT_GAME_START) {
             throw new RuntimeException("Exception: Player has already made table cards selection");
         }
         for(int selectedCardId : selectedCardsIds) {
@@ -240,7 +240,7 @@ public class GameState {
     }
 
     /**
-     * Checks if all players have selected their revealed table cards
+     * Checks if all players have selected their visible table cards
      * @return True if all players have made their selection, false otherwise
      */
     public boolean allPlayersSelectedTableCards() {
@@ -259,7 +259,7 @@ public class GameState {
     }
 
     /**
-     * Starts the game cycle once all players have selected their revealed table cards
+     * Starts the game cycle once all players have selected their visible table cards
      */
     public void startCycle() {
         logger.info("Starting game cycle");
@@ -285,13 +285,13 @@ public class GameState {
         }
         logger.info("Performing action by player " + playerId);
         IPlayerState playerState = players.get(playerId);
-        List<IGameCard> cardsToRemoveFromPlayerHand = new LinkedList<>();
+        List<IGameCard> cardsToRemoveFromPlayerState = new LinkedList<>();
         for (int cardId : cardsToPut) {
             cardStatuses[cardId] = CardStatus.PILE;
-            cardsToRemoveFromPlayerHand.add(cards[cardId]);
+            cardsToRemoveFromPlayerState.add(cards[cardId]);
             pile.add(0, cards[cardId]);
         }
-        playerState.removeAll(cardsToRemoveFromPlayerHand);
+        playerState.removeAll(cardsToRemoveFromPlayerState);
         updateSpecialEffects(victimId);
         dealPlayerCardsIfNeeded(playerId);
         if(validationResult == ActionValidationResult.TAKE) {
@@ -333,10 +333,10 @@ public class GameState {
             throw new RuntimeException("Exception: One or more of the card ids didn't exist");
         }
 
-        IPlayerState playerHand = players.get(playerId);
+        IPlayerState playerState = players.get(playerId);
         return playerId == currentTurnPlayerId ?
-            ActionValidatorForGame.validateAction(playerHand, playedCards, pile) :
-            ActionValidatorForGame.validateInterruption(playerHand, playedCards, pile);
+            ActionValidatorForGame.validateAction(playerState, playedCards, pile) :
+            ActionValidatorForGame.validateInterruption(playerState, playedCards, pile);
     }
 
     /**
@@ -376,9 +376,9 @@ public class GameState {
                 }
                 burnCards(topJokersToBurn);
                 if(players.containsKey(victimId)) {
-                    IPlayerState playerHand = players.get(victimId);
+                    IPlayerState playerState = players.get(victimId);
                     for(IGameCard gameCard : remainingPileCards) {
-                        playerHand.getHandCards().add(gameCard);
+                        playerState.getHandCards().add(gameCard);
                         cardStatuses[gameCard.getUniqueId()].setHolderId(victimId);
                         cardStatuses[gameCard.getUniqueId()].setHeldCardPosition(HeldCardPosition.IN_HAND);
                     }
@@ -508,17 +508,7 @@ public class GameState {
         return playingQueue.size() == 1;
     }
 
-    /**
-     * Converts a list of cards to a string made of their values. Used for logging.
-     * @param cards The list of cards to analyze
-     * @return A String representing the sequence of the given cards' values
-     */
-    private String cardsToDescriptions(List<IGameCard> cards) {
-        String cardDescriptions = cards.stream()
-                .map(card -> CardDescriptionGenerator.cardFaceToDescription(card.getCardFace().get()))
-                .collect(Collectors.joining(", "));
-        return "[" + cardDescriptions + "]";
-    }
+
 
     /**
      * Converts a list of cards to a string made of their values. Used for logging.
@@ -526,30 +516,28 @@ public class GameState {
      * @return A String representing the sequence of the given cards' values
      */
     private String cardIdsToDescriptions(List<Integer> cardIds) {
-        return cardsToDescriptions(cardIds.stream()
+        return LoggingUtils.cardsToDescriptions(cardIds.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList()));
     }
 
     private void logGameState() {
-        String logMessage = "Current Game State: ";
-        logMessage +=  players.values().stream()
-                .map(playerHand -> "[" + playerHandToPlayerStateString(playerHand) + "]")
-                .collect(Collectors.joining(", "));
-        logger.info(logMessage);
+        logger.info("Current Game State: ");
+        logger.info("Current move id: " + currentMoveId);
+        logger.info("Current player turn id: " + currentTurnPlayerId);
+        players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
+        logger.info("Pile: " + LoggingUtils.cardsToDescriptions(pile));
     }
 
-    private String playerHandToPlayerStateString(IPlayerState playerHand) {
-        return playerHand.getCardListsMap().entrySet().stream()
-                .map(entry -> entry.getKey() + ": " + cardsToDescriptions(entry.getValue()))
-                .collect(Collectors.joining(", "));
+    private void logPlayerState(int playerId, IPlayerState playerState) {
+        logger.info("Player " + playerId + " state: " + playerState.toString());
     }
 
-    public IPlayerState getPublicHand(int playerId) {
+    public IPlayerState getPublicState(int playerId) {
         return players.get(playerId).publicClone();
     }
 
-    public IPlayerState getPrivateHand(int playerId) {
+    public IPlayerState getPrivateState(int playerId) {
         return players.get(playerId).privateClone();
     }
 }

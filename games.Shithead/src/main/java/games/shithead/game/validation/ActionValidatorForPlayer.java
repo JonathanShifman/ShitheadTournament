@@ -2,8 +2,9 @@ package games.shithead.game.validation;
 
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
-import games.shithead.game.validation.ActionValidationResult;
-import games.shithead.game.validation.ActionValidationUtils;
+import games.shithead.game.logging.LoggingUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -11,6 +12,9 @@ import java.util.List;
  * This class is used by the players to validate potential actions
  */
 public class ActionValidatorForPlayer {
+
+    private static Logger logger = LogManager.getLogger("Player");
+
     /**
      * Validates the attempted taking of the pile. Only legal if the pile is not empty.
      * @param pile The contents of the pile
@@ -40,8 +44,8 @@ public class ActionValidatorForPlayer {
         if(!ActionValidationUtils.allCardsHaveTheSameRank(cardsToPlay)) {
             return ActionValidationResult.FOUL;
         }
-        int playedValue = cardsToPlay.get(0).getCardFace().get().getRank();
-        if(ActionValidationUtils.valueIsAlwaysAccepted(playedValue)) {
+        int playedRank = cardsToPlay.get(0).getCardFace().get().getRank();
+        if(ActionValidationUtils.valueIsAlwaysAccepted(playedRank)) {
             return ActionValidationResult.PROCEED;
         }
 
@@ -54,8 +58,8 @@ public class ActionValidatorForPlayer {
             effectiveTopCardValue = currentCardValue == 2 ? 0 : currentCardValue;
             break;
         }
-        if(effectiveTopCardValue == 7 && playedValue <= effectiveTopCardValue ||
-                effectiveTopCardValue != 7 && playedValue >= effectiveTopCardValue) {
+        if(effectiveTopCardValue == 7 && playedRank <= effectiveTopCardValue ||
+                effectiveTopCardValue != 7 && playedRank >= effectiveTopCardValue) {
             return ActionValidationResult.PROCEED;
         }
         else {

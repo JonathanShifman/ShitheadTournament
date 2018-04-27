@@ -67,7 +67,11 @@ public class ActionValidationUtils {
      * @return True if the value is always accepted, false otherwise
      */
     public static boolean valueIsAlwaysAccepted(int playedValue) {
-        return Arrays.asList(new int[] {2, 3, 10, 15}).contains(playedValue);
+        // FIXME
+        return playedValue == 2 ||
+                playedValue == 3 ||
+                playedValue == 10 ||
+                playedValue == 15;
     }
 
     /**

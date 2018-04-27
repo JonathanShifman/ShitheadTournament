@@ -24,7 +24,16 @@ public class CardDescriptionGenerator {
     }};
 
     public static String cardFaceToDescription(ICardFace cardFace) {
-//        return cardRankToRepresentation(cardFace.getRank()) + cardSuitToRepresentation(cardFace.getSuit());
+        if(cardFace == null) {
+            return "?";
+        }
+        return cardRankToRepresentation(cardFace.getRank()) + cardSuitToRepresentation(cardFace.getSuit());
+    }
+
+    public static String cardFaceToMinimalDescription(ICardFace cardFace) {
+        if(cardFace == null) {
+            return "?";
+        }
         return cardRankToRepresentation(cardFace.getRank());
     }
 

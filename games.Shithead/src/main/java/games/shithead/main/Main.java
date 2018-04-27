@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class Main {
 
-	static Logger logger = LogManager.getLogger(Main.class);
+	static Logger logger = LogManager.getLogger("Game");
 
 	public static void main(String[] args) throws InterruptedException {
 		logger.info("Main class started");

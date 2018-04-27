@@ -2,6 +2,7 @@ package games.shithead.game.entities;
 
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.game.logging.LoggingUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ public class PlayerState implements IPlayerState {
 	private List<IGameCard> visibleTableCards;
 	private List<IGameCard> hiddenTableCards;
 	private List<IGameCard> pendingSelectionCards;
-	private Map<String, List<IGameCard>> cardListsMap;
+	private Map<String, List<IGameCard>> cardListsMap; // TODO: private?
 
 	public PlayerState() {
 		this.handCards = new ArrayList<>();
@@ -120,5 +121,12 @@ public class PlayerState implements IPlayerState {
 		return listToClone.stream()
 				.map(gameCard -> gameCard.revealedClone())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public String toString() {
+		return cardListsMap.entrySet().stream()
+				.map(entry -> entry.getKey() + ": " + LoggingUtils.cardsToDescriptions(entry.getValue()))
+				.collect(Collectors.joining(", "));
 	}
 }
