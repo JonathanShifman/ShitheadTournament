@@ -1,4 +1,3 @@
-SimpleShitheadPlayer
-SimpleShitheadPlayer
-SimpleShitheadPlayer
-SimpleShitheadPlayer
+SimplePlayerActor
+SimplePlayerActor
+SimplePlayerActor

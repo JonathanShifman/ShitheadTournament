@@ -10,6 +10,7 @@ import games.shithead.messages.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,7 +33,7 @@ public class GameActor extends AbstractActor {
     // The game state used to perform all game operations
     private GameState gameState;
 
-    public GameActor() {
+    public GameActor() throws IOException {
         playerIdAllocator = 1;
         gameState = new GameState();
         playerIdsToInfos = new HashMap<>();

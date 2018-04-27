@@ -10,7 +10,10 @@ import games.shithead.game.validation.ActionValidationResult;
 import games.shithead.game.validation.ActionValidatorForGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ini4j.Ini;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
@@ -63,17 +66,25 @@ public class GameState {
 
 
     // The number of hand cards a player should have at the start of the game
-    private final int HAND_CARDS_AT_GAME_START = 3;
+    private int HAND_CARDS_AT_GAME_START;
 
     // The number of visible table cards a player should have at the start of the game
-    private final int VISIBLE_TABLE_CARDS_AT_GAME_START = 3;
+    private int VISIBLE_TABLE_CARDS_AT_GAME_START;
 
     // The number of hidden table cards a player should have at the start of the game
-    private final int HIDDEN_TABLE_CARDS_AT_GAME_START = 1;
+    private int HIDDEN_TABLE_CARDS_AT_GAME_START;
 
-    public GameState() {
+    public GameState() throws IOException {
         isGameStarted = false;
         players = new HashMap<>();
+        initParameters();
+    }
+
+    private void initParameters() throws IOException {
+        Ini ini = new Ini(new File("games.Shithead\\config\\config.ini"));
+        HAND_CARDS_AT_GAME_START = Integer.parseInt(ini.get("deal", "hand_cards_at_game_start"));
+        VISIBLE_TABLE_CARDS_AT_GAME_START = Integer.parseInt(ini.get("deal", "visible_table_cards_at_game_start"));
+        HIDDEN_TABLE_CARDS_AT_GAME_START = Integer.parseInt(ini.get("deal", "hidden_table_cards_at_game_start"));
     }
 
     public boolean isGameStarted() {

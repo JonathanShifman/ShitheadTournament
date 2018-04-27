@@ -12,8 +12,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class GameMasterActor extends AbstractActor {
 
-    static Logger logger = LogManager.getLogger("Game");
-
     @Override
     public Receive createReceive() {
         return receiveBuilder()
@@ -24,11 +22,8 @@ public class GameMasterActor extends AbstractActor {
     }
 
     private void startGame(StartGameMessage startGame) {
-        logger.info("Received StartGameMessage");
-    	
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
-        logger.info("Sending StartGameMessage to GameActor");
         gameActor.tell(startGame, self());
     }
 
