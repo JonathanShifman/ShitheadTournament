@@ -189,10 +189,9 @@ public class SimplePlayerActor extends PlayerActor {
      * @return The id of the chosen victim.
      */
     private int chooseVictimId() {
-        List<Map.Entry<Integer, IPlayerState>> sortedEntries = playerStates.entrySet().stream()
+        return playerStates.entrySet().stream()
                 .filter(entry -> entry.getKey() != playerId)
                 .sorted(new VictimComparator())
-                .collect(Collectors.toList());
-        return sortedEntries.get(sortedEntries.size() - 1).getKey();
+                .findFirst().get().getKey();
     }
 }

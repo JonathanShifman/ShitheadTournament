@@ -295,7 +295,13 @@ public class GameState {
             logger.info("Foul");
             return;
         }
-        logger.info("Performing action by player " + playerId + ". cards: " + cardIdsToDescriptions(cardsToPut));
+
+        String logString = "Performing action by player " + playerId + ". cards: " + cardIdsToDescriptions(cardsToPut);
+        if(cardsToPut.size() > 0 && cards[cardsToPut.get(0)].getCardFace().get().getRank() == 15) {
+            logString += ", victim: " + playerActionInfo.getVictimId();
+        }
+        logger.info(logString);
+
         IPlayerState playerState = players.get(playerId);
         List<IGameCard> cardsToRemoveFromPlayerState = new LinkedList<>();
         for (int cardId : cardsToPut) {
@@ -304,6 +310,7 @@ public class GameState {
             pile.add(0, cards[cardId]);
         }
         playerState.removeAll(cardsToRemoveFromPlayerState);
+
         updateSpecialEffects(victimId);
         dealPlayerCardsIfNeeded(playerId);
         if(validationResult == ActionValidationResult.TAKE) {
