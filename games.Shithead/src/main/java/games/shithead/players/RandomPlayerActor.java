@@ -1,6 +1,7 @@
 package games.shithead.players;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,14 +25,12 @@ public class RandomPlayerActor extends PlayerActor {
 	 * Choose table cards at random. (Surprising, huh?)
 	 */
 	@Override
-	protected List<Integer> chooseVisibleTableCards(List<IGameCard> cards, int numOfVisibleTableCardsToChoose) {
-		int remainingNumberOfCardsToChoose = numOfVisibleTableCardsToChoose;
+	protected List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose) {
 		List<Integer> chosenVisibleTableCardIds = new ArrayList<Integer>();
-		for(IGameCard card : cards) {
-			if(remainingNumberOfCardsToChoose > 0) {
-				chosenVisibleTableCardIds.add(card.getUniqueId());
-				remainingNumberOfCardsToChoose--;
-			}
+		Iterator<IGameCard> iterator = cardsToChooseFrom.iterator();
+		while (numOfVisibleTableCardsToChoose-- > 0) {
+			IGameCard currentCard = iterator.next();
+			chosenVisibleTableCardIds.add(currentCard.getUniqueId());
 		}
 		return chosenVisibleTableCardIds;
 	}
@@ -75,7 +74,7 @@ public class RandomPlayerActor extends PlayerActor {
 	 * Random player makes no interruptions.
 	 */
 	@Override
-	protected List<IGameCard> getInterruptionCards() {
+	protected PlayerActionInfo getPlayerInterruption() {
 		// Nah
 		return null;
 	}

@@ -24,10 +24,10 @@ public class GameActor extends AbstractActor {
     // An allocator used to allocate incrementing ids to players
     int playerIdAllocator;
 
-    // A mapping from each player id to the appropriate IPlayerInfo
+    // A mapping from each player id to the corresponding IPlayerInfo
     private Map<Integer, IPlayerInfo> playerIdsToInfos;
 
-    // A mapping from each player ref to the appropriate IPlayerInfo
+    // A mapping from each player ref to the corresponding IPlayerInfo
     private Map<ActorRef, IPlayerInfo> playerRefsToInfos;
 
     // The game state used to perform all game operations
@@ -45,7 +45,7 @@ public class GameActor extends AbstractActor {
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
                 .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
-                .match(PlayerMoveMessage.class, this::handleAttemptedAction)
+                .match(PlayerActionMessage.class, this::handleAttemptedAction)
                 .matchAny(this::unhandled)
                 .build();
     }
@@ -80,9 +80,9 @@ public class GameActor extends AbstractActor {
     /**
      * Handler method for StartGameMessage.
      * Starts the game and asks all players to choose their visible table cards.
-     * @param startGameMessage The message that tells the game actor to start the game.
+     * @param message The message that tells the game actor to start the game.
      */
-    private void startGame(StartGameMessage startGameMessage) {
+    private void startGame(StartGameMessage message) {
         logger.info("Received StartGameMessage");
         // TODO: Make sure message came from Main
         if(gameState.isGameStarted()){
@@ -102,7 +102,7 @@ public class GameActor extends AbstractActor {
      */
     private void sendChooseVisibleTableCardsMessages() {
         logger.info("Sending choose visible table cards messages");
-        playerIdsToInfos.keySet().forEach(id -> sendChooseVisibleTableCardsMessage(id));
+        playerIdsToInfos.keySet().forEach(playerId -> sendChooseVisibleTableCardsMessage(playerId));
     }
 
     /**
@@ -167,14 +167,14 @@ public class GameActor extends AbstractActor {
     }
 
     /**
-     * Handler message for PlayerMoveMessage.
+     * Handler message for PlayerActionMessage.
      * Receives an attempted player action, performs it if valid, advances the playing queue and
      * sends the next snapshot message.
-     * @param message The move message
+     * @param message The action message
      * @throws InterruptedException
      */
-    private void handleAttemptedAction(PlayerMoveMessage message) throws InterruptedException {
-        logger.info("Received PlayerMoveMessage with move id: " + message.getMoveId());
+    private void handleAttemptedAction(PlayerActionMessage message) throws InterruptedException {
+        logger.info("Received PlayerActionMessage with move id: " + message.getMoveId());
         if(!playerExists(getSender())) {
             logger.info("Unregistered Player, ignoring message");
             return;
@@ -188,7 +188,6 @@ public class GameActor extends AbstractActor {
             return;
         }
         if(gameState.isGameOver()){
-            distributeMessage(new GameResult(-1, ""));
             logger.info("Game over");
             return;
         }

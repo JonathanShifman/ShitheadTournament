@@ -1,5 +1,6 @@
 package games.shithead.players;
 
+import games.shithead.game.interfaces.IPlayerState;
 import games.shithead.game.validation.ActionValidationResult;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.entities.PlayerActionInfo;
@@ -20,7 +21,7 @@ public class SimplePlayerActor extends PlayerActor {
      * The order between regular cards is defined based on their numeric rank value.
      * The order between special cards is defined manually within the GameCardRankComparator class.
      */
-    class GameCardRankComparator implements Comparator<IGameCard> {
+    private class GameCardRankComparator implements Comparator<IGameCard> {
 
         private List<Integer> specialRanksOrdering = Arrays.asList(new Integer[] {2, 3, 10, 15});
 
@@ -29,6 +30,18 @@ public class SimplePlayerActor extends PlayerActor {
             int diff = specialRanksOrdering.indexOf(o1.getCardFace().get().getRank()) -
                     specialRanksOrdering.indexOf(o2.getCardFace().get().getRank());
             return diff != 0 ? diff : o1.getCardFace().get().getRank() - o2.getCardFace().get().getRank();
+        }
+    }
+
+    /**
+     * This class is used to compare two entries of the players map according the
+     * the number of cards the players have remaining.
+     */
+    private class VictimComparator implements Comparator<Map.Entry<Integer, IPlayerState>> {
+
+        @Override
+        public int compare(Map.Entry<Integer, IPlayerState> o1, Map.Entry<Integer, IPlayerState> o2) {
+            return Integer.compare(o1.getValue().getNumOfCardsRemaining(), o2.getValue().getNumOfCardsRemaining());
         }
     }
 
@@ -42,76 +55,52 @@ public class SimplePlayerActor extends PlayerActor {
      * Choose the strongest cards (as determined by the comparator) to be the visible table cards.
      */
     @Override
-    protected List<Integer> chooseVisibleTableCards(List<IGameCard> cards, int numOfVisibleTableCardsToChoose) {
-        cards.sort(new GameCardRankComparator().reversed());
-        int remainingNumberOfCardsToChoose = numOfVisibleTableCardsToChoose;
+    protected List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose) {
+        cardsToChooseFrom.sort(new GameCardRankComparator().reversed());
         List<Integer> chosenVisibleTableCardIds = new ArrayList<Integer>();
-        for(IGameCard card : cards) {
-            if(remainingNumberOfCardsToChoose > 0) {
-                chosenVisibleTableCardIds.add(card.getUniqueId());
-                remainingNumberOfCardsToChoose--;
-            }
+        Iterator<IGameCard> iterator = cardsToChooseFrom.iterator();
+        while (numOfVisibleTableCardsToChoose-- > 0) {
+            IGameCard currentCard = iterator.next();
+            chosenVisibleTableCardIds.add(currentCard.getUniqueId());
         }
         return chosenVisibleTableCardIds;
     }
 
     /**
      * Simple player strategy:
-     * Find the weakest playable rank, and play all cards of that rank in the player's possession.
+     * Find the weakest playable rank, and play all available cards of that rank.
+     * When playing a joker, choose the victim to be the player who holds the least cards.
      */
     @Override
     protected PlayerActionInfo getPlayerMove() {
         if(handCards.isEmpty() && visibleTableCards.isEmpty()) {
+            // If only hidden table cards are remaining, play one at random.
             List<Integer> cardsToPutIds = new LinkedList<>();
             cardsToPutIds.add(hiddenTableCards.get(0).getUniqueId());
             return new PlayerActionInfo(cardsToPutIds);
         }
+        int chosenRank;
+        List<Integer> cardsToPlayIds;
         if(handCards.isEmpty()) {
-            List<IGameCard> cardsToPut = getWeakestCardsWithBestResult(visibleTableCards);
-            List<Integer> cardsToPutIds = cardsToPut.stream()
-                    .map(card -> card.getUniqueId())
-                    .collect(Collectors.toList());
-            return new PlayerActionInfo(cardsToPutIds);
+            // Choose cards from visible table cards.
+            chosenRank = getWeakestRankWithBestResult(visibleTableCards);
+            cardsToPlayIds = getAllCardIdsWithRank(chosenRank, visibleTableCards);
         }
-        List<IGameCard> cardsToPut = getWeakestCardsWithBestResult(handCards);
-        if(!cardsToPut.isEmpty() && cardsToPut.size() == handCards.size()) {
-            int selectedRank = cardsToPut.get(0).getCardFace().get().getRank();
-            for(IGameCard gameCard : visibleTableCards) {
-                if (gameCard.getCardFace().get().getRank() == selectedRank) {
-                    cardsToPut.add(gameCard);
-                }
+        else {
+            /* Chose cards from hand cards. If all hand cards are played at once, add visible table cards
+             * with the same rank */
+            chosenRank = getWeakestRankWithBestResult(handCards);
+            cardsToPlayIds = getAllCardIdsWithRank(chosenRank, handCards);
+            if(cardsToPlayIds.size() == handCards.size()) {
+                cardsToPlayIds.addAll(getAllCardIdsWithRank(chosenRank, visibleTableCards));
             }
         }
-        List<Integer> cardsToPutIds = cardsToPut.stream()
-                .map(card -> card.getUniqueId())
-                .collect(Collectors.toList());
-        return new PlayerActionInfo(cardsToPutIds);
-    }
 
-    private List<IGameCard> getWeakestCardsWithBestResult(List<IGameCard> cards) {
-        cards.sort(new GameCardRankComparator());
-        List<IGameCard> weakestCardsWithBestResult = new LinkedList<>();
-        int chosenRank = -1;
-        for(IGameCard gameCard : cards) {
-            if(chosenRank > 0) {
-                if(gameCard.getCardFace().get().getRank() == chosenRank) {
-                    weakestCardsWithBestResult.add(gameCard);
-                    continue;
-                }
-                else {
-                    break;
-                }
-            }
-            else {
-                List<IGameCard> cardsToPlay = new LinkedList<>();
-                cardsToPlay.add(gameCard);
-                if(ActionValidatorForPlayer.validateAction(playerStates.get(playerId), cardsToPlay, pile) != ActionValidationResult.FOUL) {
-                    weakestCardsWithBestResult.add(gameCard);
-                    chosenRank = gameCard.getCardFace().get().getRank();
-                }
-            }
+        if(chosenRank == 15) {
+            // Choose a victim if a joker was played
+            return new PlayerActionInfo(cardsToPlayIds, chooseVictimId());
         }
-        return weakestCardsWithBestResult;
+        return new PlayerActionInfo(cardsToPlayIds);
     }
 
     /**
@@ -119,10 +108,12 @@ public class SimplePlayerActor extends PlayerActor {
      * Attempt interruption whenever possible.
      */
     @Override
-    protected List<IGameCard> getInterruptionCards() {
+    protected PlayerActionInfo getPlayerInterruption() {
         if(pile.isEmpty()) {
             return null;
         }
+
+        // Calculate the rank on top of the pile, and the amount of remaining cards needed for interruption
         int pileTopRank = pile.get(0).getCardFace().get().getRank();
         int consecutiveTopRankCards = 0;
         Iterator<IGameCard> iterator = pile.iterator();
@@ -136,29 +127,72 @@ public class SimplePlayerActor extends PlayerActor {
                 break;
             }
         }
+        int numOfCardsNeededForInterruption = 4 - consecutiveTopRankCards;
 
-        int cardsNeededForInterruption = 4 - consecutiveTopRankCards;
-        List<IGameCard> interruptionCards = new LinkedList<>();
-        for(IGameCard gameCard : handCards) {
-            if(gameCard.getCardFace().get().getRank() == pileTopRank) {
-                interruptionCards.add(gameCard);
-                cardsNeededForInterruption--;
-                if(cardsNeededForInterruption == 0) {
-                    return interruptionCards;
-                }
-            }
+        // Get interruption cards from hand cards, and if possible from visible table cards
+        List<Integer> cardsToInterruptIds = getAllCardIdsWithRank(pileTopRank, handCards);
+        if(cardsToInterruptIds.size() == handCards.size()) {
+            cardsToInterruptIds.addAll(getAllCardIdsWithRank(pileTopRank, visibleTableCards));
         }
-        if(interruptionCards.size() == handCards.size()) {
-            for(IGameCard gameCard : visibleTableCards) {
-                if(gameCard.getCardFace().get().getRank() == pileTopRank) {
-                    interruptionCards.add(gameCard);
-                    cardsNeededForInterruption--;
-                    if(cardsNeededForInterruption == 0) {
-                        return interruptionCards;
-                    }
-                }
-            }
+        if(cardsToInterruptIds.size() >= numOfCardsNeededForInterruption) {
+            return new PlayerActionInfo(cardsToInterruptIds);
         }
         return null;
+    }
+
+    /**
+     * Return the weakest rank (out of the given cards) that will yield the best result (PROCEED is considered
+     * better than TAKE). 
+     * @param cards The cards to choose from
+     * @return The weakest rank, or -1 if no card is valid to play.
+     */
+    private int getWeakestRankWithBestResult(List<IGameCard> cards) {
+        cards.sort(new GameCardRankComparator());
+        int weakestRankWithProceedResult = -1;
+        int weakestRankWithTakeResult = -1;
+        for(IGameCard gameCard : cards) {
+            List<IGameCard> cardsToValidate = new LinkedList<>();
+            cardsToValidate.add(gameCard);
+            ActionValidationResult validationResult = ActionValidatorForPlayer.validateAction(playerStates.get(playerId), cardsToValidate, pile);
+            if(validationResult == ActionValidationResult.PROCEED && weakestRankWithProceedResult < 0) {
+                weakestRankWithProceedResult = gameCard.getCardFace().get().getRank();
+            }
+            else if(validationResult == ActionValidationResult.TAKE && weakestRankWithTakeResult < 0) {
+                weakestRankWithTakeResult = gameCard.getCardFace().get().getRank();
+            }
+        }
+        if(weakestRankWithProceedResult > 0) {
+            return weakestRankWithProceedResult;
+        }
+        return weakestRankWithTakeResult;
+    }
+
+    /**
+     * Returns the ids of all the cards in the given lists that have the specified rank.
+     * @param rank The rank for comparison
+     * @param sources The lists of cards to look for cards in
+     * @return A list of card ids with the specified rank
+     */
+    private List<Integer> getAllCardIdsWithRank(int rank, List<IGameCard>... sources) {
+        List<Integer> cardIdsWithRank = new LinkedList<>();
+        for(List<IGameCard> source : sources) {
+            cardIdsWithRank.addAll(source.stream()
+                    .filter(gameCard -> gameCard.getCardFace().get().getRank() == rank)
+                    .map(gameCard -> gameCard.getUniqueId())
+                    .collect(Collectors.toList()));
+        }
+        return cardIdsWithRank;
+    }
+
+    /**
+     * Chooses the id of the player to give the cards to after playing a joker.
+     * @return The id of the chosen victim.
+     */
+    private int chooseVictimId() {
+        List<Map.Entry<Integer, IPlayerState>> sortedEntries = playerStates.entrySet().stream()
+                .filter(entry -> entry.getKey() != playerId)
+                .sorted(new VictimComparator())
+                .collect(Collectors.toList());
+        return sortedEntries.get(sortedEntries.size() - 1).getKey();
     }
 }

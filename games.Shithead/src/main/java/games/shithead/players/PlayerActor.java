@@ -1,7 +1,6 @@
 package games.shithead.players;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorSelection;
@@ -9,9 +8,9 @@ import games.shithead.game.actors.ShitheadActorSystem;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
-import games.shithead.game.logging.LoggingUtils;
+import games.shithead.utils.LoggingUtils;
 import games.shithead.messages.*;
-import games.shithead.messages.PlayerMoveMessage;
+import games.shithead.messages.PlayerActionMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,13 +29,12 @@ public abstract class PlayerActor extends AbstractActor {
 
     /* Used to store mappings between each player's id to their state.
      * This map contains public info only, that is to say the cards
-     * that each players holds in his hand have their card faces nullified.
+     * that other players holds in their hand have their card faces nullified.
      * Updated before each time a player is supposed to take an action. */
     protected Map<Integer, IPlayerState> playerStates = new HashMap<>();
 
     /* These fields hold the cards that are in the player's possession
-     * at this time. This info is private and is only made available to each
-     * player about their own cards.
+     * at this time.
      * Updated before each time a player is supposed to take an action. */
 	protected List<IGameCard> handCards;
 	protected List<IGameCard> visibleTableCards;
@@ -51,7 +49,7 @@ public abstract class PlayerActor extends AbstractActor {
 	protected int nextMoveId;
 
 	// The id of the player whose turn it is to play nwo.
-	protected int nexttPlayerTurn;
+	protected int nextPlayerTurn;
 
     public PlayerActor(){
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
@@ -71,14 +69,13 @@ public abstract class PlayerActor extends AbstractActor {
     }
 
 	/**
-	 * Returns the player's name
 	 * @return The player's name
 	 */
 	public abstract String getName();
 
 
 	/**
-	 * Updates the game info using the InfoProvider class
+	 * Updates the game info from the contents of the SnapshotMessage
 	 */
     protected void updateInfo(SnapshotMessage snapshotMessage) {
 		playerStates = snapshotMessage.getPlayerStates();
@@ -88,7 +85,7 @@ public abstract class PlayerActor extends AbstractActor {
 		pendingSelectionCards = playerStates.get(playerId).getPendingSelectionCards();
 
 		nextMoveId = snapshotMessage.getNextMoveId();
-		nexttPlayerTurn = snapshotMessage.getNextPlayerTurnId();
+		nextPlayerTurn = snapshotMessage.getNextPlayerTurnId();
     	pile = snapshotMessage.getPile();
 	}
 
@@ -102,8 +99,7 @@ public abstract class PlayerActor extends AbstractActor {
 
 	/**
 	 * Handler method for ChooseVisibleTableCardsMessage.
-	 * Updates the game info, and sends back the visible table card ids, as chosen
-	 * by the implementing player.
+	 * Sends back the visible table card ids, as chosen by the implementing player.
 	 * @param message
 	 */
 	private void receiveChooseTableCardsMessage(ChooseVisibleTableCardsMessage message) {
@@ -115,30 +111,30 @@ public abstract class PlayerActor extends AbstractActor {
 	/**
 	 * This method effectively chooses the visible table cards.
 	 * To be implemented by each player according to their strategy.
-	 * @param cards A list of the cards to choose from
+	 * @param cardsToChooseFrom A list of the cards to choose from
 	 * @param numOfVisibleTableCardsToChoose The number of visible table cards to choose from the list
 	 * @return The ids of the chosen visible table cards
 	 */
-	protected abstract List<Integer> chooseVisibleTableCards(List<IGameCard> cards, int numOfVisibleTableCardsToChoose);
+	protected abstract List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose);
 
 	/**
 	 * Handler method for SnapshotMessage.
 	 * @param message A message representing a request for the player to make a move.
 	 */
 	private void receiveSnapshotMessage(SnapshotMessage message) {
-		takeAction(message);
+		updateInfo(message);
+		takeAction();
 	}
 
 	/**
 	 * Takes the action required of the player at a given moment: Makes a move if it's his turn,
 	 * or considers an interruption if it isn't.
 	 */
-	private void takeAction(SnapshotMessage message) {
-		updateInfo(message);
-		if(nexttPlayerTurn == playerId) {
+	private void takeAction() {
+		if(nextPlayerTurn == playerId) {
 			logger.info("Player " + playerId + " is making a move");
 			logger.info("Player " + playerId + " state: " + playerStates.get(playerId).toString());
-			logger.info("Pile: " + LoggingUtils.cardsToDescriptions(pile));
+			logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
 			makeMove();
 		}
 		else {
@@ -150,13 +146,13 @@ public abstract class PlayerActor extends AbstractActor {
 	 * Sends the move to the game actor, as chosen by the implementing player.
 	 */
     private void makeMove(){
-        sender().tell(new PlayerMoveMessage(getPlayerMove(), nextMoveId), self());
+        sender().tell(new PlayerActionMessage(getPlayerMove(), nextMoveId), self());
     }
 
 	/**
 	 * This method effectively calculates the move the player makes.
 	 * To be implemented by each player according to their strategy.
-	 * @return A PlayerMoveMessage containing the chosen move.
+	 * @return A PlayerActionInfo containing the chosen action.
 	 */
     protected abstract PlayerActionInfo getPlayerMove();
 
@@ -165,22 +161,18 @@ public abstract class PlayerActor extends AbstractActor {
 	 * as chosen by the implementing player.
 	 */
 	protected void considerInterruption() {
-		List<IGameCard> interruptionCards = getInterruptionCards();
-		if(interruptionCards == null || interruptionCards.isEmpty()) {
+		PlayerActionInfo playerInterruption = getPlayerInterruption();
+		if(playerInterruption == null || playerInterruption.getCardsToPut().isEmpty()) {
 			return;
 		}
-		List<Integer> interruptionCardIds = interruptionCards.stream()
-				.map(card -> card.getUniqueId())
-				.collect(Collectors.toList());
-		PlayerActionInfo playerActionInfo = new PlayerActionInfo(interruptionCardIds);
-		sender().tell(new PlayerMoveMessage(playerActionInfo, nextMoveId), self());
+		sender().tell(new PlayerActionMessage(playerInterruption, nextMoveId), self());
 	}
 
 	/**
-	 * This method effectively calculates the move the player makes.
+	 * This method effectively calculates the interruption the player makes, if he makes one at all.
 	 * To be implemented by each player according to their strategy.
-	 * @return The list of cards the player chose to Interrupt with. An empty list or null indicate
-	 * no interruption.
+	 * A return value of null or an action with an empty cards list indicate no interruption.
+	 * @return The PlayerActionInfo containing the chosen interruption.
 	 */
-	protected abstract List<IGameCard> getInterruptionCards();
+	protected abstract PlayerActionInfo getPlayerInterruption();
 }

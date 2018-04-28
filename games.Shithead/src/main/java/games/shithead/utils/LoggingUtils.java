@@ -1,4 +1,4 @@
-package games.shithead.game.logging;
+package games.shithead.utils;
 
 import games.shithead.deck.CardDescriptionGenerator;
 import games.shithead.game.interfaces.IGameCard;
@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 public class LoggingUtils {
 
     /**
-     * Converts a list of cards to a string made of their descriptions. Used for logging.
+     * Converts a list of cards to a string made of their minimal descriptions (only ranks). Used for logging.
      * @param cards The list of cards to analyze
      * @return A String representing the given cards' descriptions
      */
-    public static String cardsToDescriptions(List<IGameCard> cards) {
+    public static String cardsToMinDescriptions(List<IGameCard> cards) {
         String cardDescriptions = cards.stream()
                 .map(card -> CardDescriptionGenerator.cardFaceToMinimalDescription(card.getCardFace().orElse(null)))
                 .collect(Collectors.joining(", "));

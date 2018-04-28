@@ -5,7 +5,7 @@ import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
-import games.shithead.game.logging.LoggingUtils;
+import games.shithead.utils.LoggingUtils;
 import games.shithead.game.validation.ActionValidationResult;
 import games.shithead.game.validation.ActionValidatorForGame;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +46,7 @@ public class GameState {
     private int playersPendingTableCardsSelection;
 
     /* The id of the next move.
-     * Used to prevent ambiguity in case a PlayerMoveMessage was delayed */
+     * Used to prevent ambiguity in case a PlayerActionMessage was delayed */
     private int nextMoveId = 1;
 
     // The id of the player who performed the last accepted action
@@ -525,7 +525,7 @@ public class GameState {
      * @return A String representing the given cards' descriptions
      */
     private String cardIdsToDescriptions(List<Integer> cardIds) {
-        return LoggingUtils.cardsToDescriptions(cardIds.stream()
+        return LoggingUtils.cardsToMinDescriptions(cardIds.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList()));
     }
@@ -535,7 +535,7 @@ public class GameState {
         logger.info("Next move id: " + nextMoveId);
         logger.info("Next player turn id: " + nexttTurnPlayerId);
         players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
-        logger.info("Pile: " + LoggingUtils.cardsToDescriptions(pile));
+        logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
     }
 
     private void logPlayerState(int playerId, IPlayerState playerState) {

@@ -5,12 +5,13 @@ import java.util.List;
 import games.shithead.game.interfaces.IGameCard;
 
 /**
- * Sent from <code>GameActor</code> to <code>PlayerActor</code>.
- * Sends a player the 9 cards he has been dealt. 3 of them (the hidden table cards) have nullified card faces.
- *
+ * Sent from GameActor to PlayerActor.
+ * Asks a player to make a selection of visible table cards. The non-selected cards will
+ * become the player's hand cards.
  */
 public class ChooseVisibleTableCardsMessage {
 
+    // The list of cards the player can choose from
     private final List<IGameCard> cardsPendingSelection;
 
     // The number of visible table cards that should be chosen

@@ -3,11 +3,10 @@ package games.shithead.messages;
 import games.shithead.game.entities.PlayerActionInfo;
 
 /**
- * Sent from <code>PlayerActor</code> to <code>GameActor</code>.
+ * Sent from PlayerActor to GameActor.
  * Contains the action a player chose to make.
- *
  */
-public class PlayerMoveMessage {
+public class PlayerActionMessage {
 
     /* The PlayerActionInfo object containing info about the cards the player chose
      * to play, and the victim id if relevant. */
@@ -17,7 +16,7 @@ public class PlayerMoveMessage {
      * Used to prevent ambiguity in case an action message arrives too late. */
     private final int moveId;
 
-    public PlayerMoveMessage(PlayerActionInfo playerActionInfo, int moveId) {
+    public PlayerActionMessage(PlayerActionInfo playerActionInfo, int moveId) {
         this.playerActionInfo = playerActionInfo;
         this.moveId = moveId;
     }

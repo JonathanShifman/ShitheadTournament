@@ -2,7 +2,7 @@ package games.shithead.game.entities;
 
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
-import games.shithead.game.logging.LoggingUtils;
+import games.shithead.utils.LoggingUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -126,7 +126,7 @@ public class PlayerState implements IPlayerState {
 	@Override
 	public String toString() {
 		return cardListsMap.entrySet().stream()
-				.map(entry -> entry.getKey() + ": " + LoggingUtils.cardsToDescriptions(entry.getValue()))
+				.map(entry -> entry.getKey() + ": " + LoggingUtils.cardsToMinDescriptions(entry.getValue()))
 				.collect(Collectors.joining(", "));
 	}
 }

@@ -1,5 +1,9 @@
 package games.shithead.messages;
 
+/**
+ * Sent from GameActor to GameMasterActor.
+ * Used to notify about the final result of a game.
+ */
 public class GameResult {
 
     // The id of the losing player

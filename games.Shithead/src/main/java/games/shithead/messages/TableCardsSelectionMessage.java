@@ -3,9 +3,8 @@ package games.shithead.messages;
 import java.util.List;
 
 /**
- * Sent from <code>PlayerActor</code> to <code>GameActor</code>.
- * Informs the game manager which 3 cards the player decided to put on the table.
- *
+ * Sent from PlayerActor to GameActor.
+ * Informs the game actor which cards the player decided to put on the table.
  */
 public class TableCardsSelectionMessage {
 

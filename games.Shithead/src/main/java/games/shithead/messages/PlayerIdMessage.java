@@ -1,9 +1,8 @@
 package games.shithead.messages;
 
 /**
- * Sent from <code>GameActor</code> to <code>PlayerActor</code>.
+ * Sent from GameActor to PlayerActor.
  * Sends a player their allocated id.
- *
  */
 public class PlayerIdMessage {
 

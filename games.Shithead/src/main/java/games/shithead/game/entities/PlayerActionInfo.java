@@ -2,6 +2,10 @@ package games.shithead.game.entities;
 
 import java.util.List;
 
+/**
+ * Contains info about the action a player chose to make.
+ * Namely, the cards the player chose to put and the victim id in case a joker was played.
+ */
 public class PlayerActionInfo {
 
     /* The unique ids of the cards the player would like to play.

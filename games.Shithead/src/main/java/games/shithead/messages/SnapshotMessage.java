@@ -7,11 +7,9 @@ import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
 
 /**
- * Sent from <code>GameActor</code> to <code>PlayerActor</code>.
- * Sends each player the the cards that have been dealt to all players in the game.
- * Only visible table cards' faces are not nullified.
- * This message also contains the number of players and the players order, and signals the effective start of the game.
- *
+ * Sent from GameActor to PlayerActor.
+ * Contains a snapshot with all the relevant information about the current state of the game.
+ * Namely: The states of all players, the contents of the pile, the next move id and the next player id.
  */
 public class SnapshotMessage {
 
