@@ -8,11 +8,21 @@ import games.shithead.game.actors.ShitheadActorSystem;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.utils.ConstantsProvider;
 import games.shithead.utils.LoggingUtils;
 import games.shithead.messages.*;
 import games.shithead.messages.PlayerActionMessage;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
  * A generic class for players to extend.
@@ -22,7 +32,8 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class PlayerActor extends AbstractActor {
 
-	protected static Logger logger = LogManager.getLogger("Player");
+	// The logger is not static because a separate instance is required for each player instance
+	protected Logger logger;
 
 	// The player's id
     protected int playerId = -1;
@@ -95,7 +106,35 @@ public abstract class PlayerActor extends AbstractActor {
 	 */
 	private void receiveId(PlayerIdMessage message) {
 		this.playerId = message.getPlayerId();
+		addAppender(playerId);
     }
+
+	private void addAppender(int playerId) {
+		final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		final Configuration config = ctx.getConfiguration();
+
+		Layout layout = PatternLayout.newBuilder()
+				.withPattern("%d{HH:mm:ss.SSS} %-5level %c{1} - %msg%n")
+				.build();
+
+		Appender appender = FileAppender.newBuilder()
+				.withName("player" + playerId + "appender")
+				.withFileName(System.getenv(ConstantsProvider.SYSTEM_ENV_VAR_NAME) + "\\games.Shithead\\log\\player" + playerId + ".log")
+				.withAppend(false)
+				.withLayout(layout)
+				.build();
+		appender.start();
+		config.addAppender(appender);
+		AppenderRef ref = AppenderRef.createAppenderRef("File", null, null);
+		AppenderRef[] refs = new AppenderRef[] {ref};
+
+		LoggerConfig loggerConfig = LoggerConfig.createLogger(false, Level.INFO, "player" + playerId,
+				"true", refs, null, config, null );
+		loggerConfig.addAppender(appender, null, null);
+		config.addLogger("player" + playerId, loggerConfig);
+		ctx.updateLoggers();
+		logger = ctx.getLogger("player" + playerId);
+	}
 
 	/**
 	 * Handler method for ChooseVisibleTableCardsMessage.
@@ -132,7 +171,6 @@ public abstract class PlayerActor extends AbstractActor {
 	 */
 	private void takeAction() {
 		if(nextPlayerTurn == playerId) {
-			logger.info("Player " + playerId + " is making a move");
 			logger.info("Player " + playerId + " state: " + playerStates.get(playerId).toString());
 			logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
 			makeMove();

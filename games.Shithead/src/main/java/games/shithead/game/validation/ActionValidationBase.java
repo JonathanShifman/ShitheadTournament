@@ -9,7 +9,7 @@ public abstract class ActionValidationBase {
 
     /**
      * Represents the identity of the validator (whether the validation is done by the GameState or by
-     * a player actor).
+     * a player).
      * It's important because players are not allowed to know the faces od their hidden table cards,
      */
     protected enum ValidatorIdentity {

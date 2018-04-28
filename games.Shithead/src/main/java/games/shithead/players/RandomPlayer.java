@@ -13,7 +13,7 @@ import games.shithead.game.validation.ActionValidatorForPlayer;
 /**
  * Implementation of the Random Player
  */
-public class RandomPlayerActor extends PlayerActor {
+public class RandomPlayer extends PlayerActor {
 
 	@Override
 	public String getName() {

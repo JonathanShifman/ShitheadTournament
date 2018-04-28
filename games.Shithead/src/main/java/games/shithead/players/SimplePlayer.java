@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Implementation of the Simple Player
  */
-public class SimplePlayerActor extends PlayerActor {
+public class SimplePlayer extends PlayerActor {
 
     /**
      * This class is used to compare two cards by their ranks.
