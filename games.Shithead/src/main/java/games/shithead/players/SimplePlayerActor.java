@@ -142,7 +142,7 @@ public class SimplePlayerActor extends PlayerActor {
 
     /**
      * Return the weakest rank (out of the given cards) that will yield the best result (PROCEED is considered
-     * better than TAKE). 
+     * better than TAKE).
      * @param cards The cards to choose from
      * @return The weakest rank, or -1 if no card is valid to play.
      */
