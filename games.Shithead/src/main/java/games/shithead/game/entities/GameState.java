@@ -5,6 +5,7 @@ import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
+import games.shithead.utils.ConstantsProvider;
 import games.shithead.utils.LoggingUtils;
 import games.shithead.game.validation.ActionValidationResult;
 import games.shithead.game.validation.ActionValidatorForGame;
@@ -81,7 +82,7 @@ public class GameState {
     }
 
     private void initParameters() throws IOException {
-        Ini ini = new Ini(new File("games.Shithead\\config\\config.ini"));
+        Ini ini = new Ini(new File(System.getenv(ConstantsProvider.SYSTEM_ENV_VAR_NAME) + "\\games.Shithead\\config\\config.ini"));
         HAND_CARDS_AT_GAME_START = Integer.parseInt(ini.get("deal", "hand_cards_at_game_start"));
         VISIBLE_TABLE_CARDS_AT_GAME_START = Integer.parseInt(ini.get("deal", "visible_table_cards_at_game_start"));
         HIDDEN_TABLE_CARDS_AT_GAME_START = Integer.parseInt(ini.get("deal", "hidden_table_cards_at_game_start"));
@@ -200,7 +201,7 @@ public class GameState {
      * @param selectedCardsIds The ids of the selected visible table cards
      */
     public void performTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
-        logger.info("Attempting table cards selection by player " + playerId);
+        logger.debug("Attempting table cards selection by player " + playerId);
         validateTableCardsSelection(playerId, selectedCardsIds);
         logger.info("Performing table cards selection by player " + playerId);
         IPlayerState playerState = players.get(playerId);
@@ -224,7 +225,7 @@ public class GameState {
      * @param selectedCardsIds The chosen visible tabke cards
      */
     private void validateTableCardsSelection(int playerId, List<Integer> selectedCardsIds) {
-        logger.info("Validating table cards selection by player " + playerId);
+        logger.debug("Validating table cards selection by player " + playerId);
         if(playersPendingTableCardsSelection == 0) {
             throw new RuntimeException("Exception: All players already selected table cards");
         }
@@ -287,14 +288,14 @@ public class GameState {
      */
     public void performPlayerAction(int playerId, PlayerActionInfo playerActionInfo, int moveId) {
         List<Integer> cardsToPut = playerActionInfo.getCardsToPut();
-        logger.info("Attempting action by player " + playerId + ". cards: " + cardIdsToDescriptions(cardsToPut));
+        logger.debug("Attempting action by player " + playerId);
         int victimId = playerActionInfo.getVictimId();
         ActionValidationResult validationResult = validateAction(playerId, cardsToPut, moveId);
         if(validationResult == ActionValidationResult.FOUL) {
             logger.info("Foul");
             return;
         }
-        logger.info("Performing action by player " + playerId);
+        logger.info("Performing action by player " + playerId + ". cards: " + cardIdsToDescriptions(cardsToPut));
         IPlayerState playerState = players.get(playerId);
         List<IGameCard> cardsToRemoveFromPlayerState = new LinkedList<>();
         for (int cardId : cardsToPut) {
@@ -327,7 +328,7 @@ public class GameState {
      * @param moveId The id of the move this action is relevant for
      */
     private ActionValidationResult validateAction(int playerId, List<Integer> cardsToPut, int moveId) {
-        logger.info("Validating action by player " + playerId);
+        logger.debug("Validating action by player " + playerId);
         if(!players.containsKey(playerId)) {
             throw new RuntimeException("Exception: Unregistered player");
         }
@@ -359,10 +360,12 @@ public class GameState {
     private void updateSpecialEffects(int victimId) {
         switch (pile.get(0).getCardFace().get().getRank()) {
             case 8:
+                logger.info("Will skip one turn");
                 nextTurnPolicy = NextTurnPolicy.SKIP;
                 break;
             case 10:
                 nextTurnPolicy = NextTurnPolicy.STEAL;
+                logger.info("Burning pile");
                 burnCards(pile);
                 pile = new LinkedList<>();
                 break;
@@ -385,8 +388,10 @@ public class GameState {
                         remainingPileCards.add(gameCard);
                     }
                 }
+                logger.info("Burning jokers");
                 burnCards(topJokersToBurn);
                 if(players.containsKey(victimId)) {
+                    logger.info("Giving cards to player " + victimId);
                     IPlayerState playerState = players.get(victimId);
                     for(IGameCard gameCard : remainingPileCards) {
                         playerState.getHandCards().add(gameCard);
@@ -395,6 +400,7 @@ public class GameState {
                     }
                 }
                 else {
+                    logger.info("Burning pile");
                     burnCards(remainingPileCards);
                 }
                 pile = new LinkedList<>();
@@ -402,6 +408,7 @@ public class GameState {
         }
         if(completedFour()) {
             nextTurnPolicy = NextTurnPolicy.STEAL;
+            logger.info("Burning pile");
             burnCards(pile);
             pile = new LinkedList<>();
             return;
@@ -440,7 +447,6 @@ public class GameState {
      * @param cardsToBurn The cards to burn
      */
     private void burnCards(List<IGameCard> cardsToBurn) {
-        logger.info("Burning cards");
         for(IGameCard gameCard : cardsToBurn) {
             cardStatuses[gameCard.getUniqueId()] = CardStatus.BURNT;
         }
@@ -532,10 +538,10 @@ public class GameState {
 
     private void logGameState() {
         logger.info("Current Game State: ");
-        logger.info("Next move id: " + nextMoveId);
-        logger.info("Next player turn id: " + nexttTurnPlayerId);
         players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
         logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
+        logger.info("Next move id: " + nextMoveId);
+        logger.info("Next player turn id: " + nexttTurnPlayerId);
     }
 
     private void logPlayerState(int playerId, IPlayerState playerState) {

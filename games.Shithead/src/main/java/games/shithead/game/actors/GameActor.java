@@ -57,23 +57,23 @@ public class GameActor extends AbstractActor {
      * @param message The registration message.
      */
 	private void registerPlayer(RegisterPlayerMessage message) {
-        logger.info("Received RegisterPlayerMessage from " + message.getPlayerName());
+        logger.debug("Received RegisterPlayerMessage from " + message.getPlayerName());
         if(gameState.isGameStarted()){
-            logger.info("Game has already started, too late for registration");
+            logger.debug("Game has already started, too late for registration");
             return;
         }
         if(playerExists(getSender())){
-            logger.info("Player has already been registered");
+            logger.debug("Player has already been registered");
             return;
         }
 
         int playerId = playerIdAllocator++;
-        logger.info("Registering player with allocated id: " + playerId);
+        logger.debug("Registering player with allocated id: " + playerId);
         IPlayerInfo playerInfo = new PlayerInfo(playerId, message.getPlayerName(), getSender());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);
-        logger.info("Sending PlayerIdMessage with playerId: " + playerId);
+        logger.debug("Sending PlayerIdMessage with playerId: " + playerId);
         getSender().tell(new PlayerIdMessage(playerId), self());
     }
 
@@ -83,14 +83,14 @@ public class GameActor extends AbstractActor {
      * @param message The message that tells the game actor to start the game.
      */
     private void startGame(StartGameMessage message) {
-        logger.info("Received StartGameMessage");
+        logger.debug("Received StartGameMessage");
         // TODO: Make sure message came from Main
         if(gameState.isGameStarted()){
-            logger.info("Game has already started");
+            logger.debug("Game has already started");
             return;
         }
         if(!gameState.enoughPlayersToStartGame()){
-            logger.info("Not enough players");
+            logger.debug("Not enough players");
             return;
         }
         gameState.startGame();
@@ -101,7 +101,7 @@ public class GameActor extends AbstractActor {
      * Sends each player a message asking him to choose his visible table cards
      */
     private void sendChooseVisibleTableCardsMessages() {
-        logger.info("Sending choose visible table cards messages");
+        logger.debug("Sending choose visible table cards messages");
         playerIdsToInfos.keySet().forEach(playerId -> sendChooseVisibleTableCardsMessage(playerId));
     }
 
@@ -120,9 +120,9 @@ public class GameActor extends AbstractActor {
      * @param message The message containing the table cards selection.
      */
     private void receiveTableCardsSelection(TableCardsSelectionMessage message) {
-        logger.info("Received TableCardsSelectionMessage");
+        logger.debug("Received TableCardsSelectionMessage");
         if(!playerExists(getSender())) {
-            logger.info("Unregistered Player, ignoring message");
+            logger.debug("Unregistered Player, ignoring message");
             return;
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
@@ -143,7 +143,7 @@ public class GameActor extends AbstractActor {
      * Sends each player the appropriate snapshot message.
      */
     private void sendSnapshotMessages() {
-        logger.info("Sending snapshot messages");
+        logger.debug("Sending snapshot messages");
         playerIdsToInfos.keySet().forEach(playerId -> sendSnapshotMessage(playerId));
     }
 
@@ -174,9 +174,9 @@ public class GameActor extends AbstractActor {
      * @throws InterruptedException
      */
     private void handleAttemptedAction(PlayerActionMessage message) throws InterruptedException {
-        logger.info("Received PlayerActionMessage with move id: " + message.getMoveId());
+        logger.debug("Received PlayerActionMessage with move id: " + message.getMoveId());
         if(!playerExists(getSender())) {
-            logger.info("Unregistered Player, ignoring message");
+            logger.debug("Unregistered Player, ignoring message");
             return;
         }
         int playerId = playerRefsToInfos.get(getSender()).getPlayerId();
