@@ -17,9 +17,13 @@ public class ChooseVisibleTableCardsMessage {
     // The number of visible table cards that should be chosen
     private final int numOfVisibleTableCardsToBeChosen;
 
-    public ChooseVisibleTableCardsMessage(List<IGameCard> cardsPendingSelection, int numOfVisibleTableCardsToBeChosen) {
+    // The number of players in the game
+    private final int numOfPlayers;
+
+    public ChooseVisibleTableCardsMessage(List<IGameCard> cardsPendingSelection, int numOfVisibleTableCardsToBeChosen, int numOfPlayers) {
         this.cardsPendingSelection = cardsPendingSelection;
         this.numOfVisibleTableCardsToBeChosen = numOfVisibleTableCardsToBeChosen;
+        this.numOfPlayers = numOfPlayers;
     }
 
     public List<IGameCard> getCardsPendingSelection() {
@@ -28,5 +32,9 @@ public class ChooseVisibleTableCardsMessage {
 
     public int getNumOfVisibleTableCardsToBeChosen() {
         return numOfVisibleTableCardsToBeChosen;
+    }
+
+    public int getNumOfPlayers() {
+        return numOfPlayers;
     }
 }

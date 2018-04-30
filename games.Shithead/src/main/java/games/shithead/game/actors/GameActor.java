@@ -111,7 +111,8 @@ public class GameActor extends AbstractActor {
      */
     private void sendChooseVisibleTableCardsMessage(Integer playerId) {
         playerIdsToInfos.get(playerId).getPlayerRef().tell(new ChooseVisibleTableCardsMessage(
-                gameState.getPrivateState(playerId).getPendingSelectionCards(), gameState.getNumOfVisibleTableCardsAtGameStart()), self());
+                gameState.getPrivateState(playerId).getPendingSelectionCards(),
+                gameState.getNumOfVisibleTableCardsAtGameStart(), playerIdsToInfos.size()), self());
     }
 
     /**

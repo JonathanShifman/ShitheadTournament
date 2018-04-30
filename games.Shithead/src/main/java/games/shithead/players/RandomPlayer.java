@@ -25,7 +25,7 @@ public class RandomPlayer extends PlayerActor {
 	 * Choose table cards at random. (Surprising, huh?)
 	 */
 	@Override
-	protected List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose) {
+	protected List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose, int numOfPlayers) {
 		List<Integer> chosenVisibleTableCardIds = new ArrayList<Integer>();
 		Iterator<IGameCard> iterator = cardsToChooseFrom.iterator();
 		while (numOfVisibleTableCardsToChoose-- > 0) {

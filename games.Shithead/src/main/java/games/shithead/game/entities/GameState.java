@@ -292,8 +292,7 @@ public class GameState {
         int victimId = playerActionInfo.getVictimId();
         ActionValidationResult validationResult = validateAction(playerId, cardsToPut, moveId);
         if(validationResult == ActionValidationResult.FOUL) {
-            logger.info("Foul");
-            return;
+            throw new RuntimeException("Exception: Foul");
         }
 
         String logString = "Performing action by player " + playerId + ". cards: " + cardIdsToDescriptions(cardsToPut);

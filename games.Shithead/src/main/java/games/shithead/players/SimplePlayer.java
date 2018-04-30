@@ -55,7 +55,7 @@ public class SimplePlayer extends PlayerActor {
      * Choose the strongest cards (as determined by the comparator) to be the visible table cards.
      */
     @Override
-    protected List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose) {
+    protected List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose, int numOfPlayers) {
         cardsToChooseFrom.sort(new GameCardRankComparator().reversed());
         List<Integer> chosenVisibleTableCardIds = new ArrayList<Integer>();
         Iterator<IGameCard> iterator = cardsToChooseFrom.iterator();

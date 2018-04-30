@@ -143,7 +143,8 @@ public abstract class PlayerActor extends AbstractActor {
 	 */
 	private void receiveChooseTableCardsMessage(ChooseVisibleTableCardsMessage message) {
         List<Integer> chosenVisibleTableCardIds = chooseVisibleTableCards(
-        		message.getCardsPendingSelection(), message.getNumOfVisibleTableCardsToBeChosen());
+        		message.getCardsPendingSelection(), message.getNumOfVisibleTableCardsToBeChosen(),
+				message.getNumOfPlayers());
         sender().tell(new TableCardsSelectionMessage(chosenVisibleTableCardIds), self());
 	}
 
@@ -152,9 +153,10 @@ public abstract class PlayerActor extends AbstractActor {
 	 * To be implemented by each player according to their strategy.
 	 * @param cardsToChooseFrom A list of the cards to choose from
 	 * @param numOfVisibleTableCardsToChoose The number of visible table cards to choose from the list
+	 * @param numOfPlayers The number of players in the game
 	 * @return The ids of the chosen visible table cards
 	 */
-	protected abstract List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose);
+	protected abstract List<Integer> chooseVisibleTableCards(List<IGameCard> cardsToChooseFrom, int numOfVisibleTableCardsToChoose, int numOfPlayers);
 
 	/**
 	 * Handler method for SnapshotMessage.
