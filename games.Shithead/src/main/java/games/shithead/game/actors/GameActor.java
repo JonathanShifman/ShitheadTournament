@@ -20,6 +20,7 @@ import java.util.*;
 public class GameActor extends AbstractActor {
 
     static Logger logger = LogManager.getLogger("Game");
+    static Logger initLogger = LogManager.getLogger("Init");
 
     // An allocator used to allocate incrementing ids to players
     int playerIdAllocator;
@@ -70,6 +71,7 @@ public class GameActor extends AbstractActor {
         int playerId = playerIdAllocator++;
         logger.debug("Registering player with allocated id: " + playerId);
         IPlayerInfo playerInfo = new PlayerInfo(playerId, message.getPlayerName(), getSender());
+        initLogger.info(playerId + ":" + message.getPlayerName());
         playerIdsToInfos.put(playerId, playerInfo);
         playerRefsToInfos.put(getSender(), playerInfo);
         gameState.addPlayer(playerId);

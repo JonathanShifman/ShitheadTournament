@@ -1,6 +1,7 @@
 package games.shithead.deck;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MultiDeck implements IMultiDeck {
 
@@ -101,6 +102,13 @@ public class MultiDeck implements IMultiDeck {
 	@Override
 	public boolean isEmpty() {
 		return currentCardFaceIndex >= cardFaces.size();
+	}
+
+	@Override
+	public String toString() {
+		return cardFaces.stream()
+				.map(cardFace -> CardDescriptionGenerator.cardFaceToDescription(cardFace))
+				.collect(Collectors.joining(","));
 	}
 
 

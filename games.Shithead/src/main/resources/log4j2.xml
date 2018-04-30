@@ -7,6 +7,9 @@
         <File name="GameFile" fileName="${env:SHITHEAD_REPO_PATH}\games.Shithead\log\game.log" append="false">
             <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"/>
         </File>
+        <File name="InitFile" fileName="${env:SHITHEAD_REPO_PATH}\games.Shithead\log\init.log" append="false">
+            <PatternLayout pattern="%msg%n"/>
+        </File>
     </Appenders>
     <Loggers>
         <Root level="error">
@@ -14,6 +17,9 @@
         <Logger name="Game" level="info">
             <AppenderRef ref="Console" />
             <AppenderRef ref="GameFile"/>
+        </Logger>
+        <Logger name="Init" level="info">
+            <AppenderRef ref="InitFile"/>
         </Logger>
     </Loggers>
 </Configuration>

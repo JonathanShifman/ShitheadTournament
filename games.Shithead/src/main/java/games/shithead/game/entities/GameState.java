@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class GameState {
 
     static Logger logger = LogManager.getLogger("Game");
+    static Logger initLogger = LogManager.getLogger("Init");
 
     private Random rnd = new Random();
 
@@ -63,7 +64,7 @@ public class GameState {
     private Deque<Integer> playingQueue = new LinkedBlockingDeque<>();
 
     // The id of the player whose turn it is to play next
-    private int nexttTurnPlayerId = -1;
+    private int nextTurnPlayerId = -1;
 
 
     // The number of hand cards a player should have at the start of the game
@@ -101,7 +102,7 @@ public class GameState {
     }
 
     public int getNextPlayerTurn() {
-        return nexttTurnPlayerId;
+        return nextTurnPlayerId;
     }
 
     public List<IGameCard> getPile() {
@@ -156,6 +157,8 @@ public class GameState {
         //Try to match deck size to number of players
         logger.info("Initializing deck");
         deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
+        initLogger.info(deck.toString());
+
         cardStatuses = new CardStatus[deck.getNumberOfInitialCards()];
         cards = new IGameCard[deck.getNumberOfInitialCards()];
         for(int i = 0; i < cardStatuses.length; i++) {
@@ -266,8 +269,11 @@ public class GameState {
         List<Integer> playerIds = new ArrayList<>(players.keySet());
         playerIds.sort((id1, id2) -> rnd.nextBoolean() ? 1 : rnd.nextBoolean() ? 0 : -1);
         playingQueue.addAll(playerIds);
-        nexttTurnPlayerId = playingQueue.getFirst();
+        nextTurnPlayerId = playingQueue.getFirst();
         logger.info("Determined players order: " + playingQueue.toString());
+        initLogger.info(playingQueue.stream()
+                .map(id -> id.toString())
+                .collect(Collectors.joining(",")));
     }
 
     /**
@@ -352,7 +358,7 @@ public class GameState {
         }
 
         IPlayerState playerState = players.get(playerId);
-        return playerId == nexttTurnPlayerId ?
+        return playerId == nextTurnPlayerId ?
             ActionValidatorForGame.validateAction(playerState, playedCards, pile) :
             ActionValidatorForGame.validateInterruption(playerState, playedCards, pile);
     }
@@ -464,8 +470,8 @@ public class GameState {
      */
     private void updatePlayerTurn() {
         if(nextTurnPolicy == NextTurnPolicy.STEAL) {
-            nexttTurnPlayerId = lastPerformedActionPlayer;
-            advancePlayingQueue(nexttTurnPlayerId);
+            nextTurnPlayerId = lastPerformedActionPlayer;
+            advancePlayingQueue(nextTurnPlayerId);
         }
         else if(nextTurnPolicy == NextTurnPolicy.SKIP) {
             // FIXME
@@ -482,7 +488,7 @@ public class GameState {
         if(deck.isEmpty() && players.get(lastPerformedActionPlayer).getNumOfCardsRemaining() == 0) {
             logger.info("Player " + lastPerformedActionPlayer + " won");
             playingQueue.remove(lastPerformedActionPlayer);
-            nexttTurnPlayerId = playingQueue.getFirst();
+            nextTurnPlayerId = playingQueue.getFirst();
         }
     }
 
@@ -491,7 +497,7 @@ public class GameState {
      */
     private void advancePlayingQueue() {
         playingQueue.addLast(playingQueue.poll());
-        nexttTurnPlayerId = playingQueue.getFirst();
+        nextTurnPlayerId = playingQueue.getFirst();
     }
 
     /**
@@ -547,7 +553,7 @@ public class GameState {
         players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
         logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
         logger.info("Next move id: " + nextMoveId);
-        logger.info("Next player turn id: " + nexttTurnPlayerId);
+        logger.info("Next player turn id: " + nextTurnPlayerId);
     }
 
     private void logPlayerState(int playerId, IPlayerState playerState) {
