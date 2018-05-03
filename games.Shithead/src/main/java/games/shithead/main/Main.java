@@ -3,6 +3,7 @@ package games.shithead.main;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import games.shithead.game.InitParams;
 import games.shithead.game.actors.GameActor;
 import games.shithead.game.actors.GameMasterActor;
 import games.shithead.game.actors.ShitheadActorSystem;
@@ -12,15 +13,18 @@ import games.shithead.utils.ConstantsProvider;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
 
+
+
 	public static void main(String[] args) throws InterruptedException, IOException {
-		init();
+		init(generateInitParams(args));
 	}
 
-	private static void init() throws InterruptedException, IOException {
+	private static void init(InitParams initParams) throws InterruptedException, IOException {
 		ActorSystem actorSystem = ShitheadActorSystem.INSTANCE.getActorSystem();
 		ActorRef gameMaterActor = actorSystem.actorOf(Props.create(GameMasterActor.class), ShitheadActorSystem.GAME_MASTER_ACTOR_NAME);
 		actorSystem.actorOf(Props.create(GameActor.class), ShitheadActorSystem.GAME_ACTOR_NAME);
@@ -43,6 +47,36 @@ public class Main {
 		}
 	}
 
+	private static InitParams generateInitParams(String[] args) throws IOException {
+		if(args.length >= 2 && args[0].equals("-i")) {
+			List<String> initFileLines = Files.readAllLines(Paths.get(args[1]));
+			Iterator<String> linesIterator = initFileLines.iterator();
+
+			Map<Integer, String> idsToNames = new HashMap<>();
+			for(int i = 0; i < initFileLines.size() - 2; i++) {
+				String entry = linesIterator.next();
+				String[] splitEntry = entry.split(":");
+				int id = Integer.parseInt(splitEntry[0]);
+				String name = Arrays.asList(splitEntry).stream()
+						.skip(1)
+						.collect(Collectors.joining(":"));
+				idsToNames.put(id, name);
+			}
+
+			List<String> deckCardDescriptions = Arrays.asList(linesIterator.next().split(","));
+
+			List<Integer> playingQueue = Arrays.asList(linesIterator.next().split(",")).stream()
+					.map(idString -> Integer.parseInt(idString))
+					.collect(Collectors.toList());
+
+			return new InitParams()
+					.withIdsToNames(idsToNames)
+					.withDeckCards(deckCardDescriptions)
+					.withPlayingQueue(playingQueue);
+		}
+		return new InitParams();
+	}
+
 	private static void initializePlayer(ActorSystem actorSystem, String playerClassName, int serialNumber) {
 		String name = playerClassName + serialNumber;
 		try {
@@ -53,5 +87,7 @@ public class Main {
 			System.out.println("Error initializing player " + playerClassName);
 		}
 	}
+
+
 
 }
