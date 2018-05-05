@@ -78,7 +78,16 @@ public class GameActor extends AbstractActor {
             return;
         }
 
-        int playerId = playerIdAllocator++;
+        int playerId;
+        if(!initParams.isWithIdsToNames()) {
+            playerId = playerIdAllocator++;
+        }
+        else {
+            playerId = initParams.getIdsToNames().entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(message.getPlayerName()))
+                    .filter(entry -> !playerIdsToInfos.containsKey(entry.getKey()))
+                    .findFirst().get().getKey();
+        }
         logger.debug("Registering player with allocated id: " + playerId);
         IPlayerInfo playerInfo = new PlayerInfo(playerId, message.getPlayerName(), getSender());
         initLogger.info(playerId + ":" + message.getPlayerName());
