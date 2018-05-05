@@ -21,10 +21,10 @@ public class GameMasterActor extends AbstractActor {
                 .build();
     }
 
-    private void startGame(StartGameMessage startGame) {
+    private void startGame(StartGameMessage startGameMessage) {
         ActorSelection gameActor = ShitheadActorSystem.INSTANCE.getActorSystem()
                 .actorSelection(ShitheadActorSystem.getActorUrl(ShitheadActorSystem.GAME_ACTOR_NAME));
-        gameActor.tell(startGame, self());
+        gameActor.tell(startGameMessage, self());
     }
 
     private void logGameResult(GameResult result) {

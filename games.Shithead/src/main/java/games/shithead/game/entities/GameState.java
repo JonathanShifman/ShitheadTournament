@@ -3,6 +3,7 @@ package games.shithead.game.entities;
 import games.shithead.deck.ICardFace;
 import games.shithead.deck.IMultiDeck;
 import games.shithead.deck.MultiDeck;
+import games.shithead.game.InitParams;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
 import games.shithead.utils.ConstantsProvider;
@@ -142,21 +143,28 @@ public class GameState {
     /**
      * Starts the game by initializing the required date
      */
-    public void startGame() {
+    public void startGame(InitParams initParams) {
         logger.info("Starting game");
         isGameStarted = true;
         pile = new ArrayList<>();
-        initDeck();
+        initDeck(initParams);
         dealInitialCards();
     }
 
     /**
      * Initializes the game deck
      */
-    private void initDeck() {
+    private void initDeck(InitParams initParams) {
         //Try to match deck size to number of players
         logger.info("Initializing deck");
-        deck = new MultiDeck((int) Math.ceil((double)players.size()/4));
+        if (initParams.isWithDeckCards()) {
+            logger.debug("Initializing deck with " + initParams.getDeckCardDescriptions().stream().collect(Collectors.joining(",")));
+            deck = new MultiDeck(initParams.getDeckCardDescriptions());
+        }
+        else {
+            deck = new MultiDeck((int) Math.ceil((double) players.size() / 4));
+        }
+
         initLogger.info(deck.toString());
 
         cardStatuses = new CardStatus[deck.getNumberOfInitialCards()];
@@ -263,6 +271,21 @@ public class GameState {
     }
 
     /**
+     * Starts the game cycle once all players have selected their visible table cards
+     * @param initParams
+     */
+    public void startCycle(InitParams initParams) {
+        logger.info("Starting game cycle");
+        if (initParams.isWithPlayingQueue()) {
+            determinePlayersOrder(initParams.getPlayingQueue());
+        }
+        else {
+            determinePlayersOrder();
+        }
+        logGameState();
+    }
+
+    /**
      * Produces a random permutation to represent the order of the players' turns
      */
     private void determinePlayersOrder() {
@@ -276,13 +299,13 @@ public class GameState {
                 .collect(Collectors.joining(",")));
     }
 
-    /**
-     * Starts the game cycle once all players have selected their visible table cards
-     */
-    public void startCycle() {
-        logger.info("Starting game cycle");
-        determinePlayersOrder();
-        logGameState();
+    private void determinePlayersOrder(List<Integer> playingQueueList) {
+        playingQueue.addAll(playingQueueList);
+        nextTurnPlayerId = playingQueue.getFirst();
+        logger.info("Determined players order: " + playingQueue.toString());
+        initLogger.info(playingQueue.stream()
+                .map(id -> id.toString())
+                .collect(Collectors.joining(",")));
     }
 
     /**

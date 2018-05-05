@@ -2,6 +2,7 @@ package games.shithead.game.actors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
+import games.shithead.game.InitParams;
 import games.shithead.game.entities.GameState;
 import games.shithead.game.interfaces.IPlayerInfo;
 import games.shithead.game.interfaces.IPlayerState;
@@ -34,6 +35,10 @@ public class GameActor extends AbstractActor {
     // The game state used to perform all game operations
     private GameState gameState;
 
+    /* The InitParams object containing information about game data that should be initialized
+     * in a specific way */
+    private InitParams initParams;
+
     public GameActor() throws IOException {
         playerIdAllocator = 1;
         gameState = new GameState();
@@ -43,12 +48,17 @@ public class GameActor extends AbstractActor {
 
     public Receive createReceive() {
         return receiveBuilder()
+                .match(InitParamsMessage.class, this::receiveInitParams)
                 .match(RegisterPlayerMessage.class, this::registerPlayer)
                 .match(StartGameMessage.class, this::startGame)
                 .match(TableCardsSelectionMessage.class, this::receiveTableCardsSelection)
                 .match(PlayerActionMessage.class, this::handleAttemptedAction)
                 .matchAny(this::unhandled)
                 .build();
+    }
+
+    private void receiveInitParams(InitParamsMessage initParamsMessage) {
+        this.initParams = initParamsMessage.getInitParams();
     }
 
     /**
@@ -95,7 +105,7 @@ public class GameActor extends AbstractActor {
             logger.debug("Not enough players");
             return;
         }
-        gameState.startGame();
+        gameState.startGame(initParams);
         sendChooseVisibleTableCardsMessages();
     }
 
@@ -137,7 +147,7 @@ public class GameActor extends AbstractActor {
             return;
         }
     	if(gameState.allPlayersSelectedTableCards()) {
-    	    gameState.startCycle();
+    	    gameState.startCycle(initParams);
             sendSnapshotMessages();
         }
     }

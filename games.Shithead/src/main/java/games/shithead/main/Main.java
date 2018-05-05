@@ -7,6 +7,7 @@ import games.shithead.game.InitParams;
 import games.shithead.game.actors.GameActor;
 import games.shithead.game.actors.GameMasterActor;
 import games.shithead.game.actors.ShitheadActorSystem;
+import games.shithead.messages.InitParamsMessage;
 import games.shithead.messages.StartGameMessage;
 import games.shithead.utils.ConstantsProvider;
 
@@ -27,7 +28,10 @@ public class Main {
 	private static void init(InitParams initParams) throws InterruptedException, IOException {
 		ActorSystem actorSystem = ShitheadActorSystem.INSTANCE.getActorSystem();
 		ActorRef gameMaterActor = actorSystem.actorOf(Props.create(GameMasterActor.class), ShitheadActorSystem.GAME_MASTER_ACTOR_NAME);
-		actorSystem.actorOf(Props.create(GameActor.class), ShitheadActorSystem.GAME_ACTOR_NAME);
+		ActorRef gameActor = actorSystem.actorOf(Props.create(GameActor.class), ShitheadActorSystem.GAME_ACTOR_NAME);
+
+		gameActor.tell(new InitParamsMessage(initParams), ActorRef.noSender());
+		Thread.sleep(500);
 
 		/* This number is meaningless for the game, and has nothing to do with the player id (which is given later).
 		 * Only used to ensure every Akka actor has a unique name. */

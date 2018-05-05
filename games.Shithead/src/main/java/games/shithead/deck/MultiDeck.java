@@ -14,7 +14,7 @@ public class MultiDeck implements IMultiDeck {
 			NUMBER_OF_JOKERS;
 	
 	private int numberOfDecks;
-	private int currentCardFaceIndex;
+	private int currentCardFaceIndex = 0;
 	private List<ICardFace> cardFaces;
 
 	/**
@@ -24,9 +24,16 @@ public class MultiDeck implements IMultiDeck {
 	 */
 	public MultiDeck(int numberOfDecks) {
 		this.numberOfDecks = numberOfDecks;
-		this.currentCardFaceIndex = 0;
 		init();
 		shuffle();
+	}
+
+	public MultiDeck(List<String> deckCardsDescriptions) {
+		if(deckCardsDescriptions.size() % CARDS_PER_DECK != 0) {
+			throw new RuntimeException("Amount of cards didn't match any number of decks");
+		}
+		this.numberOfDecks = deckCardsDescriptions.size() / CARDS_PER_DECK;
+		init(deckCardsDescriptions);
 	}
 
 	/**
@@ -38,6 +45,12 @@ public class MultiDeck implements IMultiDeck {
 		for(int deckIndex = 0; deckIndex < numberOfDecks; deckIndex++) {
 			insertSingleDeck(deckIndex);
 		}
+	}
+
+	private void init(List<String> deckCardsDescriptions) {
+		cardFaces = deckCardsDescriptions.stream()
+				.map(cardDescription -> CardDescriptionGenerator.descriptionToCardFace(cardDescription))
+				.collect(Collectors.toList());
 	}
 
 	/**
