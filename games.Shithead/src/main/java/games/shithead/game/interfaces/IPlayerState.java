@@ -61,4 +61,8 @@ public interface IPlayerState {
 	 * @return The cloned state
 	 */
 	IPlayerState privateClone();
+
+	boolean hasWon();
+
+	void markAsWon();
 }

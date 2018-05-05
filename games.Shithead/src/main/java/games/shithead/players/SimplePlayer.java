@@ -191,6 +191,7 @@ public class SimplePlayer extends PlayerActor {
     private int chooseVictimId() {
         return playerStates.entrySet().stream()
                 .filter(entry -> entry.getKey() != playerId)
+                .filter(entry -> !entry.getValue().hasWon())
                 .sorted(new VictimComparator())
                 .findFirst().get().getKey();
     }

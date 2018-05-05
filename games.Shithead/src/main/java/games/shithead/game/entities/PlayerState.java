@@ -13,13 +13,15 @@ public class PlayerState implements IPlayerState {
 	private List<IGameCard> visibleTableCards;
 	private List<IGameCard> hiddenTableCards;
 	private List<IGameCard> pendingSelectionCards;
-	private Map<String, List<IGameCard>> cardListsMap; // TODO: private?
+	private boolean hasWon;
+	private Map<String, List<IGameCard>> cardListsMap;
 
 	public PlayerState() {
 		this.handCards = new ArrayList<>();
 		this.visibleTableCards = new ArrayList<>();
 		this.hiddenTableCards = new ArrayList<>();
 		this.pendingSelectionCards = new ArrayList<>();
+		this.hasWon = false;
 
 		createCardListsMap();
 	}
@@ -30,6 +32,18 @@ public class PlayerState implements IPlayerState {
 		this.visibleTableCards = visibleTableCards;
 		this.hiddenTableCards = hiddenTableCards;
 		this.pendingSelectionCards = pendingSelectionCards;
+		this.hasWon = false;
+
+		createCardListsMap();
+	}
+
+	private PlayerState(List<IGameCard> handCards, List<IGameCard> visibleTableCards,
+					   List<IGameCard> hiddenTableCards, List<IGameCard> pendingSelectionCards, boolean hasWon) {
+		this.handCards = handCards;
+		this.visibleTableCards = visibleTableCards;
+		this.hiddenTableCards = hiddenTableCards;
+		this.pendingSelectionCards = pendingSelectionCards;
+		this.hasWon = hasWon;
 
 		createCardListsMap();
 	}
@@ -84,10 +98,11 @@ public class PlayerState implements IPlayerState {
 	@Override
 	public IPlayerState publicClone() {
 		return new PlayerState(
-			listClassifiedClone(handCards),
-			listRevealedClone(visibleTableCards),
-			listClassifiedClone(hiddenTableCards),
-			listClassifiedClone(pendingSelectionCards)
+				listClassifiedClone(handCards),
+				listRevealedClone(visibleTableCards),
+				listClassifiedClone(hiddenTableCards),
+				listClassifiedClone(pendingSelectionCards),
+				hasWon
 		);
 	}
 
@@ -97,7 +112,8 @@ public class PlayerState implements IPlayerState {
 				listRevealedClone(handCards),
 				listRevealedClone(visibleTableCards),
 				listClassifiedClone(hiddenTableCards),
-				listRevealedClone(pendingSelectionCards)
+				listRevealedClone(pendingSelectionCards),
+				hasWon
 		);
 	}
 
@@ -121,6 +137,16 @@ public class PlayerState implements IPlayerState {
 		return listToClone.stream()
 				.map(gameCard -> gameCard.revealedClone())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean hasWon() {
+		return hasWon;
+	}
+
+	@Override
+	public void markAsWon() {
+		this.hasWon = true;
 	}
 
 	@Override

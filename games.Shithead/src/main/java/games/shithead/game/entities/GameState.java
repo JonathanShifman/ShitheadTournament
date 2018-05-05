@@ -402,7 +402,7 @@ public class GameState {
                 }
                 logger.info("Burning jokers");
                 burnCards(topJokersToBurn);
-                if(players.containsKey(victimId)) {
+                if(players.containsKey(victimId) && !players.get(victimId).hasWon()) {
                     logger.info("Giving cards to player " + victimId);
                     IPlayerState playerState = players.get(victimId);
                     for(IGameCard gameCard : remainingPileCards) {
@@ -485,8 +485,10 @@ public class GameState {
     }
 
     private void checkIfPlayerWon() {
-        if(deck.isEmpty() && players.get(lastPerformedActionPlayer).getNumOfCardsRemaining() == 0) {
+        IPlayerState playerToCheck = players.get(lastPerformedActionPlayer);
+        if(deck.isEmpty() && playerToCheck.getNumOfCardsRemaining() == 0) {
             logger.info("Player " + lastPerformedActionPlayer + " won");
+            playerToCheck.markAsWon();
             playingQueue.remove(lastPerformedActionPlayer);
             nextTurnPlayerId = playingQueue.getFirst();
         }
