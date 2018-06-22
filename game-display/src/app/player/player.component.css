@@ -1,0 +1,16 @@
+.player-wrapper{
+	text-align: center;
+	border: 1px solid black;
+	width: 100%;
+	height: 100%;
+}
+.player-state {
+	display: flex;
+    flex-direction: row;
+}
+.player-state div {
+	width: 15%;
+}
+.card-image {
+	width: 24px;
+}

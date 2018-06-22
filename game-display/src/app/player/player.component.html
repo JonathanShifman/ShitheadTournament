@@ -1,0 +1,17 @@
+<div class="player-wrapper">
+	<div class="player-name">
+		Player {{ playerId }}
+	</div>
+	<div class="player-state">
+		<div class="hidden-table-cards">
+			<div *ngFor="let rank of hiddenTableCardRanks">
+				<img src="assets/{{ rank }}S.png" class="card-image" /><br />
+			</div>
+		</div>
+		<div class="revealed-table-cards">
+			<div *ngFor="let rank of visibleTableCardRanks">
+				<img src="assets/{{ rank }}S.png" class="card-image" /><br />
+			</div>
+		</div>
+	</div>
+</div>

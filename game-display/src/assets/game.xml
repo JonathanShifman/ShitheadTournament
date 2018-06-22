@@ -1,0 +1,4770 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<game num-of-players="3">
+    <move move-id="0">
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="5"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="4"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="1">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="4"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="5"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="4"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="8"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="2">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="4"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="5"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="6"/>
+                    <card rank="R"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="8"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="4"/>
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="3">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="6"/>
+                    <card rank="R"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="8"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="4">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="8"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="6"/>
+                    <card rank="R"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="8"/>
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="5">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="8"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="6"/>
+                    <card rank="R"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="8"/>
+                <card rank="8"/>
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="6">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="R"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="5"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="5"/>
+                    <card rank="6"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="7">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="5"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="6"/>
+                    <card rank="9"/>
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="8">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="6"/>
+                    <card rank="9"/>
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="9">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="6"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="6"/>
+                    <card rank="9"/>
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="10">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="6"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="10"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="11">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="6"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="10"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="2"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="12">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="10"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="9"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="13">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="A"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="14">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="J"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="A"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="J"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="15">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="J"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="A"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="2"/>
+                    <card rank="3"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="J"/>
+                <card rank="J"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="16">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="A"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="3"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="2"/>
+                    <card rank="3"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="A"/>
+                <card rank="J"/>
+                <card rank="J"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="17">
+        <action player-id=" 1">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="5"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="3"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="2"/>
+                    <card rank="3"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="18">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="5"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="3"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="5"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="19">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="3"/>
+                <card rank="3"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="4"/>
+                    <card rank="4"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="5"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="9"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="5"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="3"/>
+                <card rank="3"/>
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="20">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="4"/>
+                <card rank="4"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="5"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="9"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="5"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="4"/>
+                <card rank="4"/>
+                <card rank="3"/>
+                <card rank="3"/>
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="21">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="5"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="9"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+                <card rank="3"/>
+                <card rank="3"/>
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="22">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="7"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="5"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="9"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="7"/>
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+                <card rank="3"/>
+                <card rank="3"/>
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="23">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="9"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+                <card rank="5"/>
+                <card rank="7"/>
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+                <card rank="3"/>
+                <card rank="3"/>
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="24">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="7"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="10"/>
+                    <card rank="9"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="Q"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="7"/>
+                <card rank="5"/>
+                <card rank="5"/>
+                <card rank="7"/>
+                <card rank="5"/>
+                <card rank="4"/>
+                <card rank="4"/>
+                <card rank="3"/>
+                <card rank="3"/>
+                <card rank="2"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="25">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="10"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="Q"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="26">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                    <card rank="3"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="Q"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="27">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                    <card rank="3"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="Q"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="28">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="Q"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                    <card rank="3"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="Q"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="29">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="A"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="Q"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="30">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="A"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="A"/>
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="Q"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="31">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="A"/>
+                <card rank="A"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="4"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="Q"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="32">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="3"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="8"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="4"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="3"/>
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="Q"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="33">
+        <action player-id=" 1">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="8"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="4"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="34">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="4"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="8"/>
+                    <card rank="8"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="35">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="8"/>
+                <card rank="8"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="8"/>
+                    <card rank="8"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="8"/>
+                <card rank="8"/>
+                <card rank="4"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="36">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="8"/>
+                <card rank="8"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="6"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="37">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                    <card rank="6"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="6"/>
+                <card rank="6"/>
+                <card rank="6"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="38">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="6"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="39">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="Q"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="Q"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="Q"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="Q"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="40">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="Q"/>
+                <card rank="Q"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="Q"/>
+                <card rank="Q"/>
+                <card rank="Q"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="41">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="3"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="3"/>
+                <card rank="Q"/>
+                <card rank="Q"/>
+                <card rank="Q"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="42">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="10"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="43">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="K"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="K"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="44">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="45">
+        <action player-id=" 3">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="5"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="46">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="47">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="48">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="49">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="50">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="J"/>
+                <card rank="J"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="J"/>
+                <card rank="J"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="51">
+        <action player-id=" 3">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="52">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="53">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="A"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="5"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="54">
+        <action player-id=" 3">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="9"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                    <card rank="9"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="55">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+                <card rank="9"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                    <card rank="K"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="56">
+        <action player-id=" 2">
+            <cardList card-list-name="action">
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="3"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="57">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="3"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="A"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="3"/>
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="58">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="A"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                    <card rank="A"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="A"/>
+                <card rank="3"/>
+                <card rank="K"/>
+                <card rank="K"/>
+                <card rank="K"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="59">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="A"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                    <card rank="2"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="60">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="2"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="5"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="61">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="5"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible">
+                    <card rank="10"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="5"/>
+                <card rank="2"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="62">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="10"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="K"/>
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="63">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="K"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="K"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="64">
+        <action player-id=" 3">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="J"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="65">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="J"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="J"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="66">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="J"/>
+                <card rank="J"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden">
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="J"/>
+                <card rank="J"/>
+                <card rank="J"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="67">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="7"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="68">
+        <action player-id=" 3">
+            <cardList card-list-name="action">
+                <card rank="7"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="7"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="7"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="69">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="7"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="7"/>
+                <card rank="7"/>
+            </cardList>
+        </game-state>
+    </move>
+    <move move-id="70">
+        <action player-id=" 3">
+            <cardList card-list-name="action"/>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand">
+                    <card rank="J"/>
+                    <card rank="J"/>
+                    <card rank="J"/>
+                </cardList>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                    <card rank="7"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile"/>
+        </game-state>
+    </move>
+    <move move-id="71">
+        <action player-id=" 1">
+            <cardList card-list-name="action">
+                <card rank="J"/>
+                <card rank="J"/>
+                <card rank="J"/>
+            </cardList>
+        </action>
+        <game-state>
+            <player-state player-id="1">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="2">
+                <cardList card-list-name="hand"/>
+                <cardList card-list-name="table-visible"/>
+                <cardList card-list-name="table-hidden"/>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <player-state player-id="3">
+                <cardList card-list-name="hand">
+                    <card rank="K"/>
+                    <card rank="7"/>
+                    <card rank="7"/>
+                </cardList>
+                <cardList card-list-name="table-visible">
+                    <card rank="R"/>
+                    <card rank="10"/>
+                    <card rank="Q"/>
+                </cardList>
+                <cardList card-list-name="table-hidden">
+                    <card rank="2"/>
+                    <card rank="J"/>
+                    <card rank="4"/>
+                </cardList>
+                <cardList card-list-name="pending-selection"/>
+            </player-state>
+            <cardList card-list-name="pile">
+                <card rank="J"/>
+                <card rank="J"/>
+                <card rank="J"/>
+            </cardList>
+        </game-state>
+    </move>
+</game>
