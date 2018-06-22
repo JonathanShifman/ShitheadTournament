@@ -6,7 +6,7 @@ import games.shithead.deck.MultiDeck;
 import games.shithead.game.InitParams;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
-import games.shithead.utils.ConstantsProvider;
+import games.shithead.constants.ConstantsProvider;
 import games.shithead.utils.LoggingUtils;
 import games.shithead.game.validation.ActionValidationResult;
 import games.shithead.game.validation.ActionValidatorForGame;

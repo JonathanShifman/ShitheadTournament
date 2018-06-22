@@ -9,7 +9,7 @@ import games.shithead.game.actors.GameMasterActor;
 import games.shithead.game.actors.ShitheadActorSystem;
 import games.shithead.messages.InitParamsMessage;
 import games.shithead.messages.StartGameMessage;
-import games.shithead.utils.ConstantsProvider;
+import games.shithead.constants.ConstantsProvider;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>games</groupId>
-            <artifactId>Shithead</artifactId>
+            <artifactId>ShitheadCommon</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

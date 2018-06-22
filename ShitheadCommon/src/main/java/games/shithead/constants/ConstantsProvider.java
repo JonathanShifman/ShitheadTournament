@@ -1,4 +1,4 @@
-package games.shithead.utils;
+package games.shithead.constants;
 
 public class ConstantsProvider {
 

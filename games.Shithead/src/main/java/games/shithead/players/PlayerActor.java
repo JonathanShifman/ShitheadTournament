@@ -8,7 +8,7 @@ import games.shithead.game.actors.ShitheadActorSystem;
 import games.shithead.game.entities.PlayerActionInfo;
 import games.shithead.game.interfaces.IGameCard;
 import games.shithead.game.interfaces.IPlayerState;
-import games.shithead.utils.ConstantsProvider;
+import games.shithead.constants.ConstantsProvider;
 import games.shithead.utils.LoggingUtils;
 import games.shithead.messages.*;
 import games.shithead.messages.PlayerActionMessage;
