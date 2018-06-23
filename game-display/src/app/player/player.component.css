@@ -8,9 +8,12 @@
 	display: flex;
     flex-direction: row;
 }
-.player-state div {
-	width: 15%;
+.hidden-table-cards, .revealed-table-cards {
+	width: 64px;
 }
-.card-image {
-	width: 24px;
+.player-state div div {
+	width: 100%;
+}
+img {
+	height: 50px;
 }

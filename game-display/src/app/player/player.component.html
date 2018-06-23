@@ -13,5 +13,8 @@
 				<img src="assets/{{ rank }}S.png" class="card-image" /><br />
 			</div>
 		</div>
+		<div class="hand-cards">
+			<img *ngFor="let rank of handCardRanks" src="assets/{{ rank }}S.png" class="card-image" />
+		</div>
 	</div>
 </div>

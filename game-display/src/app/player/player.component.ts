@@ -11,8 +11,9 @@ export class PlayerComponent implements OnInit {
   playerId;
   name;
   cardLists;
-  visibleTableCardRanks;
   hiddenTableCardRanks;
+  visibleTableCardRanks;
+  handCardRanks;
 
   constructor() { }
 
@@ -21,14 +22,19 @@ export class PlayerComponent implements OnInit {
       this.playerId = this.player.getAttribute('player-id');
       this.cardLists = this.player.children;
 
-      this.visibleTableCardRanks = [] 
+      this.hiddenTableCardRanks = [];
+      for(let card of Array.from(this.cardLists[2].children)) {
+        this.hiddenTableCardRanks.push(card.getAttribute("rank"))
+      }
+
+      this.visibleTableCardRanks = [];
       for(let card of Array.from(this.cardLists[1].children)) {
         this.visibleTableCardRanks.push(card.getAttribute("rank"))
       }
 
-      this.hiddenTableCardRanks = [] 
-      for(let card of Array.from(this.cardLists[2].children)) {
-        this.hiddenTableCardRanks.push(card.getAttribute("rank"))
+      this.handCardRanks = [];
+      for(let card of Array.from(this.cardLists[0].children)) {
+        this.handCardRanks.push(card.getAttribute("rank"))
       }
   }
 

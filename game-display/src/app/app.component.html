@@ -5,7 +5,13 @@
 		</div>
 	</div>
 	<div id="game-section">
-		Game section
+		<div>
+			<button (click)="prevMove()">Prev</button>
+			<button (click)="nextMove()">Next</button>
+		</div>	
+		<div class="pile-cards">
+			<img *ngFor="let rank of pileCardRanks" src="assets/{{ rank }}S.png" class="card-image" />
+		</div>
 	</div>
 	<div class="players-section" *ngIf="numOfPlayers > 2">
 		<div class="player" *ngFor="let playerStateElement of currentPlayerStateElements.slice(2, currentPlayerStateElements.length)">

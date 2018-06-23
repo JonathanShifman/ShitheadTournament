@@ -1,6 +1,3 @@
-html {
-	height: 100%;
-}
 #wrapper {
 	display: flex;
     flex-direction: row;
@@ -8,15 +5,17 @@ html {
 	height: 100%;
 }
 #game-section {
-	width: 36%;
+	width: 640px;
 }
 .players-section {
-	width: 32%;
-	height: 100%;
+	width: 640px;
 }
 .player {
-	height: 25%;
+	height: 200px;
 }
-.card-image {
+/* .card-image {
 	width: 100%;
+} */
+img {
+	height: 50px;
 }
