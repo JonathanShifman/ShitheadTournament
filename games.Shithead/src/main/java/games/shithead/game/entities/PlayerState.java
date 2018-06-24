@@ -152,7 +152,7 @@ public class PlayerState implements IPlayerState {
 	@Override
 	public String toString() {
 		return cardListsMap.entrySet().stream()
-				.map(entry -> entry.getKey() + ": " + LoggingUtils.cardsToMinDescriptions(entry.getValue()))
+				.map(entry -> entry.getKey() + ": " + LoggingUtils.cardsToFullDescriptions(entry.getValue()))
 				.collect(Collectors.joining(", "));
 	}
 }

@@ -571,7 +571,7 @@ public class GameState {
      * @return A String representing the given cards' descriptions
      */
     private String cardIdsToDescriptions(List<Integer> cardIds) {
-        return LoggingUtils.cardsToMinDescriptions(cardIds.stream()
+        return LoggingUtils.cardsToFullDescriptions(cardIds.stream()
                 .map(cardId -> cards[cardId])
                 .collect(Collectors.toList()));
     }
@@ -579,7 +579,7 @@ public class GameState {
     private void logGameState() {
         logger.info("Current Game State: ");
         players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
-        logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
+        logger.info("Pile: " + LoggingUtils.cardsToFullDescriptions(pile));
         logger.info("Next move id: " + nextMoveId);
         logger.info("Next player turn id: " + nextTurnPlayerId);
     }

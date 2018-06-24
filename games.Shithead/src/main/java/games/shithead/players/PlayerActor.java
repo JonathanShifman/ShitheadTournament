@@ -174,7 +174,7 @@ public abstract class PlayerActor extends AbstractActor {
 	private void takeAction() {
 		if(nextPlayerTurn == playerId) {
 			logger.info("Player " + playerId + " state: " + playerStates.get(playerId).toString());
-			logger.info("Pile: " + LoggingUtils.cardsToMinDescriptions(pile));
+			logger.info("Pile: " + LoggingUtils.cardsToFullDescriptions(pile));
 			makeMove();
 		}
 		else {

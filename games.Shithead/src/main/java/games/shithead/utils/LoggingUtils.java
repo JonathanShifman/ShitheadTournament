@@ -20,4 +20,11 @@ public class LoggingUtils {
         return "[" + cardDescriptions + "]";
     }
 
+    public static String cardsToFullDescriptions(List<IGameCard> cards) {
+        String cardDescriptions = cards.stream()
+                .map(card -> CardDescriptionGenerator.cardToFullDescription(card.getCardFace().orElse(null), card.getUniqueId()))
+                .collect(Collectors.joining(", "));
+        return "[" + cardDescriptions + "]";
+    }
+
 }

@@ -44,9 +44,8 @@ export class AppComponent {
 		}
 		this.pileCardRanks = [];
       	for(let card of Array.from(pileCardList.children)) {
-        	this.pileCardRanks.push(card.getAttribute("rank"));
+        	this.pileCardRanks.push(card.getAttribute("rank") + card.getAttribute("suit"));
 		}
-		console.log(this.pileCardRanks);
 	}
 
 	nextMove() {
@@ -65,4 +64,3 @@ export class AppComponent {
 		}
 	}
 }
-  

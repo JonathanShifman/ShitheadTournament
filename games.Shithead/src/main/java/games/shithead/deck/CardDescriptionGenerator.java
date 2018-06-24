@@ -42,6 +42,14 @@ public class CardDescriptionGenerator {
         return cardRankToRepresentation(cardFace.getRank());
     }
 
+    public static String cardToFullDescription(ICardFace cardFace, int cardId) {
+        if(cardFace == null) {
+            return "<?>";
+        }
+        return "<" + cardRankToRepresentation(cardFace.getRank()) + "#" +
+                cardSuitToRepresentation(cardFace.getSuit()) + "#" + cardId + ">";
+    }
+
     public static String cardRankToRepresentation(int rankValue) {
         return rankValuesToRepresentations.get(rankValue);
     }

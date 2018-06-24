@@ -91,7 +91,7 @@ public class LogAnalyzer {
                 String playerId = substringsBetween(line, "by player", ".").get(0);
                 actionElement.setAttribute("player-id", playerId);
                 String cardListString = substringsBetween(line, "[", "]").get(0);
-                Element cardListElement = getCardListElement(Arrays.asList(cardListString.split(", ")));
+                Element cardListElement = getCardListElement(cardListStringToCardList(cardListString));
                 cardListElement.setAttribute("card-list-name", "action");
                 actionElement.appendChild(cardListElement);
                 currentMoveElement.appendChild(actionElement);
@@ -114,7 +114,7 @@ public class LogAnalyzer {
         List<String> cardListNames = Arrays.asList(new String[] {"hand", "table-visible", "table-hidden", "pending-selection"});
         Iterator<String> cardListNamesIterator = cardListNames.iterator();
         for(String cardListString : substringsBetweenSquareBrackets(line)) {
-            Element cardListElement = getCardListElement(Arrays.asList(cardListString.split(", ")), cardListNamesIterator.next());
+            Element cardListElement = getCardListElement(cardListStringToCardList(cardListString), cardListNamesIterator.next());
             playerStateElement.appendChild(cardListElement);
         }
         return playerStateElement;
@@ -149,20 +149,23 @@ public class LogAnalyzer {
     private Element getCardListElement(List<String> cardList) {
         Element cardListElement = dom.createElement("cardList");
         cardList.stream()
-                .filter(cardSymbol -> !cardSymbol.isEmpty())
-                .map(cardSymbol -> getCardElement(cardSymbol))
+                .filter(cardDescription -> !cardDescription.isEmpty())
+                .map(cardDescription -> getCardElement(cardDescription))
                 .forEach(cardElement -> cardListElement.appendChild(cardElement));
         return cardListElement;
     }
 
     /**
      * Generates a card XML element with the given card symbol.
-     * @param cardSymbol The card symbol
+     * @param cardDescription The card description
      * @return The generated card element
      */
-    private Element getCardElement(String cardSymbol) {
+    private Element getCardElement(String cardDescription) {
         Element cardElement = dom.createElement("card");
-        cardElement.setAttribute("rank", cardSymbol);
+        String[] descriptionParts = cardDescription.substring(1, cardDescription.length() - 1).split("#");
+        cardElement.setAttribute("rank", descriptionParts[0]);
+        cardElement.setAttribute("suit", descriptionParts[1]);
+        cardElement.setAttribute("card-id", descriptionParts[2]);
         return cardElement;
     }
 

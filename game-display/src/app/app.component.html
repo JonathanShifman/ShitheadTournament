@@ -10,7 +10,7 @@
 			<button (click)="nextMove()">Next</button>
 		</div>	
 		<div class="pile-cards">
-			<img *ngFor="let rank of pileCardRanks" src="assets/{{ rank }}S.png" class="card-image" />
+			<img *ngFor="let rank of pileCardRanks" src="assets/{{ rank }}.png" class="card-image" />
 		</div>
 	</div>
 	<div class="players-section" *ngIf="numOfPlayers > 2">
