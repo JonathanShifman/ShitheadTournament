@@ -339,8 +339,6 @@ public class GameState {
         }
         playerState.removeAll(cardsToRemoveFromPlayerState);
 
-        updateSpecialEffects(victimId);
-        dealPlayerCardsIfNeeded(playerId);
         if(validationResult == ActionValidationResult.TAKE) {
             for(IGameCard gameCard : pile) {
                 playerState.getHandCards().add(gameCard);
@@ -348,6 +346,11 @@ public class GameState {
             }
             pile = new LinkedList<>();
         }
+        else { // validationResult == ActionValidationResult.PROCEED
+            updateSpecialEffects(victimId);
+        }
+        dealPlayerCardsIfNeeded(playerId);
+
         lastPerformedActionPlayer = playerId;
         updatePlayerTurn();
         checkIfPlayerWon();
