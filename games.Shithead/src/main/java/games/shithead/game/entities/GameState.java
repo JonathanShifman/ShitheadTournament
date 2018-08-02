@@ -580,6 +580,7 @@ public class GameState {
         logger.info("Current Game State: ");
         players.entrySet().forEach(entry -> logPlayerState(entry.getKey(), entry.getValue()));
         logger.info("Pile: " + LoggingUtils.cardsToFullDescriptions(pile));
+        logger.info("Deck cards remaining: " + deck.getNumberOfRemainingCards());
         logger.info("Next move id: " + nextMoveId);
         logger.info("Next player turn id: " + nextTurnPlayerId);
     }

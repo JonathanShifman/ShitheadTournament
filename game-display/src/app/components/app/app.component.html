@@ -1,0 +1,28 @@
+<div id="wrapper">
+	<div class="players-section">
+		<div class="player" *ngFor="let playerStateElement of currentPlayerStateElements.slice(0, 4)">
+			<app-player [player]="playerStateElement"></app-player>
+		</div>
+	</div>
+	<div id="game-section">
+		<div>
+			<button (click)="prevMove()">Prev</button>
+			<button (click)="nextMove()">Next</button>
+		</div>	
+		<div class="general-game-info">
+			<div>Move {{ currentMoveId }}</div>
+			<div>Deck cards: {{ numOfDeckCards }}</div>
+			<div>Burnt cards: </div>
+		</div>	
+		<div class="pile-cards">
+			<img *ngFor="let rank of pileCardRanks" src="assets/{{ rank }}.png" class="card-image" />
+		</div>
+	</div>
+	<!-- <div class="players-section" *ngIf="numOfPlayers > 4"> -->
+	<div class="players-section">
+		<!-- <div class="player" *ngFor="let playerStateElement of currentPlayerStateElements.slice(4, currentPlayerStateElements.length)"> -->
+		<div class="player" *ngFor="let playerStateElement of currentPlayerStateElements.slice(0, 4)">
+			<app-player [player]="playerStateElement"></app-player>
+		</div>
+	</div>
+</div>

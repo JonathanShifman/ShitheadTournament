@@ -36,6 +36,12 @@ public interface IMultiDeck {
 	int getNumberOfInitialCards();
 
 	/**
+	 * Returns the number of cards currently remaining in the multi-deck.
+	 * @return the number of cards currently in the multi-deck
+	 */
+	int getNumberOfRemainingCards();
+
+	/**
 	 * Checks if the multi-deck is empty.
 	 * @return True if the multi-deck is empty, false otherwise
 	 */

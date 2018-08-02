@@ -1,0 +1,35 @@
+.player-wrapper{
+	text-align: center;
+	width: 100%;
+	height: 100%;
+}
+.player-state {
+	display: flex;
+    flex-direction: row;
+	width: 100%;
+	height: 10em;
+}
+.player-name {
+	padding: 6px;
+	text-align: left;
+	font-size: 0.8em;
+}
+.hidden-table-cards {
+	display: table;
+	background-color: #ffcccc;
+}
+.revealed-table-cards {
+	display: table;
+	background-color: #ffffcc;
+}
+.hand-cards {
+	background-color: #eeeeff;
+	display: table;
+}
+.player-state div div {
+	width: 100%;
+}
+.card-image {
+	height: 2.5em;
+	margin: 4px;
+}

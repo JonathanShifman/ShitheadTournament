@@ -113,6 +113,11 @@ public class MultiDeck implements IMultiDeck {
 	}
 
 	@Override
+	public int getNumberOfRemainingCards() {
+		return cardFaces.size() - currentCardFaceIndex;
+	}
+
+	@Override
 	public boolean isEmpty() {
 		return currentCardFaceIndex >= cardFaces.size();
 	}

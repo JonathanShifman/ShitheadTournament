@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-	
+
 	title = 'app';
 	numOfPlayers;
 	moveElements;
@@ -14,7 +14,8 @@ export class AppComponent {
 	currentMoveElement;
 	currentPlayerStateElements;
 	pileCardRanks;
-	
+	numOfDeckCards;
+
 	ngOnInit() {
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.open("GET", "assets/game.xml", false);
@@ -30,22 +31,24 @@ export class AppComponent {
 
 	updateCurrentStates() {
 		this.currentMoveElement = this.moveElements[this.currentMoveId];
-		var playerStateElements = this.currentMoveElement.getElementsByTagName('game-state')[0].getElementsByTagName('player-state');
+		var currentGameStateElement = this.currentMoveElement.getElementsByTagName('game-state')[0]
+		var playerStateElements = currentGameStateElement.getElementsByTagName('player-state');
 		this.currentPlayerStateElements = [];
 		for(let playerStateElement of Array.from(playerStateElements)) {
 			this.currentPlayerStateElements.push(playerStateElement)
 		}
 
 		var pileCardList;
-		for(let cardList of this.currentMoveElement.getElementsByTagName('game-state')[0].getElementsByTagName('cardList')) {
+		for(let cardList of currentGameStateElement.getElementsByTagName('cardList')) {
 			if(cardList.getAttribute('card-list-name') == 'pile') {
 				pileCardList = cardList;
 			}
 		}
 		this.pileCardRanks = [];
       	for(let card of Array.from(pileCardList.children)) {
-        	this.pileCardRanks.push(card.getAttribute("rank") + card.getAttribute("suit"));
+        	// this.pileCardRanks.push(card.getAttribute("rank") + card.getAttribute("suit"));
 		}
+		this.numOfDeckCards = currentGameStateElement.getElementsByTagName('deck')[0].getAttribute("num-of-cards")
 	}
 
 	nextMove() {

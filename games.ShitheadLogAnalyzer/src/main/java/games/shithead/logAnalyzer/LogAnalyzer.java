@@ -79,6 +79,10 @@ public class LogAnalyzer {
             }
             if(nextExpectedEvent == NextExpectedEvent.PILE && line.contains("Pile:")) {
                 currentGameStateElement.appendChild(getCardListElement(cardListStringToCardList(substringsBetweenSquareBrackets(line).get(0)), "pile"));
+                nextExpectedEvent = NextExpectedEvent.DECK;
+            }
+            if(nextExpectedEvent == NextExpectedEvent.DECK && line.contains("Deck cards remaining: ")) {
+                currentGameStateElement.appendChild(createDeckElement(line));
                 currentMoveElement.appendChild(currentGameStateElement);
                 nextExpectedEvent = NextExpectedEvent.MOVE_ID;
             }
@@ -216,6 +220,18 @@ public class LogAnalyzer {
         tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
         tr.transform(new DOMSource(dom),
                 new StreamResult(new File(outputFilePath)));
+    }
+
+    /**
+     * Generates an element specifying the number of cards remaining in the deck.
+     * @param line The log line containing the relevant info
+     * @return The generated deck element
+     */
+    private Element createDeckElement(String line) {
+        Element deckElement  = dom.createElement("deck");
+        String[] splitLine = line.split("Deck cards remaining: ");
+        deckElement.setAttribute("num-of-cards", splitLine[splitLine.length - 1]);
+        return deckElement;
     }
 
 }

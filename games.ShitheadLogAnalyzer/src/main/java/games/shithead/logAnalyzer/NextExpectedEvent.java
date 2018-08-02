@@ -7,5 +7,6 @@ public enum NextExpectedEvent {
     GAME_STATE,
     PLAYER_STATE,
     PILE,
+    DECK,
     MOVE_ID
 }
